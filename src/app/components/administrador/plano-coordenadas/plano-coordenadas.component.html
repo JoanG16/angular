@@ -1,0 +1,99 @@
+<div class="container">
+    <aside class="left">
+        <div class="logo">
+            <img src="assets/icon/logo.jpg" alt="Logo del Centro Comercial Nuevo Tarqui" />
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">🏠 Inicio</a></li>
+                <li><a href="#locales">📍 Locales</a></li>
+                <li><a href="#socios">🧑‍🤝‍🧑 Socios</a></li>
+                <li><a href="#ofertas">🏷 Ofertas</a></li>
+                <li><a href="#contenedores">🚛 Contenedores</a></li>
+            </ul>
+        </nav>
+        <nav>
+            <ul>
+                <li><a href="#Usuario">👤 Usuario</a></li>
+                <li><a href="#config">⚙️ Configuración</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="datos">
+            <!-- Título dinámico para el formulario (Crear vs. Editar) -->
+            <h2>{{ isEditing ? 'Editar Contenedor' : 'Ingresar Nuevo Contenedor' }}</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="numeroContenedor">Número de Contenedor</label>
+                    <input id="numeroContenedor" type="text" [(ngModel)]="numeroContenedor" />
+                </div>
+
+                <div class="form-group">
+                    <label for="bloque">Bloque</label>
+                    <input id="bloque" type="text" [(ngModel)]="bloque" />
+                </div>
+
+                <div class="form-group">
+                    <label for="socio">Socio</label>
+                    <!-- El valor seleccionado es el id_socio, y se muestra el nombre -->
+                    <select id="socio" [(ngModel)]="socioSeleccionado">
+                        <option [ngValue]="null">Seleccionar Socio</option>
+                        <option *ngFor="let socio of socios" [ngValue]="socio.id_socio">{{ socio.nombres }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="coordenadas">Coordenadas (Dibuja o edita en el mapa)</label>
+                    <pre id="coordenadas">{{ coordenadasTexto }}</pre>
+                </div>
+
+                <div class="boton-acciones">
+                    <!-- Botón principal de guardar/actualizar, cambia el texto y la acción según el modo -->
+                    <button (click)="guardarOActualizarContenedor()">
+                        {{ isEditing ? 'Actualizar Contenedor' : 'Guardar Contenedor' }}
+                    </button>
+                    <!-- Botón para cancelar la edición, solo visible en modo edición -->
+                    <button *ngIf="isEditing" (click)="resetForm()" class="btn-cancelar">Cancelar Edición</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-mapa">
+            <div id="map"></div>
+        </div>
+
+        <h2>Lista de Contenedores</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Bloque</th>
+                    <th>Socio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Resalta la fila si el contenedor está seleccionado para edición -->
+                <tr *ngFor="let contenedor of contenedores" [class.selected]="contenedor === contenedorSeleccionado">
+                    <td>{{ contenedor.numero_contenedor }}</td>
+                    <td>{{ contenedor.bloque }}</td>
+                    <!-- Muestra el nombre del socio usando el método del componente -->
+                    <td>{{ getSocioNombre(contenedor.socioId) }}</td>
+                    <td>
+                        <!-- Botón "Seleccionar" que carga el contenedor para edición -->
+                        <button (click)="selectContenedor(contenedor)"
+                            [disabled]="isEditing && contenedor === contenedorSeleccionado"
+                            [class.active-selection]="isEditing && contenedor === contenedorSeleccionado">
+                            {{ (isEditing && contenedor === contenedorSeleccionado) ? 'Seleccionado' : 'Seleccionar' }}
+                        </button>
+                        <!-- Botón "Eliminar" solo habilitado para el contenedor seleccionado para eliminar -->
+                        <button (click)="deleteContenedor()"
+                            [disabled]="contenedor !== contenedorSeleccionado">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>

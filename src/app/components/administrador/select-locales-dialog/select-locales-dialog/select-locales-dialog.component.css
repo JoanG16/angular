@@ -1,0 +1,98 @@
+/* src/app/components/administrador/select-locales-dialog/select-locales-dialog.component.css */
+
+/* Estilos para el diálogo en general */
+.mat-dialog-title {
+    color: #32346B;
+    /* Var azul */
+    font-size: 1.5rem;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.mat-dialog-content {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    /* Altura máxima para el contenido del diálogo */
+    overflow: hidden;
+    /* Controla el overflow general */
+}
+
+.search-field {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+/* Contenedor de la lista de locales para scroll */
+.locales-list-container {
+    flex-grow: 1;
+    /* Permite que la lista ocupe el espacio disponible */
+    overflow-y: auto;
+    /* Habilita el scroll vertical cuando sea necesario */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 0;
+    /* Padding interno */
+    margin-bottom: 20px;
+    background-color: #fcfcfc;
+}
+
+.mat-list-item {
+    height: auto !important;
+    /* Permite que el item de lista ajuste su altura al contenido */
+    padding: 8px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    /* Separador ligero entre items */
+}
+
+.mat-list-item:last-child {
+    border-bottom: none;
+}
+
+.local-item mat-checkbox {
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+.no-results {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+}
+
+/* Acciones del diálogo (botones) */
+.mat-dialog-actions {
+    padding: 10px 24px 20px;
+    display: flex;
+    justify-content: flex-end;
+    /* Alinea los botones a la derecha */
+    gap: 10px;
+    /* Espacio entre botones */
+}
+
+.mat-dialog-actions button {
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    min-width: 100px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mat-dialog-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.cancel-button:hover {
+    background-color: #e0e0e0;
+}

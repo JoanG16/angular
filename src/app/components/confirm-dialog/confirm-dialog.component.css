@@ -1,0 +1,34 @@
+/* Puedes personalizar si lo necesitas, pero Material ya hace la mayoría del trabajo */
+mat-dialog-title {
+    color: var(--azul);
+    /* Usa tu color primario */
+}
+
+mat-dialog-content {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+mat-dialog-actions {
+    padding-top: 10px;
+}
+
+/* Opcional: para el botón de confirmar si isDanger es true */
+button[mat-flat-button][color="warn"] {
+    background-color: #f44336 !important;
+    /* Rojo de eliminar */
+    color: white !important;
+}
+
+button[mat-flat-button][color="primary"] {
+    background-color: var(--azul) !important;
+    /* Tu color azul */
+    color: white !important;
+}
+
+button[mat-button] {
+    color: #6c757d;
+    /* Color para el botón de cancelar */
+}

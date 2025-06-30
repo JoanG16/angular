@@ -1,0 +1,135 @@
+<div class="page-container">
+  <!-- Header (Mantiene la estructura y contenido de tu diseño anterior) -->
+  <header class="main-header">
+    <div class="header-content-wrapper">
+      <div class="site-branding">
+        <div class="logo-image"></div>
+        <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+      </div>
+      <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+      <label for="menu-toggle" class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </label>
+      <nav class="main-navigation">
+        <label for="menu-toggle" class="close-menu-icon">&times;</label>
+        <ul>
+          <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+          <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+          <li><a [routerLink]="['/locales']" class="nav-link">Locales</a></li>
+          <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenido Principal de la página de detalle del local -->
+  <main class="local-detail-main-content">
+    <div class="content-wrapper">
+      <button class="back-to-map-button" (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Volver al Mapa</span>
+      </button>
+
+      <ng-container *ngIf="local; else loadingOrError">
+        <section class="local-info-section-containerfade-in-up">
+          <!-- Carrusel de imágenes del local -->
+          <div class="image-gallery-carousel">
+            <ng-container *ngIf="local.imagen_urls && local.imagen_urls.length > 0; else noImages">
+              <div class="carousel-track">
+                <img [src]="backendBaseUrl + local.imagen_urls[currentImageIndex]"
+                  alt="Imagen de {{ local.nombre_del_negocio }}" class="carousel-main-image">
+              </div>
+              <button class="carousel-nav-button prev" (click)="prevImage()">&#10094;</button>
+              <button class="carousel-nav-button next" (click)="nextImage()">&#10095;</button>
+              <div class="carousel-dots-pagination">
+                <span *ngFor="let img of local.imagen_urls; let i = index"
+                  [class.active]="i === currentImageIndex" (click)="goToImage(i)"></span>
+              </div>
+            </ng-container>
+            <ng-template #noImages>
+              <div class="no-image-available-placeholder">
+                <p>No hay imágenes disponibles para este local.</p>
+                <img src="https://placehold.co/600x400/e0e0e0/333?text=Sin+Imagen" alt="Sin Imagen">
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Detalles del local -->
+          <div class="local-details-content">
+            <h1 class="local-name-title">{{ local.nombre_del_negocio }}</h1>
+            
+            <p class="local-code"><strong>Código Local:</strong> {{ local.codigo_local || 'N/A' }}</p>
+            <p class="local-container"><strong>Contenedor N°:</strong> {{ local.id_contenedor || 'N/A' }}</p>
+          
+
+            <div class="description-section">
+              <h3>Acerca de nosotros:</h3>
+              <p>{{ local.descripcion || 'No hay descripción detallada disponible para este local.' }}</p>
+            </div>
+
+            <!-- NUEVA SECCIÓN: PRODUCTOS DEL LOCAL -->
+            <div *ngIf="local.productos && local.productos.length > 0" class="products-in-local">
+                <h5>Productos de este local:</h5>
+                <ul>
+                    <li *ngFor="let product of local.productos">
+                        {{ product.nombre }}
+                        <span *ngIf="product.categoria?.nombre_categoria"> ({{ product.categoria?.nombre_categoria }})</span>
+                        <span *ngIf="product.descripcion_adicional"> - {{ product.descripcion_adicional }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="!local.productos || local.productos.length === 0" class="no-products-message">
+                <p>No hay productos registrados para este local.</p>
+            </div>
+
+            <div class="contact-social-section">
+              <h3>Contacto y Síguenos:</h3>
+              <p *ngIf="local.telefono">
+                <strong>Teléfono:</strong> <a [href]="'tel:' + local.telefono" class="contact-link">{{ local.telefono }}</a>
+              </p>
+              <div class="social-icons-wrapper">
+                <a *ngIf="local.facebook" [href]="'//www.facebook.com/' + local.facebook" target="_blank" class="social-icon-link" aria-label="Facebook">
+                  <img src="assets/icons/facebook-icon.svg" alt="Facebook">
+                </a>
+                <a *ngIf="local.instagram" [href]="'https://www.instagram.com/' + local.instagram" target="_blank" class="social-icon-link" aria-label="Instagram">
+                  <img src="assets/icons/instagram-icon.svg" alt="Instagram">
+                </a>
+                <a *ngIf="local.tiktok" [href]="'https://www.tiktok.com/ ' + local.tiktok" target="_blank" class="social-icon-link" aria-label="TikTok">
+                  <img src="assets/icons/tiktok-icon.svg" alt="TikTok">
+                </a>
+                <p *ngIf="!local.telefono && !local.facebook && !local.instagram && !local.tiktok" class="no-contact-info">
+                  No hay información de contacto o redes sociales disponibles.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </ng-container>
+
+      <ng-template #loadingOrError>
+        <div class="loading-state-message fade-in-up">
+          <div class="spinner-loader"></div>
+          <p>Cargando detalles del local o el local no existe...</p>
+        </div>
+      </ng-template>
+    </div>
+  </main>
+
+  <!-- Footer (Mantiene la estructura y contenido de tu diseño anterior) -->
+  <footer class="main-footer">
+    <div class="footer-content-wrapper">
+      <h2 class="footer-title">Contáctanos</h2>
+      <div class="footer-details">
+        <p><strong>N° celular:</strong> 0981130641</p>
+        <p><strong>Correo:</strong> joangallardohotmail.com</p>
+        <p><strong>Redes sociales:</strong> <a href="#" target="_blank">Facebook</a></p>
+        <p><strong>Ubicación:</strong> Calle de la cultura</p>
+      </div>
+      <p class="footer-copyright">&copy; {{ currentYear }} Mercado de Tarqui</p>
+    </div>
+  </footer>
+</div>

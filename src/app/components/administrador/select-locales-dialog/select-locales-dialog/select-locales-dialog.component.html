@@ -1,0 +1,29 @@
+<!-- src/app/components/administrador/select-locales-dialog/select-locales-dialog.component.html -->
+<h2 mat-dialog-title>Seleccionar Locales</h2>
+
+<mat-dialog-content>
+    <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar Local</mat-label>
+        <input matInput [(ngModel)]="searchText" (input)="filterLocales()" placeholder="Nombre o código de local">
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="locales-list-container">
+        <mat-list>
+            <mat-list-item *ngIf="filteredLocales.length === 0">
+                <p class="no-results">No se encontraron locales.</p>
+            </mat-list-item>
+            <mat-list-item *ngFor="let local of filteredLocales" class="local-item">
+                <mat-checkbox [checked]="isSelected(local.id_local)"
+                    (change)="toggleLocalSelection(local.id_local, $event)" color="primary">
+                    {{ local.nombre_del_negocio }} ({{ local.codigo_local }})
+                </mat-checkbox>
+            </mat-list-item>
+        </mat-list>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" class="cancel-button">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onConfirm()">Confirmar</button>
+</mat-dialog-actions>

@@ -1,0 +1,142 @@
+<header>
+  <div class="container animated fade-in-down">
+     <div class="logo-main">
+        <div id="logo-tarqui"></div>
+        <h2 class="logo">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark> </h2>
+      </div>
+      <input type="checkbox" id="check">
+      <label for="check" class="mostrar-menu">
+        &#8801;
+      </label>
+      <nav class="menu">
+        <a href="#" style="cursor: pointer;">Inicio</a>
+        <a (click)="irAPagina('mapa_contenedores')"  style="cursor: pointer;">Mapa del Mercado</a>
+        <a href="#" style="cursor: pointer;" >Locales</a>
+        <a href="#" style="cursor: pointer;">Sobre nosotros</a>
+        <label for="check" class="esconder-menu">&#215;</label>
+      </nav>
+    </div>
+
+  <div class="texto-sobreMapa animated fade-in-up delay-2">
+    <h1 class="text.aling">Encuentra fácilmente productos y locales en el C.C Nuevo Tarqui</h1>
+  </div>
+</header>
+
+<main>
+  <div class="slider animated zoom-in" *ngIf="promociones.length > 0">
+      </div>
+
+  <section class="productos">
+    <h1 class="animated fade-in-up">
+      Encuentra nuestros locales comerciales por categoría
+    </h1>
+    <div class="tarjetas">
+      <div id="tarjeta1" class="tarjeta animated fade-in-up delay-1" (click)="irAPagina('mapa_contenedores', 'Cárnicos y lácteos')"> <img src="assets/img/carnicos-lacteos.png" alt="carnicos">
+      <div class="texto">
+        <h3>Cárnicos y lácteos</h3>
+      </div> </div>
+      <div id="tarjeta2" class="tarjeta animated fade-in-up delay-2" (click)="irAPagina('mapa_contenedores', 'Frutas y verduras')">  <img src="assets/img/verduras.png" alt="verduras">
+      <div class="texto">
+        <h3>Frutas y verduras</h3>
+      </div></div>
+      <div id="tarjeta3" class="tarjeta animated fade-in-up delay-3" (click)="irAPagina('mapa_contenedores', 'Hierbas y medicinal')"> <img src="assets/img/pruductos-medicinales.png" alt="medicinal">
+      <div class="texto">
+        <h3>Hierbas y medicinal</h3>
+      </div> </div>
+      <div id="tarjeta4" class="tarjeta animated fade-in-up delay-4" (click)="irAPagina('mapa_contenedores', 'Granos y procesados')"> <img src="assets/img/granos.png" alt="grano">
+      <div class="texto">
+        <h3>Granos y procesados</h3>
+      </div> </div>
+      <div id="tarjeta5" class="tarjeta animated fade-in-up delay-5" (click)="irAPagina('mapa_contenedores', 'Celulares, electrónicos')">  <img src="assets/img/celulares.png" alt="celulares">
+      <div class="texto">
+        <h3>Celulares, electrónicos</h3>
+      </div> </div>
+      <div id="tarjeta6" class="tarjeta animated fade-in-up delay-6" (click)="irAPagina('mapa_contenedores', 'Locales de Ropa')"> <img src="assets/img/ropa.png" alt="img-ropa">
+      <div class="texto">
+        <h3>Locales de Ropa</h3>
+      </div> </div>
+      <div id="tarjeta7" class="tarjeta animated fade-in-up delay-7" (click)="irAPagina('mapa_contenedores', 'Restaurantes')"> <img src="assets/img/restaurante.png" alt="restaurantes">
+      <div class="texto">
+        <h3>Restaurantes</h3>
+      </div> </div>
+      <div id="tarjeta8" class="tarjeta animated fade-in-up delay-8" (click)="irAPagina('mapa_contenedores', 'Locales de belleza')"> <img src="assets/img/belleza-Photoroom.png" alt="belleza">
+      <div class="texto">
+        <h3>Locales de belleza</h3>
+      </div> </div>
+    </div>
+  </section>
+
+
+
+
+  <section class="tiktok animated fade-in-left">
+     <div class="contenedor-servicios">
+      <div class="texto-servicios animated fade-in-up">
+              <h1>Videos de TikTok</h1>
+      </div>
+       <div class="carousel" *ngIf="tiktokVideos.length > 0">
+        <button class="nav-button prev" (click)="prevTiktokVideo()">&#10094;</button>
+        <div class="carousel-slide">
+          <div class="video-item" *ngFor="let video of visibleTiktokVideos">
+            <blockquote class="tiktok-embed" [attr.cite]="video" [attr.data-video-id]="getVideoId(video)"
+              style="max-width: 705px; min-width: 325px;">
+              <section>
+                <p><a target="_blank" [attr.title]="'video'" [attr.href]="video"></a></p>
+              </section>
+            </blockquote>
+          </div>
+        </div>
+        <button class="nav-button next" (click)="nextTiktokVideo()">&#10095;</button>
+      </div>
+      <div class="no-content-message" *ngIf="tiktokVideos.length === 0">
+        <p>No hay videos de TikTok activos en este momento.</p>
+      </div>
+    </div>
+    </section>
+
+  <section class="servicios">
+   
+  </section>
+
+
+  <section id="clientes" class="animated fade-in-right">
+    <div class="testimonio-wrapper">
+        <div class="testimonio-slider">
+          <div class="testimonio" *ngFor="let comentario of comentarios; let i = index"
+            [class.active]="i === comentarioActual">
+            <p>{{ comentario.texto }}</p>
+            <p class="autor">{{ comentario.autor }}</p>
+          </div>
+        </div>
+      </div>
+      </section>
+
+
+  <div class="youtube animated fade-in-up">
+    <h1>Videos de algunos visitantes</h1>
+      <div class="carousel-container" *ngIf="youtubeUrls.length > 0">
+        <button class="nav-button" (click)="prevVideo()">&#10094;</button>
+        <div class="carousel-slide">
+          <iframe *ngFor="let video of visibleVideos" [src]="video | safeUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="nav-button" (click)="nextVideo()">&#10095;</button>
+      </div>
+      <div class="no-content-message" *ngIf="youtubeUrls.length === 0">
+        <p>No hay videos de YouTube activos en este momento.</p>
+      </div>
+    </div>
+
+   
+
+</main>
+
+<footer class="animated fade-in-up">
+  <div>
+      <h1>Contáctanos</h1>
+      <p>N° celular: <br> 0981130641 </p>
+      <p>Correo:<br> joangallardohotmail.com</p>
+      <p>Redes sociales: <br> Facebook</p>
+      <p>Ubicación: <br> Calle de la cultura</p>
+      <p>&copy; 2025 Mercado de Tarqui</p>
+    </div>
+    </footer>

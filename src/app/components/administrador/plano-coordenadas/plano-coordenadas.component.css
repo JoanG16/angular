@@ -1,0 +1,231 @@
+:root {
+
+    --azul: #3e4077;
+    --mostaza: #ce9636;
+    --beige: #f7f8f3;
+    --crema: #f9f0b6;
+    --rosado: #ac6c7a;
+    --gris-claro: #cacfea;
+    --gris: #999eb9;
+    --amarillo-suave: #dec774;
+    background-color: beige;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+table thead th {
+    background-color: var(--azul);
+    /* O un color de tu preferencia */
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    /* Evita que el texto se rompa en varias líneas */
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* Estilos para "N/A" */
+table tbody td {
+    color: #333;
+}
+
+table tbody td:empty:before {
+    content: 'N/A';
+    color: #999;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--azul);
+    color: #fff;
+}
+
+button:hover {
+    background-color: var(--mostaza);
+}
+
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    background-color: beige;
+    min-height: 100vh;
+    flex: 1;
+}
+
+.left {
+    background: var(--azul);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0 30px 30px 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+}
+
+.logo img {
+    width: 100%;
+    max-width: 170px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+.left nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.left nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.left nav ul li a:hover {
+    background: #a5891b;
+}
+
+main {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f2f2;
+    margin: 10px;
+    border-radius: 8px;
+}
+
+.datos h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+}
+
+input,
+select {
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+}
+
+pre {
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+
+    overflow-x: auto;
+}
+
+.boton-guardar {
+    min-width: 150px;
+    height: auto;
+}
+
+.boton-guardar button {
+    background-color: var(--azul);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    color: #fff;
+    background-color: var(--mostaza);
+}
+
+.container-mapa {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+#map {
+    width: 100%;
+    max-width: 1000px;
+    height: 520px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .left {
+        flex-direction: row;
+        justify-content: space-evenly;
+        border-radius: 0;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+
+    .form-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #map {
+        height: 400px;
+    }
+}

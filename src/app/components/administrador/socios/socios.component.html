@@ -1,0 +1,110 @@
+<div class="container">
+    <aside class="left">
+        <div class="logo">
+            <img src="assets/icon/logo.jpg" alt="Logo" />
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">🏠 Inicio</a></li>
+                <li><a href="#locales">📍 Locales</a></li>
+                <li><a href="#socios">🧑‍🤝‍🧑 Socios</a></li>
+                <li><a href="#ofertas">🏷 Ofertas</a></li>
+                <li><a href="#contenedores">🚛 Contenedores</a></li>
+            </ul>
+        </nav>
+        <nav>
+            <ul>
+                <li><a href="#Usuario">👤 Usuario</a></li>
+                <li><a href="#config">⚙️ Configuración</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="socios-table-container">
+            <h2>Listado de Socios</h2>
+
+            <!-- Sección de Filtros -->
+            <div class="filter-section mb-4 p-3 border rounded">
+                <h4>Filtros de Búsqueda</h4>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="filterNombreSocio" class="form-label">Buscar por Nombre o Apellido:</label>
+                        <input type="text" id="filterNombreSocio" class="form-control" [(ngModel)]="filterNombreSocio"
+                            (input)="applyFilters()" name="filterNombreSocio"
+                            placeholder="Escribe el nombre o apellido del socio">
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Sección de Filtros -->
+
+            <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Socio</button>
+
+            <div *ngIf="socios.length > 0; else noSocios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Socio</th>
+                            <th>Nombres</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                            <th>Creado En</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let socio of socios">
+                            <td>{{ socio.id_socio }}</td>
+                            <td>{{ socio.nombres }}</td>
+                            <td>{{ socio.apellido }}</td>
+                            <td>{{ socio.telefono || 'N/A' }}</td>
+                            <td>{{ socio.correo || 'N/A' }}</td>
+                            <td>{{ socio.creado_en | date:'short' }}</td>
+                            <td class="acciones">
+                                <button class="btn-accion btn-editar"
+                                    (click)="abrirFormularioEditar(socio)">Editar</button>
+                                <button class="btn-accion btn-eliminar"
+                                    (click)="eliminarSocio(socio.id_socio, socio.nombres, socio.apellido)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template #noSocios>
+                <p>No hay socios para mostrar.</p>
+            </ng-template>
+        </div>
+
+        <!-- Formulario/Modal para Crear/Editar Socio -->
+        <div class="modal-backdrop" *ngIf="mostrarFormulario">
+            <div class="modal-content">
+                <h3>{{ socioSeleccionado ? 'Editar Socio' : 'Crear Nuevo Socio' }}</h3>
+                <form (ngSubmit)="guardarSocio()">
+                    <div class="form-group">
+                        <label for="nombres">Nombres:</label>
+                        <input id="nombres" type="text" [(ngModel)]="nuevoSocio.nombres" name="nombres" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido:</label>
+                        <input id="apellido" type="text" [(ngModel)]="nuevoSocio.apellido" name="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input id="telefono" type="text" [(ngModel)]="nuevoSocio.telefono" name="telefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo:</label>
+                        <input id="correo" type="email" [(ngModel)]="nuevoSocio.correo" name="correo">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-guardar">{{ socioSeleccionado ? 'Guardar Cambios' : 'Crear
+                            Socio' }}</button>
+                        <button type="button" class="btn-cancelar" (click)="cerrarFormulario()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

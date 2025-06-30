@@ -1,0 +1,782 @@
+/* src/app/components/detalle-local/detalle-local.component.css */
+
+/* Paleta de colores consistente con Home y Mapa */
+:root {
+  --primary-blue: #3e4077; /* Azul oscuro principal */
+  --accent-gold: #ce9636; /* Mostaza para acentos */
+  --light-grey-bg: #f0f2f5; /* Fondo general más claro */
+  --card-bg: #ffffff; /* Fondo para tarjetas y secciones principales */
+  --text-dark: #333; /* Texto oscuro */
+  --text-light: #fff; /* Texto claro (para fondos oscuros) */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --border-light: #e0e0e0; /* Borde muy sutil */
+  --section-bg-alt: #f9f9f9; /* Fondo alterno para secciones dentro de la tarjeta */
+  --hover-effect: #dec774; /* Amarillo suave para efectos de hover */
+}
+
+/* Base Body Styles */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+  background-color: var(--light-grey-bg);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Page Container (Flex column for header, main, footer layout) */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f7f8f3;
+}
+
+/* --- Header (Copied from mapa-contenedores.component.css for consistency) --- */
+.main-header {
+  width: 100%;
+  padding: 15px 0;
+  background-color: #3e4077;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.site-branding {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 45px;
+  height: 45px;
+  min-width: 45px;
+  background-image: url('/assets/icon/logo.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.site-title {
+  font-size: 1.2em;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.site-title mark {
+  background-color: transparent;
+  color: var(--accent-gold);
+  font-weight: 900;
+}
+
+.main-navigation ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-navigation li {
+  margin-left: 30px;
+}
+
+.main-navigation .nav-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 500;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.main-navigation .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--accent-gold);
+  transition: width 0.3s ease;
+}
+
+.main-navigation .nav-link:hover::after {
+  width: 100%;
+}
+
+.main-navigation .nav-link:hover {
+  color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.menu-toggle-checkbox {
+  display: none;
+}
+
+.hamburger-icon,
+.close-menu-icon {
+  display: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: transform 0.3s ease;
+  z-index: 1001;
+}
+
+.hamburger-icon:hover,
+.close-menu-icon:hover {
+  transform: scale(1.1);
+}
+/* --- End Header --- */
+
+/* --- Main Content Area --- */
+
+.local-info-section-containerfade-in-up{
+   background-color: #fff;
+   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+   border-radius: 10px;
+   }
+
+
+.local-detail-main-content {
+  flex-grow: 1;
+  padding: 3rem 1.5rem; /* More vertical padding */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align content to the top */
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Space between back button and info section */
+}
+
+/* Back Button */
+.back-to-map-button {
+  align-self: flex-start; /* Align to left */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+  border: none;
+  padding: 0.9rem 1.8rem; /* Larger padding */
+  border-radius: 10px; /* More rounded */
+  font-size: 1.05rem; /* Slightly larger font */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-soft);
+  text-decoration: none; /* In case it's an anchor */
+}
+
+.back-to-map-button:hover {
+  background-color: #ce9636;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  color:#fff;
+}
+
+.back-to-map-button svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.back-to-map-button:hover svg {
+  transform: translateX(-3px);
+}
+
+/* Local Info Section Container (Main Card) */
+.local-info-section-container {
+  background-color: var(--card-bg);
+  border-radius: 20px; /* Highly rounded corners */
+  box-shadow: var(--shadow-medium);
+  display: flex;
+  flex-direction: row; /* Default desktop layout */
+  overflow: hidden;
+}
+
+/* --- Entrance Animation --- */
+@keyframes fadeInUpContent {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUpContent 0.8s ease-out forwards;
+  animation-delay: 0.3s; /* Delay for content to appear after header */
+  opacity: 0; /* Hidden by default */
+}
+
+/* Image Gallery / Carousel */
+.image-gallery-carousel {
+  flex: 1;
+  min-width: 450px; /* Minimum width for image section on desktop */
+  background-color: var(--section-bg-alt); /* Lighter background for image area */
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-track {
+  width: 100%;
+  max-width: 550px; /* Max width for the image display */
+  height: 400px; /* Fixed height for consistency */
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000020; /* Black background for images that don't fill */
+}
+
+.carousel-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures entire image is visible */
+  display: block;
+  transition: opacity 0.6s ease-in-out; /* Smooth fade between images */
+}
+
+/* Carousel Navigation Buttons */
+.carousel-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(37, 43, 75, 0.6);
+  color: var(--text-light);
+  border: none;
+  padding: 8px 19px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.8rem; /* Larger arrows */
+  z-index: 10;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  backdrop-filter: blur(3px); /* Slight blur for modern look */
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.268);
+}
+
+.carousel-nav-button.prev {
+  left: 20px;
+  color: #f0f2f5;
+}
+
+.carousel-nav-button.next {
+  right: 20px;
+   color: #f0f2f5;
+}
+
+.carousel-nav-button:hover {
+  background-color: #3e4077;
+  transform: translateY(-50%) scale(1.05);
+   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Carousel Pagination Dots */
+.carousel-dots-pagination {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dots-pagination span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, border 0.3s ease;
+  border: 2px solid transparent; /* Border for subtle highlight */
+}
+
+.carousel-dots-pagination span.active {
+  background-color: #f5f5f5;
+  transform: scale(1.3);
+  border: 2px solid var(--text-light); /* White border for active dot */
+}
+
+/* No Images Placeholder */
+.no-image-available-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  color: #777;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 20px;
+}
+.no-image-available-placeholder img {
+  max-width: 70%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+/* Local Details Content (Text Information) */
+.local-details-content {
+  flex: 1.2; /* Allows it to take more space than the image */
+  padding: 2.5rem; /* More generous padding */
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* Consistent spacing between content blocks */
+}
+
+.local-name-title {
+  font-size: 2.8rem; /* Larger and more impactful title */
+  color: var(--primary-blue);
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-weight: 800; /* Extra bold */
+  line-height: 1.1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.local-details-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0; /* Reset default paragraph margin */
+  color: var(--text-dark);
+}
+
+.local-details-content strong {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+/* Description Section */
+.description-section {
+  background-color: var(--section-bg-alt); /* Light gray background */
+  border-left: 6px solid var(--accent-gold); /* Prominent gold border */
+  padding: 1.5rem; /* More padding */
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.description-section h3 {
+  margin-top: 0;
+  color: var(--primary-blue);
+  font-size: 1.4rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.description-section p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* Contact & Social Section */
+.contact-social-section {
+  margin-top: 2rem;
+  border-top: 1px dashed var(--border-light); /* Dashed subtle border */
+  padding-top: 2rem;
+}
+
+.contact-social-section h3 {
+  color: var(--primary-blue);
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.contact-link {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.contact-link:hover {
+  color: var(--accent-gold);
+  text-decoration: underline;
+}
+
+.social-icons-wrapper {
+  display: flex;
+  gap: 20px; /* More space between icons */
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.social-icon-link {
+  display: inline-block;
+  width: 50px; /* Larger icons */
+  height: 50px;
+  background-color: var(--primary-blue);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.social-icon-link img {
+  width: 28px; /* Icon image size */
+  height: 28px;
+  filter: invert(100%); /* Makes icons white */
+}
+
+.social-icon-link:hover {
+  background-color: var(--accent-gold);
+  transform: translateY(-5px) scale(1.1); /* Lifts and slightly enlarges */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.no-contact-info {
+  font-style: italic;
+  color: #777;
+  text-align: center;
+  width: 100%;
+}
+
+
+/* Loading State */
+@keyframes spinnerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-state-message {
+  text-align: center;
+  padding: 80px 20px; /* More padding for a prominent message */
+  font-size: 1.4rem;
+  color: var(--primary-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  box-shadow: var(--shadow-soft);
+  margin: 50px auto;
+  max-width: 600px;
+  animation: fadeInUpContent 0.8s ease-out forwards; /* Apply entrance animation */
+}
+
+.spinner-loader {
+  border: 6px solid var(--border-light);
+  border-top: 6px solid var(--primary-blue);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spinnerRotate 1s linear infinite;
+}
+
+/* --- Footer (Copied from home.component.css for consistency) --- */
+.main-footer {
+  background-color: #3e4077;
+  padding: 40px 20px;
+  text-align: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.footer-content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  font-size: 1.8em;
+  margin-bottom: 25px;
+  color: var(--accent-gold);
+}
+
+.footer-details p {
+  margin: 10px 0;
+  font-size: 1.05em;
+  line-height: 1.5;
+}
+
+.footer-details a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.footer-details a:hover {
+  color: var(--accent-gold);
+}
+
+.footer-copyright {
+  margin-top: 30px;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+/* --- End Footer --- */
+
+
+/* --- Responsive Adjustments --- */
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .header-content-wrapper {
+    padding: 0 15px;
+  }
+  .site-title {
+    font-size: 1.1em;
+  }
+  .main-navigation li {
+    margin-left: 25px;
+  }
+  .main-navigation .nav-link {
+    font-size: 0.95em;
+  }
+
+  .local-detail-main-content {
+    padding: 2rem 1rem;
+  }
+  .back-to-map-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .local-info-section-container {
+    flex-direction: column; /* Stack image and details */
+    border-radius: 15px;
+  }
+  .image-gallery-carousel {
+    min-width: unset; /* Remove min-width */
+    width: 100%;
+    padding: 1rem;
+  }
+  .carousel-track {
+    height: 350px; /* Adjust height for tablets */
+    max-width: 100%;
+    border-radius: 12px;
+  }
+  .carousel-nav-button {
+    padding: 10px 16px;
+    font-size: 1.6rem;
+  }
+  .carousel-dots-pagination {
+    bottom: 15px;
+    gap: 8px;
+  }
+  .carousel-dots-pagination span {
+    width: 10px;
+    height: 10px;
+  }
+
+  .local-details-content {
+    padding: 2rem;
+    gap: 1rem;
+  }
+  .local-name-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .local-details-content p {
+    font-size: 1rem;
+  }
+  .description-section {
+    padding: 1.2rem;
+    margin-top: 1rem;
+  }
+  .description-section h3 {
+    font-size: 1.3rem;
+  }
+  .contact-social-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+  .contact-social-section h3 {
+    font-size: 1.4rem;
+  }
+  .social-icon-link {
+    width: 45px;
+    height: 45px;
+  }
+  .social-icon-link img {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Header Mobile */
+  .site-title {
+    font-size: 1em; /* Smaller title */
+  }
+  .hamburger-icon {
+    display: block;
+    order: 1;
+  }
+  .main-navigation {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--primary-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.4s ease-in-out;
+    z-index: 1000;
+  }
+  .menu-toggle-checkbox:checked ~ .main-navigation {
+    right: 0;
+  }
+  .main-navigation ul {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+  }
+  .main-navigation li {
+    margin: 15px 0;
+  }
+  .main-navigation .nav-link {
+    font-size: 1.2em;
+    padding: 8px 0;
+    display: block;
+  }
+  .close-menu-icon {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 2em;
+    color: var(--text-light);
+  }
+  /* End Header Mobile */
+
+  .local-detail-main-content {
+    padding: 1.5rem 0.8rem;
+  }
+  .back-to-map-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    gap: 5px;
+  }
+  .back-to-map-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .local-info-section-container {
+    border-radius: 10px;
+  }
+  .image-gallery-carousel {
+    padding: 0.8rem;
+  }
+  .carousel-track {
+    height: 280px; /* Smaller height for mobile */
+    border-radius: 10px;
+  }
+  .carousel-nav-button {
+    padding: 8px 14px;
+    font-size: 1.4rem;
+    left: 10px;
+    right: 10px;
+  }
+  .carousel-dots-pagination {
+    bottom: 10px;
+    gap: 6px;
+  }
+  .carousel-dots-pagination span {
+    width: 8px;
+    height: 8px;
+  }
+
+  .local-details-content {
+    padding: 1.5rem;
+    gap: 0.8rem;
+  }
+  .local-name-title {
+    font-size: 1.8rem;
+  }
+  .local-details-content p {
+    font-size: 0.9rem;
+  }
+  .description-section {
+    padding: 1rem;
+  }
+  .description-section h3 {
+    font-size: 1.2rem;
+  }
+  .social-icon-link {
+    width: 40px;
+    height: 40px;
+  }
+  .social-icon-link img {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Loading state */
+  .loading-state-message {
+    padding: 50px 15px;
+    font-size: 1.1rem;
+    gap: 15px;
+  }
+  .spinner-loader {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Footer */
+  .footer-title {
+    font-size: 1.5em;
+  }
+  .footer-details p {
+    font-size: 0.9em;
+  }
+}

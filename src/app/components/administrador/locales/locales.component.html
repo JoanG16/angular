@@ -1,0 +1,195 @@
+<div class="container">
+    <aside class="left">
+        <div class="logo">
+            <img src="assets/icon/logo.jpg" alt="Logo" />
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">🏠 Inicio</a></li>
+                <li><a href="#locales">📍 Locales</a></li>
+                <li><a href="#socios">🧑‍🤝‍🧑 Socios</a></li>
+                <li><a href="#ofertas">🏷 Ofertas</a></li>
+                <li><a href="#contenedores">🚛 Contenedores</a></li>
+            </ul>
+        </nav>
+        <nav>
+            <ul>
+                <li><a href="#Usuario">👤 Usuario</a></li>
+                <li><a href="#config">⚙️ Configuración</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="locales-table-container">
+            <h2>Listado de Locales</h2>
+            <div class="filter-section mb-4 p-3 border rounded">
+                <h4>Filtros de Búsqueda</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="filterBloque" class="form-label">Filtrar por Bloque:</label>
+                        <select id="filterBloque" class="form-select" [(ngModel)]="filterBloque"
+                            (change)="applyFilters()" name="filterBloque">
+                            <option [ngValue]="null">Todos los Bloques</option>
+                            <option *ngFor="let bloque of bloquesUnicos" [ngValue]="bloque">
+                                {{ bloque }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="filterNombreLocal" class="form-label">Buscar por Nombre de Local:</label>
+                        <input type="text" id="filterNombreLocal" class="form-control" [(ngModel)]="filterNombreLocal"
+                            (input)="applyFilters()" name="filterNombreLocal" placeholder="Escribe el nombre del local">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Local</button>
+
+            <div *ngIf="locales.length > 0; else noLocales">
+                <table>
+                    <thead>
+                        <tr>
+                           
+                            <th>Nombre del Negocio</th>
+                            <th>Nombre del Dueño</th>
+                            <th>Código Local</th>
+                            <th>Facebook</th>
+                            <th>Instagram</th>
+                            <th>TikTok</th>
+                            <th>Teléfono</th>
+                            <th>N° Contenedor</th>
+                            <th>Descripción</th> <!-- NUEVA COLUMNA -->
+                            
+                            <th>Imágenes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let local of locales">
+                            
+                            <td>{{ local.nombre_del_negocio }}</td>
+                            <td>{{ local.nombre_del_dueno }}</td>
+                            <td>{{ local.codigo_local }}</td>
+                            <td>{{ local.facebook || 'N/A' }}</td>
+                            <td>{{ local.instagram || 'N/A' }}</td>
+                            <td>{{ local.tiktok || 'N/A' }}</td>
+                            <td>{{ local.telefono || 'N/A' }}</td>
+                            <td>{{ local.id_contenedor }}</td>
+                            <td>{{ local.descripcion || 'N/A' }}</td> <!-- NUEVO CAMPO EN LA TABLA -->
+                            
+                            <td>
+                                <div class="local-images-gallery">
+                                    <img *ngFor="let imageUrl of local.imagen_urls" [src]="backendBaseUrl + imageUrl" alt="Imagen del local"
+                                        class="local-image-thumbnail">
+                                    <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
+                                </div>
+                            </td>
+                            <td class="acciones">
+                                <button class="btn-accion btn-editar"
+                                    (click)="abrirFormularioEditar(local)">Editar</button>
+                                <button class="btn-accion btn-eliminar"
+                                    (click)="eliminarLocal(local.id_local, local.nombre_del_negocio)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template #noLocales>
+                <p>No hay locales para mostrar.</p>
+            </ng-template>
+        </div>
+
+        <div class="modal-backdrop" *ngIf="mostrarFormulario">
+            <div class="modal-content">
+                <h3>{{ localSeleccionado ? 'Editar Local' : 'Crear Nuevo Local' }}</h3>
+                <form (ngSubmit)="guardarLocal()">
+                    <div class="form-group">
+                        <label for="nombreNegocio">Nombre del Negocio:</label>
+                        <input id="nombreNegocio" type="text" [(ngModel)]="nuevoLocal.nombre_del_negocio"
+                            name="nombre_del_negocio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreDueno">Nombre del Dueño:</label>
+                        <input id="nombreDueno" type="text" [(ngModel)]="nuevoLocal.nombre_del_dueno"
+                            name="nombre_del_dueno" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="codigoLocal">Código Local:</label>
+                        <input id="codigoLocal" type="text" [(ngModel)]="nuevoLocal.codigo_local" name="codigo_local"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="facebook">Facebook:</label>
+                        <input id="facebook" type="url" [(ngModel)]="nuevoLocal.facebook" name="facebook">
+                    </div>
+                    <div class="form-group">
+                        <label for="instagram">Instagram:</label>
+                        <input id="instagram" type="url" [(ngModel)]="nuevoLocal.instagram" name="instagram">
+                    </div>
+                    <div class="form-group">
+                        <label for="tiktok">TikTok:</label>
+                        <input id="tiktok" type="url" [(ngModel)]="nuevoLocal.tiktok" name="tiktok">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input id="telefono" type="text" [(ngModel)]="nuevoLocal.telefono" name="telefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="selectBloque">Bloque:</label>
+                        <select id="selectBloque" [(ngModel)]="nuevoLocal.selectedBloque" (change)="onBloqueSelected()"
+                            name="nuevoLocal_selectedBloque" required>
+                            <option [ngValue]="null" disabled>Selecciona un Bloque</option>
+                            <option *ngFor="let bloque of bloquesUnicos" [ngValue]="bloque">
+                                {{ bloque }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idContenedor">N° Contenedor:</label>
+                        <select id="idContenedor" [(ngModel)]="nuevoLocal.id_contenedor" name="id_contenedor" required
+                            [disabled]="!nuevoLocal.selectedBloque">
+                            <option [ngValue]="0" disabled>
+                                {{ nuevoLocal.selectedBloque ? 'Selecciona un contenedor' : 'Selecciona un bloque
+                                primero' }}
+                            </option>
+                            <option *ngFor="let contenedor of contenedoresFiltrados"
+                                [ngValue]="contenedor.id_contenedor">
+                                {{ contenedor.numero_contenedor }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- NUEVO CAMPO: Descripción -->
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea id="descripcion" [(ngModel)]="nuevoLocal.descripcion" name="descripcion"></textarea>
+                    </div>
+
+                    <div class="form-group file-upload-group">
+                        <label for="imagenLocal">Imágenes del Local:</label>
+                        <input type="file" id="imagenLocal" (change)="onFileSelected($event)" accept="image/*" multiple
+                            name="imagenLocal">
+                        <div *ngIf="nuevoLocal.imagen_urls && nuevoLocal.imagen_urls.length > 0" class="images-preview-gallery">
+                            <div class="image-preview-item" *ngFor="let imageUrl of nuevoLocal.imagen_urls; let i = index">
+                                <img [src]="backendBaseUrl + imageUrl" alt="Previsualización de imagen" class="image-preview">
+                                <button type="button" class="clear-image-btn" (click)="removeImage(i)">
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                        <span *ngIf="!nuevoLocal.imagen_urls || nuevoLocal.imagen_urls.length === 0" class="no-image-text">
+                            No hay imágenes seleccionadas.
+                        </span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-guardar">{{ localSeleccionado ? 'Guardar Cambios' : 'Crear
+                            Local' }}</button>
+                        <button type="button" class="btn-cancelar" (click)="cerrarFormulario()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

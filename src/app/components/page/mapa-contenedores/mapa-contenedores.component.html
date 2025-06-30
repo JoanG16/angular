@@ -1,0 +1,108 @@
+<!-- src/app/components/mapa-contenedores/mapa-contenedores.component.html -->
+
+<body>
+  <header class="main-header">
+    <div class="header-content-wrapper">
+      <div class="site-branding">
+        <div class="logo-image"></div>
+        <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+      </div>
+      <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+      <label for="menu-toggle" class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </label>
+      <nav class="main-navigation">
+        <label for="menu-toggle" class="close-menu-icon">&times;</label>
+        <ul>
+          <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+          <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+          <li><a href="#" class="nav-link">Locales</a></li>
+          <li><a href="#" class="nav-link">Sobre nosotros</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Añadimos la clase 'content-loaded' condicionalmente para la animación de entrada -->
+  <div class="map-page-wrapper" [class.content-loaded]="!isLoading">
+    <!-- Panel de filtros y búsqueda -->
+    <div class="filters-panel">
+      <h3 class="panel-title">Buscar Local o Producto</h3>
+      <div class="filter-group">
+        <input type="text" id="searchInput" [(ngModel)]="searchTerm" placeholder="Nombre de Local, Producto o # Contenedor" (keyup.enter)="applyFilters()" />
+        <select id="categorySelect" [(ngModel)]="selectedCategory">
+          <option value="">Todas las Categorías</option>
+          <option *ngFor="let categoria of categoriasDisponibles" [value]="categoria">{{ categoria }}</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button (click)="applyFilters()" class="btn-primary">Filtrar</button>
+        <button (click)="clearFilters()" class="btn-secondary">Limpiar</button>
+      </div>
+
+      <!-- Indicador de carga animado -->
+      <div *ngIf="isLoading" class="loading-indicator">
+        <div class="spinner"></div>
+        <span>Cargando datos del mapa...</span>
+      </div>
+
+      <!-- Panel de información del contenedor seleccionado -->
+      <div class="info-panel" [class.show]="contenedorSeleccionado" [@panelAnimation]="contenedorSeleccionado ? 'visible' : 'hidden'">
+        <h3 class="panel-title">Información del Contenedor</h3>
+        <div *ngIf="contenedorSeleccionado">
+          <p><strong>ID Contenedor:</strong> {{ contenedorSeleccionado.id_contenedor }}</p>
+          <p><strong>Número Contenedor:</strong> {{ contenedorSeleccionado.numero_contenedor }}</p>
+          <p><strong>Bloque:</strong> {{ contenedorSeleccionado.bloque }}</p>
+          <p *ngIf="contenedorSeleccionado.socio?.nombres"><strong>Socio:</strong> {{ contenedorSeleccionado.socio?.nombres }} {{ contenedorSeleccionado.socio?.apellido }}</p>
+
+          <div *ngIf="contenedorSeleccionado.locales && contenedorSeleccionado.locales.length > 0">
+            <h4>Locales en este Contenedor:</h4>
+            <ul class="local-list">
+              <li *ngFor="let local of contenedorSeleccionado.locales" class="local-item-animated">
+                <strong>{{ local.nombre_del_negocio }}</strong> <br>
+                <span *ngIf="local.telefono">Teléfono: {{ local.telefono }}</span>
+                <div class="local-social-links">
+                  <a *ngIf="local.facebook" [href]="local.facebook" target="_blank">Facebook</a>
+                  <a *ngIf="local.instagram" [href]="local.instagram" target="_blank">Instagram</a>
+                  <a *ngIf="local.tiktok" [href]="local.tiktok" target="_blank">TikTok</a>
+                </div>
+
+                <div *ngIf="local.productos_vendidos && local.productos_vendidos.length > 0" class="products-in-local">
+                  <h5>Productos:</h5>
+                  <ul>
+                    <li *ngFor="let product of local.productos_vendidos">
+                      {{ product.nombre }} ({{ product.categoria_obj?.nombre_categoria || 'N/A' }})
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="!local.productos_vendidos || local.productos_vendidos.length === 0" class="no-products-message">
+                  <p>No hay productos registrados para este local.</p>
+                </div>
+                <button class="btn-detail-local" (click)="verDetalleLocal(local.id_local)">Ver Detalles del Local</button>
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="!contenedorSeleccionado.locales || contenedorSeleccionado.locales.length === 0">
+            <p class="no-locales-message">No hay locales registrados para este contenedor.</p>
+          </div>
+        </div>
+        <div *ngIf="!contenedorSeleccionado && !isLoading" class="no-selection-message">
+          <p>Haz clic en un contenedor en el mapa o usa los filtros para ver su información detallada.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor del mapa -->
+    <div class="map-area">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <div class="chatbot-floating">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="Chatbot" />
+    <span>¿En qué puedo ayudarte?</span>
+  </div>
+
+</body>

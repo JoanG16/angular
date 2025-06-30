@@ -1,0 +1,604 @@
+/* src/app/components/mapa-contenedores/mapa-contenedores.component.css */
+
+/* Paleta de colores de Home Component para consistencia */
+:root {
+  --azul: #3e4077;
+  --mostaza: #ce9636;
+  --beige: #f7f8f3; /* Fondo claro principal, muy suave */
+  --crema: #f9f0b6; /* Un tono más cálido y saturado que el beige, ideal para tarjetas o fondos secundarios suaves */
+  --rosado: #ac6c7a; /* Para acentos o secciones que queremos que destaquen */
+  --gris-claro: #cacfea; /* Útil para bordes sutiles o separadores */
+  --gris: #999eb9; /* Para texto secundario o iconos */
+  --amarillo-suave: #dec774; /* Para detalles específicos o highlights en el mapa */
+
+  /* Mapeo a nombres más genéricos para el CSS */
+  --primary-color: var(--azul);
+  --accent-color: var(--mostaza);
+  --light-bg-primary: var(--beige);
+  --light-bg-secondary: var(--crema);
+  --highlight-accent: var(--rosado); /* Usado para chatbot o elementos de atención */
+  --text-main: #2c2c2c; /* Un negro más suave para texto principal */
+  --text-light: #fff;
+  --text-subtle: var(--gris);
+  --border-color: var(--gris-claro);
+}
+
+/* Estilos globales y reseteo básico para el body del componente */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--beige); /* Fondo general de la página - Beige */
+  color: var(--text-main);
+  min-height: 100vh; /* Asegura que el body ocupe toda la altura */
+  display: flex;
+  flex-direction: column;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* --- Header (Reutilizado del HomeComponent para consistencia visual) --- */
+.main-header {
+  width: 100%;
+  padding: 10px 0;
+  background-color: var(--azul); /* Fondo del header: Azul */
+  color: var(--beige);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* No permite que el header se encoja */
+}
+
+.header-content-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0 15px;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.site-branding {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background-image: url('/assets/icon/logo.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.site-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.site-title mark {
+  background-color: transparent;
+  color: var(--accent-color); /* Mostaza */
+  font-weight: 700;
+}
+
+/* Navegación */
+.main-navigation ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-navigation li {
+  margin-left: 25px;
+}
+
+.main-navigation .nav-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.95em;
+  font-weight: 500;
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.main-navigation .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-color); /* Mostaza */
+  transition: width 0.3s ease;
+}
+
+.main-navigation .nav-link:hover::after {
+  width: 100%;
+}
+
+.main-navigation .nav-link:hover {
+  color: var(--accent-color); /* Mostaza */
+}
+
+/* Menú hamburguesa (oculto por defecto en desktop) */
+.menu-toggle-checkbox {
+  display: none;
+}
+
+.hamburger-icon,
+.close-menu-icon {
+  display: none;
+  font-size: 1.6em;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: transform 0.3s ease;
+}
+
+.hamburger-icon:hover,
+.close-menu-icon:hover {
+  transform: scale(1.1);
+}
+
+/* --- Layout Principal de la Página del Mapa --- */
+.map-page-wrapper {
+  display: flex;
+  flex-direction: row; /* Horizontal en desktop */
+  flex-grow: 1; /* Ocupa el espacio restante después del header */
+  background-color: var(--light-bg-primary); /* Beige */
+}
+
+.filters-panel {
+  flex-basis: 320px;
+  flex-shrink: 0;
+  background-color: var(--light-bg-secondary); /* Fondo del panel de filtros: Crema (más cálido) */
+  padding: 25px;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panel-title {
+  color: var(--primary-color); /* Azul */
+  font-size: 1.6em;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filters-panel input[type="text"],
+.filters-panel select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color); /* Gris claro */
+  border-radius: 10px;
+  font-size: 1em;
+  color: var(--text-main);
+  background-color: var(--text-light); /* Blanco para inputs */
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.07);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filters-panel input[type="text"]:focus,
+.filters-panel select:focus {
+  border-color: var(--accent-color); /* Mostaza */
+  box-shadow: 0 0 0 4px rgba(206, 150, 54, 0.25);
+  outline: none;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.filters-panel button {
+  padding: 14px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  flex-grow: 1;
+}
+
+.btn-primary {
+  background-color: var(--primary-color); /* Botón principal: Azul */
+  color: var(--text-light);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: #323565;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.18);
+}
+
+.btn-secondary {
+  background-color: var(--accent-color); /* Botón secundario: Mostaza */
+  color: var(--text-light);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+  background-color: #ab802c;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Indicador de carga */
+.loading-indicator {
+  text-align: center;
+  color: var(--primary-color);
+  font-weight: 500;
+  padding: 20px;
+  background-color: var(--light-bg-primary); /* Beige */
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Panel de Información del Contenedor */
+.info-panel {
+  background-color: var(--crema); /* Fondo del panel info: Beige */
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-panel p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.info-panel strong {
+  color: var(--primary-color); /* Azul para los labels */
+}
+
+.info-panel h4 {
+  color: var(--accent-color); /* Mostaza para el subtítulo de locales */
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.local-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.local-list li {
+  background-color: var(--light-bg-secondary); /* Crema para los items de la lista de locales */
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 0.95em;
+  color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.local-social-links {
+  margin-top: 8px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.local-social-links a {
+  color: var(--primary-color); /* Enlaces de redes sociales - Azul */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.local-social-links a:hover {
+  color: var(--accent-color); /* Mostaza */
+  text-decoration: underline;
+}
+
+.products-in-local {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color); /* Separador sutil */
+}
+
+.products-in-local h5 {
+  color: var(--primary-color); /* Azul */
+  font-size: 1em;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.products-in-local ul {
+  list-style: disc; /* Vuelven los puntos para los productos */
+  padding-left: 20px;
+  margin: 0;
+}
+
+.products-in-local li {
+  background-color: transparent; /* Fondo transparente para los ítems de producto */
+  padding: 3px 0;
+  margin-bottom: 3px;
+  box-shadow: none;
+  font-size: 0.9em;
+}
+
+.no-selection-message,
+.no-locales-message,
+.no-products-message {
+  text-align: center;
+  color: var(--text-subtle); /* Gris */
+  font-style: italic;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 20px;
+}
+
+
+/* Contenedor del Mapa */
+.map-area {
+  flex-grow: 1;
+  position: relative;
+  min-height: 500px; /* Altura mínima para el mapa */
+  background-color: var(--light-bg-primary); /* Fondo del área del mapa - Beige */
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+/* --- Chatbot Flotante --- */
+.chatbot-floating {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: var(--highlight-accent); /* Fondo del chatbot: Rosado */
+  color: var(--text-light);
+  border-radius: 50px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 100;
+}
+
+.chatbot-floating:hover {
+  background-color: #925c68; /* Tono más oscuro de rosado en hover */
+  transform: translateY(-3px);
+}
+
+.chatbot-floating img {
+  width: 35px;
+  height: 35px;
+  filter: brightness(0) invert(1); /* Hace que el icono sea blanco para contrastar */
+}
+
+.chatbot-floating span {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Nuevo estilo para el botón de detalle del local */
+.btn-detail-local {
+  display: block; /* Ocupa todo el ancho disponible */
+  width: 100%;
+  padding: 10px 15px;
+  margin-top: 15px; /* Espacio superior */
+  background-color: var(--azul); /* Usa el color azul principal */
+  color: var(--beige); /* Texto blanco */
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-detail-local:hover {
+  background-color:var(--mostaza); /* Un tono de azul más oscuro al pasar el ratón */
+  transform: translateY(-2px); /* Ligero levantamiento */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color:var(--beige);
+}
+/* --- Media Queries para Responsividad --- */
+
+/* Tablet y dispositivos medianos (hasta 1024px) */
+@media (max-width: 1024px) {
+  .header-content-wrapper {
+    padding: 0 10px;
+  }
+
+  .site-title {
+    font-size: 1em;
+  }
+
+  .main-navigation li {
+    margin-left: 20px;
+  }
+
+  .main-navigation .nav-link {
+    font-size: 0.9em;
+  }
+
+  .map-page-wrapper {
+    flex-direction: column; /* Apilar en tablet */
+    min-height: auto;
+  }
+
+  .filters-panel {
+    flex-basis: auto;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    order: 1;
+  }
+
+  .info-panel {
+    margin-top: 20px;
+  }
+
+  .map-area {
+    width: 100%;
+    min-height: 400px; /* Altura mínima en tablet */
+    order: 2;
+  }
+
+  .chatbot-floating {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 0.9em;
+  }
+
+  .chatbot-floating img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+
+/* Teléfonos y dispositivos pequeños (hasta 768px) */
+@media (max-width: 768px) {
+  .site-title {
+    font-size: 0.8em;
+  }
+
+  /* Menú hamburguesa */
+  .hamburger-icon {
+    display: block;
+    order: 1;
+  }
+
+  .main-navigation {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--primary-color); /* Azul */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.4s ease-in-out;
+    z-index: 1000;
+  }
+
+  .menu-toggle-checkbox:checked~.main-navigation {
+    right: 0;
+  }
+
+  .main-navigation ul {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+  }
+
+  .main-navigation li {
+    margin: 15px 0;
+  }
+
+  .main-navigation .nav-link {
+    font-size: 1.2em;
+    padding: 8px 0;
+    display: block;
+  }
+
+  .close-menu-icon {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 2em;
+    color: var(--text-light);
+  }
+
+  .filters-panel {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .panel-title {
+    font-size: 1.3em;
+  }
+
+  .filters-panel input[type="text"],
+  .filters-panel select,
+  .filters-panel button {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+
+  .filter-actions {
+    flex-direction: column; /* Botones apilados en móvil */
+  }
+
+  .info-panel {
+    padding: 15px;
+  }
+
+  .info-panel h3 {
+    font-size: 1.3em;
+  }
+
+  .info-panel p,
+  .info-panel li {
+    font-size: 0.9em;
+  }
+
+  .map-area {
+    min-height: 300px; /* Altura mínima en móvil */
+  }
+
+  .chatbot-floating {
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 18px;
+    font-size: 0.85em;
+    border-radius: 40px;
+  }
+
+  .chatbot-floating img {
+    width: 28px;
+    height: 28px;
+  }
+}

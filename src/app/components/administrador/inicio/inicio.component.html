@@ -1,0 +1,33 @@
+<div class="inicio-container">
+
+    <div class="user-info">
+        <span class="user-icon">👤</span> <span class="user-name">{{ nombreUsuario }}</span>
+    </div>
+
+    <div class="main-content">
+        <h1 class="panel-title">PANEL DE ADMINISTRACIÓN</h1>
+
+        <div class="dashboard-buttons">
+            <a routerLink="/locales" class="dash-button" (click)="irAPagina('locales')">
+                <span class="icon">📍</span>
+                <span class="text">Locales</span>
+            </a>
+            <a routerLink="/socios" class="dash-button" (click)="irAPagina('socios')">
+                <span class="icon">🧑‍🤝‍🧑</span>
+                <span class="text">Socios</span>
+            </a>
+            <a routerLink="/ofertas" class="dash-button" (click)="irAPagina('ofertas')">
+                <span class="icon">🏷</span>
+                <span class="text">Ofertas</span>
+            </a>
+            <a routerLink="/contenedores" class="dash-button" (click)="irAPagina('plano_contenedores')">
+                <span class="icon">🚛</span>
+                <span class="text">Contenedores</span>
+            </a>
+            <a routerLink="/configuracion" class="dash-button" (click)="irAPagina('configuracion')">
+                <span class="icon">⚙️</span>
+                <span class="text">Configuración</span>
+            </a>
+        </div>
+    </div>
+</div>

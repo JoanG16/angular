@@ -1,0 +1,992 @@
+/* Add these styles to plano-coordenadas.component.css */
+
+/* Variables (if not already defined) */
+:root {
+    --azul: #32346B;
+    --crema: #a5891b;
+}
+
+
+/* Basic table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    /* Increased margin for better spacing */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Soft shadow for the table */
+    border-radius: 8px;
+    /* Rounded corners for the table */
+    overflow: hidden;
+    /* Ensures rounded corners apply to content */
+    table-layout: fixed; /* CAMBIO CLAVE: Permite que las columnas tengan anchos fijos o flexibles */
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    /* More padding for better readability */
+    border: 1px solid #e0e0e0;
+    /* Lighter border color */
+    text-align: left;
+    word-wrap: break-word; /* Permite que las palabras largas se rompan */
+}
+
+th {
+    background-color: #f5f5f5;
+    /* Light gray header background */
+    font-weight: 600;
+    color: var(--azul);
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Zebra striping for rows */
+}
+
+tbody tr:hover {
+    background-color: #eef;
+    /* Highlight row on hover */
+    cursor: pointer;
+}
+
+/* Style for selected row */
+.selected {
+    background-color: #dbeafe !important;
+    /* Tailwind's blue-100 */
+    border-left: 4px solid var(--azul);
+}
+
+/* Button styling for table actions */
+td button {
+    padding: 0.6rem 1.2rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    /* Slightly more rounded buttons */
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+td button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    /* Slight lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+td button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+}
+
+/* Specific button colors */
+td button:first-of-type {
+    /* Selectar button */
+    background-color: var(--azul);
+    color: white;
+}
+
+td button:first-of-type:hover:not(:disabled) {
+    background-color: #2c2e5e;
+}
+
+/* Edit button (if separate, currently removed as per instructions) */
+/* td button:nth-of-type(2) {
+  background-color: #ffc107;
+  color: #333;
+}
+td button:nth-of-type(2):hover:not(:disabled) {
+  background-color: #e0a800;
+} */
+
+td button:last-of-type {
+    /* Delete button */
+    background-color: #dc3545;
+    /* Bootstrap red for danger */
+    color: white;
+}
+
+td button:last-of-type:hover:not(:disabled) {
+    background-color: #c82333;
+}
+
+/* Form container button group */
+.boton-acciones {
+    display: flex;
+    gap: 1rem;
+    /* Space between buttons */
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.boton-acciones button {
+    padding: 0.8rem 1.8rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.boton-acciones button:hover {
+    transform: translateY(-2px);
+}
+
+.boton-acciones button:first-child {
+    /* Guardar/Actualizar button */
+    background-color: var(--azul);
+    color: white;
+}
+
+.boton-acciones button:first-child:hover {
+    background-color: #2c2e5e;
+}
+
+.boton-acciones .btn-cancelar {
+    background-color: #6c757d;
+    /* Bootstrap gray */
+    color: white;
+}
+
+.boton-acciones .btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+
+/* Existing styles - make sure these are still here and correct */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    background-color: #f7f8f3;
+    /* Lighter background for the entire page */
+    min-height: 100vh;
+    flex: 1;
+}
+
+.left {
+    background: var(--azul);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0 30px 30px 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+}
+
+.logo img {
+    width: 100%;
+    max-width: 170px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 2rem auto;
+    /* Added bottom margin */
+}
+
+.left nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.left nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 0.75rem 1rem;
+    /* Increased padding */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    /* Increased margin */
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.left nav ul li a:hover {
+    background: var(--crema);
+    transform: translateX(5px);
+    /* Slight slide effect */
+}
+
+main {
+    padding: 1.5rem;
+    /* More generous padding */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    /* Space between main sections (form, map, table) */
+    background-color: white;
+    /* Main content background */
+    border-radius: 12px;
+    /* Rounded corners for main content area */
+    margin: 1.5rem;
+    /* Margin around the main content area */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    /* Stronger shadow for main content */
+}
+
+.datos {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    /* Lighter shadow for data input form */
+}
+
+.datos h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    /* Increased margin */
+    color: var(--azul);
+    font-size: 1.8rem;
+}
+
+.form-container {
+    display: grid;
+    /* Use grid for better control */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Responsive columns */
+    gap: 1.5rem;
+    /* Space between form groups */
+    justify-content: center;
+    max-width: 900px;
+    /* Limit form width */
+    margin: 0 auto;
+    /* Center the form */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    /* min-width: 250px; No longer needed with grid */
+}
+
+input,
+select,
+pre {
+    border: 1px solid #ddd;
+    /* Add a subtle border */
+    border-radius: 8px;
+    padding: 0.75rem;
+    /* More padding */
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    width: 100%;
+    /* Occupy full width of form-group */
+    box-sizing: border-box;
+    /* Include padding/border in width */
+}
+
+pre {
+    background-color: #f0f0f0;
+    /* Light background for preformatted text */
+    min-height: 80px;
+    /* Minimum height for coordinates display */
+    font-family: 'Consolas', 'Monaco', monospace;
+    /* Monospaced font for coordinates */
+    color: #333;
+}
+
+label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+/* .boton-guardar { Removed, replaced by .boton-acciones } */
+
+
+.container-mapa {
+    margin-top: 1rem;
+    /* Adjusted margin */
+    display: flex;
+    justify-content: center;
+    background-color: #f9f9f9;
+    /* Light background for map container */
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#map {
+    width: 100%;
+    max-width: 1000px;
+    height: 520px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+        /* Stack sidebar and main content */
+    }
+
+    .left {
+        flex-direction: row;
+        flex-wrap: wrap;
+        /* Allow nav items to wrap */
+        justify-content: space-around;
+        border-radius: 0;
+        padding: 0.75rem 0.5rem;
+        /* Reduce padding */
+    }
+
+    .left nav ul {
+        display: flex;
+        /* Make nav ul horizontal */
+        gap: 0.5rem;
+        margin-bottom: 0;
+    }
+
+    .left nav ul li {
+        flex-grow: 1;
+        /* Distribute space */
+        text-align: center;
+    }
+
+    .left nav ul li a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+    }
+
+    .logo img {
+        max-width: 120px;
+        /* Smaller logo in mobile header */
+        margin: 0.5rem auto 1rem auto;
+    }
+
+    main {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .datos h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-container {
+        grid-template-columns: 1fr;
+        /* Stack form groups vertically */
+        gap: 1rem;
+        max-width: 100%;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th,
+    td {
+        padding: 0.6rem 0.8rem;
+    }
+
+    td button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .left nav ul {
+        flex-direction: column;
+        /* Stack nav items in mobile sidebar */
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .left nav ul li {
+        width: 100%;
+        /* Full width for stacked items */
+    }
+
+    .left nav ul li a {
+        text-align: center;
+    }
+
+    .boton-acciones {
+        flex-direction: column;
+        /* Stack action buttons */
+        gap: 0.5rem;
+    }
+
+    .boton-acciones button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        margin: 0.5rem;
+        padding: 0.8rem;
+    }
+
+    .datos {
+        padding: 1rem;
+    }
+
+    .datos h2 {
+        font-size: 1.3rem;
+    }
+
+    label {
+        font-size: 0.85rem;
+    }
+
+    input,
+    select,
+    pre {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    th,
+    td {
+        padding: 0.5rem 0.6rem;
+    }
+
+    td button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+}
+
+
+/* Estilos para la tabla de locales */
+.locales-table-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+    /* Mantener overflow-x: auto; para el contenedor general de la tabla */
+}
+
+.locales-table-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--azul);
+    /* Usa tu variable de color azul si está definida */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    table-layout: fixed; /* Asegura que la tabla respete los anchos de columna */
+}
+
+table thead th {
+    background-color: var(--azul);
+    /* O un color de tu preferencia */
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    white-space: normal; /* CAMBIO CLAVE: Permite que el texto se envuelva */
+    word-wrap: break-word; /* Asegura que palabras largas se rompan si es necesario */
+    overflow: hidden; /* Oculta cualquier contenido que se desborde */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto se corta */
+}
+
+/* CAMBIO: Definir anchos para las columnas para un mejor control */
+
+table thead th:nth-child(1), /* Nombre del Negocio */
+table tbody td:nth-child(1) {
+    width: 15%;
+}
+
+table thead th:nth-child(2), /* Nombre del Dueño */
+table tbody td:nth-child(2) {
+    width: 12%;
+}
+
+table thead th:nth-child(3), /* Código Local */
+table tbody td:nth-child(3) {
+    width: 8%;
+}
+
+table thead th:nth-child(4), /* Facebook */
+table tbody td:nth-child(4) {
+    width: 10%;
+}
+
+table thead th:nth-child(5), /* Instagram */
+table tbody td:nth-child(5) {
+    width: 10%;
+}
+
+table thead th:nth-child(6), /* TikTok */
+table tbody td:nth-child(6) {
+    width: 10%;
+}
+
+table thead th:nth-child(7), /* Teléfono */
+table tbody td:nth-child(7) {
+    width: 10%;
+}
+
+table thead th:nth-child(8), /* N° Contenedor */
+table tbody td:nth-child(8) {
+    width: 7%;
+}
+
+table thead th:nth-child(9), /* Creado En */
+table tbody td:nth-child(9) {
+    width: 12%;
+}
+
+table thead th:nth-child(10), /* Imágenes */
+table tbody td:nth-child(10) {
+    width: 15%; /* Ajustado para un mejor espacio para la galería de imágenes */
+}
+
+table thead th:nth-child(11), /* Acciones */
+table tbody td:nth-child(11) {
+    width: 12%; /* Asegura espacio para los botones */
+}
+
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* Estilos para "N/A" */
+table tbody td {
+    color: #333;
+}
+
+table tbody td:empty:before {
+    content: 'N/A';
+    color: #999;
+}
+
+/* Estilos para el botón de crear local */
+.btn-crear {
+    background-color: #4CAF50;
+    /* Un verde amigable */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-crear:hover {
+    background-color: #45a049;
+}
+
+/* Estilos para los botones de acción en la tabla */
+.acciones {
+    white-space: nowrap;
+    /* Asegura que los botones se queden en una línea */
+}
+
+.btn-accion {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-editar {
+    background-color: var(--azul);
+    /* Tu color azul */
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #2c2e5e;
+}
+
+.btn-eliminar {
+    background-color: #f44336;
+    /* Rojo para eliminar */
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background-color: #da190b;
+}
+
+
+/* --- Estilos para el Modal de Formulario --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* Asegura que esté por encima de otros elementos */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    /* Limita la altura para scroll si es necesario */
+    overflow-y: auto;
+    /* Permite scroll dentro del modal */
+}
+
+.modal-content h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--azul);
+}
+
+.modal-content form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    /* Espacio entre los grupos de formulario */
+}
+
+.modal-content .form-group {
+    flex: 1 1 calc(50% - 1rem);
+    /* Dos columnas, con espacio */
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #555;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="url"],
+.modal-content input[type="number"],
+.modal-content select {
+    /* Añadido select para consistencia */
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Estilos específicos para el input de tipo file */
+.modal-content input[type="file"] {
+    padding: 0.5rem;
+    /* Menos padding para el input file */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.file-upload-group {
+    flex: 1 1 100%;
+    /* Ocupa todo el ancho en el modal */
+    text-align: center;
+}
+
+/* Estilos para la galería de previsualización de imágenes */
+.images-preview-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio entre las miniaturas */
+    margin-top: 10px;
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: auto; /* Permite scroll si hay muchas imágenes */
+    padding: 5px; /* Pequeño padding interno */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.image-preview-item {
+    position: relative;
+    width: 90px; /* Tamaño de la miniatura en la previsualización */
+    height: 90px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    flex-shrink: 0; /* Evita que las imágenes se encojan */
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.clear-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: background-color 0.2s;
+    z-index: 10; /* Asegura que esté por encima de la imagen */
+}
+
+.clear-image-btn:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.no-image-text {
+    display: block;
+    margin-top: 10px;
+    color: #888;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+
+/* Estilo para las imágenes en la tabla (galería de miniaturas) */
+.local-images-gallery {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las miniaturas se envuelvan */
+    gap: 5px; /* Espacio entre las miniaturas en la tabla */
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.local-image-thumbnail {
+    width: 40px; /* Tamaño pequeño para la tabla */
+    height: 40px;
+    object-fit: cover;
+    /* Recorta la imagen para llenar el espacio */
+    border-radius: 4px;
+    vertical-align: middle;
+    /* Alinea con el texto en la celda */
+    border: 1px solid #ddd;
+}
+
+.modal-content .form-actions {
+    width: 100%;
+    /* Ocupa todo el ancho */
+    display: flex;
+    justify-content: flex-end;
+    /* Alinea los botones a la derecha */
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-content .btn-guardar,
+.modal-content .btn-cancelar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content .btn-guardar {
+    background-color: var(--azul);
+    color: white;
+}
+
+.modal-content .btn-guardar:hover {
+    background-color: #2c2e5e;
+}
+
+.modal-content .btn-cancelar {
+    background-color: #6c757d;
+    /* Gris para cancelar */
+    color: white;
+}
+
+.modal-content .btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+    .modal-content .form-group {
+        flex: 1 1 100%;
+        /* Una columna en pantallas pequeñas */
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Responsive adjustments for table */
+@media (max-width: 768px) {
+    .locales-table-container {
+        padding: 0.5rem;
+    }
+    table { /* CAMBIO: Asegurarse que la tabla se haga scroll si el contenido es demasiado ancho */
+        display: block; /* Permite que la tabla se desborde */
+        overflow-x: auto; /* Muestra la barra de desplazamiento horizontal */
+        white-space: nowrap; /* Asegura que las celdas no se rompan por defecto en este modo */
+    }
+
+    table thead, table tbody tr {
+        display: table; /* Hace que el thead y las filas del tbody actúen como tablas individuales para el scroll */
+        width: 100%;
+        table-layout: fixed; /* Mantiene la consistencia de ancho */
+    }
+
+    /* CAMBIO: Eliminar anchos fijos de columnas para la vista móvil, dejar que el contenido defina el ancho en scroll */
+    table thead th:nth-child(1),
+    table tbody td:nth-child(1),
+    table thead th:nth-child(2),
+    table tbody td:nth-child(2),
+    table thead th:nth-child(3),
+    table tbody td:nth-child(3),
+    table thead th:nth-child(4),
+    table tbody td:nth-child(4),
+    table thead th:nth-child(5),
+    table tbody td:nth-child(5),
+    table thead th:nth-child(6),
+    table tbody td:nth-child(6),
+    table thead th:nth-child(7),
+    table tbody td:nth-child(7),
+    table thead th:nth-child(8),
+    table tbody td:nth-child(8),
+    table thead th:nth-child(9),
+    table tbody td:nth-child(9),
+    table thead th:nth-child(10),
+    table tbody td:nth-child(10),
+    table thead th:nth-child(11),
+    table tbody td:nth-child(11),
+    table thead th:nth-child(12),
+    table tbody td:nth-child(12) {
+        width: auto; /* CAMBIO: Eliminar anchos fijos */
+        min-width: 80px; /* Ancho mínimo para que las columnas no se encojan demasiado */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .left {
+        flex-direction: row;
+        justify-content: space-evenly;
+        border-radius: 0;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+
+    .form-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #map {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        margin: 0.5rem;
+        padding: 0.8rem;
+    }
+
+    .datos {
+        padding: 1rem;
+    }
+
+    .datos h2 {
+        font-size: 1.3rem;
+    }
+
+    label {
+        font-size: 0.85rem;
+    }
+
+    input,
+    select,
+    pre {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    th,
+    td {
+        padding: 0.5rem 0.6rem;
+    }
+
+    td button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+}

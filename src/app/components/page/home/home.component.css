@@ -1,0 +1,803 @@
+header {
+
+  width: 100%;
+  height: 70vh;
+  background: var(--azul);
+  padding: 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(to bottom, rgb(0 0 0 / .25), rgb(0 0 0 /1)), url(/assets/img/plano/ChatGP.png);
+  background-size: cover;
+  background-position: center;
+
+
+
+}
+
+g {
+  width: 100%;
+  height: auto;
+
+}
+
+
+
+#logo-tarqui {
+  width: 36px;
+  aspect-ratio: 1 / 1;
+  background-image: url(/assets/icon/logo.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-left: 10px;
+
+
+}
+
+
+.container {
+  width: 90%;
+  max-width: 1300px;
+  margin-top: 10px;
+  line-height: 1.5;
+  border-radius: 20px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #00000005;
+  background: #0000005c;
+}
+
+
+.logo {
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 420px;
+  font-size: 14px;
+
+}
+
+.logo-main {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+
+
+.logo mark {
+  background-color: transparent;
+  color: var(--crema);
+}
+
+.menu a {
+
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0 10px;
+  transition: 0.4s;
+  font-weight: 500;
+  font-size: 13px;
+
+}
+
+
+.mostrar-menu,
+.esconder-menu {
+  font-size: 30px;
+  cursor: pointer;
+  display: none;
+  transition: 0.4s;
+
+}
+
+
+.mostrar-menu {
+
+  order: 1;
+}
+
+.menu a:hover,
+.mostrar-menu:hover,
+.esconder-menu:hover {
+  color: #a5891b
+}
+
+
+#check {
+
+  display: none;
+}
+
+
+
+/* servicios */
+
+.servicios {
+
+  padding: 1rem;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.contenedor .mapa-img {
+  width: 100%;
+  height: auto;
+
+
+}
+
+
+.texto-sobreMapa {
+
+  width: 80%;
+  height: 80%;
+  display: flex;
+  align-items: end;
+  justify-content: start;
+
+}
+
+.texto-sobreMapa h1 {
+  font-size: 54px;
+  width: 790px;
+}
+
+
+.header-im-servicios {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+
+
+}
+
+.texto-servicios {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.texto-servicios h1 {
+  width: 40%;
+  font-size: 15px;
+}
+
+.iconos {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+
+
+}
+
+
+.icono {
+
+  margin: 5px;
+  padding: 10px;
+  border: 5px solid var(--azul);
+  border-radius: 10px;
+  width: 6%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+}
+
+.icono img {
+  width: 40%;
+  height: 40px;
+  margin: 10px;
+
+}
+
+.icono p {
+  margin: auto;
+  color: var(--azul);
+  font-size: 13px;
+}
+
+
+
+@media(max-width: 768px) {
+
+  .mostrar-menu,
+  .esconder-menu {
+    display: block;
+  }
+
+  .menu {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #3e4077;
+
+    right: -100%;
+    top: 0;
+    text-align: center;
+    padding: 100px 0px;
+    z-index: 100;
+    transition: 0.8s;
+  }
+
+  .menu a {
+    display: block;
+    padding: 20px;
+
+  }
+
+  .esconder-menu {
+
+    position: absolute;
+    top: 40px;
+    right: 40px;
+  }
+
+  #check:checked~.menu {
+
+    right: 0;
+  }
+
+  .texto-sobreMapa {
+    width: 80%;
+  }
+
+  .texto-sobreMapa h1 {
+    font-size: 25px;
+  }
+
+  header {
+    background-size: cover;
+    background-position: center;
+
+  }
+
+  #logo-tarqui {
+    width: 55px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 100%;
+    position: relative;
+    left: -10px;
+    top: -2px;
+  }
+
+  .servicios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+  }
+
+  .servicios h1 {
+    width: 80%;
+    margin-top: 40px;
+
+  }
+
+  .iconos {
+    display: inline-block;
+  }
+
+  .icono {
+    margin: 30px;
+    border-radius: 20px;
+    line-height: 1.5;
+    background-color: #3e40771b;
+  }
+}
+
+
+
+
+
+
+
+.productos {
+  padding: 2rem 1rem; /* Un poco más de espacio vertical */
+  text-align: center;
+  background-color: beige;
+  overflow: hidden; /* Importante para que las animaciones que vienen desde afuera no generen scrollbars */
+}
+
+.productos h1 {
+  font-size: 35px;
+  color: #3e4077;
+  margin-bottom: 2rem; /* Espacio entre el título y las tarjetas */
+}
+
+.tarjetas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem; /* Un poco más de espacio entre tarjetas */
+}
+
+/* Usamos la clase .tarjeta para los estilos comunes */
+.tarjeta {
+  width: 10%; /* Ajustado ligeramente */
+  min-width: 120px; /* Ancho mínimo para que no se deforme */
+  height: 155px;
+  background: #fbf4de;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  /* La magia para una animación suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta img {
+  width: 80%;
+  height: 90px;
+  object-fit: contain; /* Asegura que la imagen se vea completa sin deformarse */
+}
+
+.tarjeta .texto h3 {
+  color: #3e4077;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* --- Media Query para Responsive --- */
+@media screen and (max-width: 1200px) {
+    .tarjeta {
+        width: 15%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+  .tarjetas {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tarjeta {
+    width: 80%;
+    max-width: 300px; /* Un ancho máximo para tabletas */
+    flex-direction: row; /* En móvil, puede quedar mejor en fila */
+    height: auto;
+    justify-content: flex-start;
+  }
+
+  .tarjeta img {
+      width: 80px;
+      height: 80px;
+      margin-right: 1rem;
+  }
+}
+.tarjeta:hover {
+  transform: translateY(-10px) scale(1.05); /* La levanta y la agranda un poco */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+  cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Footer */
+footer {
+  background-color: var(--azul);
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+
+}
+
+
+
+/* Carrusel de TikTok */
+.tiktok {
+    padding: 1rem;
+    text-align: center;
+    background-color: #3e4077;
+    margin-top: 50px;
+    display: flex; /* Usar flexbox para el contenedor principal */
+    flex-direction: column; /* Apilar título y carrusel */
+    align-items: center; /* Centrar contenido horizontalmente */
+}
+
+.tiktok h1 {
+    color: white; /* Color de título claro */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    font-size: 2em;
+}
+
+.tiktok .carousel { /* Contenedor del carrusel y botones */
+    display: flex;
+    align-items: center;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 900px; /* Limitar ancho máximo para desktop */
+    overflow: hidden; /* Ocultar el desbordamiento si no queremos scroll manual */
+    position: relative; /* Para posicionar botones */
+    padding: 20px 0; /* Padding interno para espacio de botones */
+}
+
+.tiktok .carousel-slide { /* El contenedor de los videos que se desplazan */
+    display: flex;
+    flex-grow: 1; /* Permite que tome el espacio disponible */
+    gap: 20px; /* Espacio entre los videos */
+    transition: transform 0.5s ease-in-out; /* Animación de desplazamiento */
+    /* overflow-x: auto; Removido si se usa JS para navegación, o se puede mantener si quieres scroll manual */
+    /* scrollbar-width: none; // Firefox */
+    /* -ms-overflow-style: none; // IE y Edge */
+    /* &::-webkit-scrollbar { display: none; } // Chrome, Safari y Opera */
+    /* Estas reglas se trasladan a .carousel-slide si se desea scroll manual */
+}
+
+/* Removido el width fijo y height en .video-item para hacerlo flexible */
+.tiktok .video-item {
+    flex-shrink: 0; /* Evita que los videos se encojan */
+    /* width: calc(100% / var(--tiktokVideosPerPage) - var(--gap-between-videos)); */
+    /* Usaremos el adjustVideosPerPage en TS y CSS para definir el ancho */
+    width: 32%; /* Aproximadamente 3 videos por fila con gap */
+    max-width: 300px; /* Un ancho máximo razonable para un video de TikTok */
+    height: auto; /* Permitir que la altura se ajuste al contenido del embed */
+    background-color: #000; /* Fondo negro para los videos */
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Para asegurar que el bloque de tiktok no se desborde */
+}
+
+/* Estilo para los iframes de tiktok dentro de blockquote */
+.tiktok .video-item blockquote {
+    margin: 0; /* Eliminar margen predeterminado de blockquote */
+    padding: 0;
+    display: block; /* Asegurarse de que el blockquote sea un bloque */
+    width: 100%; /* Que el blockquote ocupe todo el ancho */
+    height: 100%; /* Que el blockquote ocupe toda la altura */
+    min-height: 400px; /* Altura mínima para el embed, ajusta según necesites */
+    max-height: 580px; /* Altura máxima */
+    box-sizing: border-box;
+}
+
+.tiktok .video-item blockquote > section {
+    display: none; /* Ocultar la sección de texto de TikTok, ya que la API la inserta */
+}
+
+
+/* Navigation buttons for TikTok carousel */
+.tiktok .nav-button {
+    background-color: var(--crema);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: absolute; /* Posicionamiento absoluto */
+    top: 50%; /* Centrar verticalmente */
+    transform: translateY(-50%); /* Ajuste fino */
+    z-index: 10;
+}
+
+.tiktok .nav-button.prev {
+    left: 10px;
+}
+
+.tiktok .nav-button.next {
+    right: 10px;
+}
+
+.tiktok .nav-button:hover {
+    background-color: #8c7317;
+    transform: translateY(-50%) scale(1.05); /* Mantener centrado al escalar */
+}
+
+/* Media queries para el carrusel de TikTok */
+@media (max-width: 1200px) {
+    .tiktok .video-item {
+        width: 48%; /* 2 videos por fila en pantallas medianas */
+    }
+}
+
+@media (max-width: 768px) {
+    .tiktok .carousel {
+        width: 95%; /* Más ancho en móviles */
+    }
+    .tiktok .video-item {
+        width: 98%; /* 1 video por fila en móviles */
+        max-width: 350px; /* Limitar el tamaño si la pantalla es muy grande pero es mobile */
+    }
+    .tiktok .nav-button {
+        padding: 8px 12px;
+        font-size: 1.2em;
+    }
+}
+
+
+/* clientes */
+
+.youtube {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  margin: 50px;
+}
+
+.youtube h1 {
+  text-align: center;
+}
+
+#clientes {
+  background: #3e4077;
+  padding: 50px 20px;
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.testimonio-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  display: block;
+  align-content: center;
+  min-height: 160px;
+}
+
+.testimonio {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.testimonio.active {
+  display: block;
+  opacity: 1;
+  position: relative;
+}
+
+.testimonio p {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #fff;
+  margin: 0;
+}
+
+.autor {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #555;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* carrusel youtbe */
+
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-250px * 7));
+  }
+}
+
+.slider {
+  background: linear-gradient(135deg, #ff5722, #ff9800);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
+  height: auto;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.slider::before,
+.slider::after {
+  /* Quita esta línea si no tienes definido un degradado, o reemplázala por uno real */
+  background: linear-gradient(to right, white 0%, transparent 100%);
+  content: "";
+  height: auto;
+  position: absolute;
+  width: 200px;
+  z-index: 2;
+}
+
+.slider::after {
+  right: 0;
+  top: 0;
+  transform: rotateZ(180deg);
+}
+
+.slider::before {
+  left: 0;
+  top: 0;
+}
+
+.slide-track {
+  animation: scroll 40s linear infinite;
+  display: flex;
+  width: calc(250px * 14);
+  /* Puedes ajustar el número de slides según tu necesidad */
+}
+
+.slide {
+  height: auto;
+  width: 250px;
+
+  /* degradado naranja/rojo */
+  color: white;
+  font-weight: bold;
+
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255, 87, 34, 0.3);
+}
+
+.slide p {
+
+  font-size: 14px;
+}
+
+
+
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  display: flex;
+  gap: 16px;
+}
+
+.carousel-slide iframe {
+  width: 360px;
+  height: 215px;
+  border-radius: 12px;
+}
+
+.nav-button {
+  font-size: 24px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.nav-button:hover {
+  transform: scale(1.2);
+}
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Motor de Animaciones al Hacer Scroll
+   ========================================================================== */
+
+/*
+ * 1. Ocultamos los elementos por defecto.
+ * 2. Preparamos una transición suave para cuando se hagan visibles.
+ */
+.animated {
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/*
+ * Efectos de entrada.
+ * Aquí definimos desde dónde aparecerán los elementos.
+ */
+.fade-in-up {
+  transform: translateY(40px);
+}
+
+.fade-in-down {
+    transform: translateY(-40px);
+}
+
+.fade-in-left {
+  transform: translateX(-40px);
+}
+
+.fade-in-right {
+  transform: translateX(40px);
+}
+
+.zoom-in {
+    transform: scale(0.9);
+}
+
+
+/*
+ * La clase .is-visible es la que activa la animación.
+ * La añadiremos con JavaScript cuando el elemento entre en la pantalla.
+ */
+.animated.is-visible {
+  opacity: 1;
+  transform: none; /* Resetea la transformación a su estado original */
+}
+
+/*
+ * Clases opcionales para retrasar animaciones (efecto escalonado).
+ * Útiles para listas de elementos como las tarjetas de productos o los iconos.
+ */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }

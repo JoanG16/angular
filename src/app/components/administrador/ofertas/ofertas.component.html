@@ -1,0 +1,93 @@
+<!-- src/app/components/administrador/ofertas/ofertas.component.html -->
+<div class="crud-container">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="assets/icon/logo.jpg" alt="Logo" />
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">🏠 Inicio</a></li>
+                <li><a href="#locales">📍 Locales</a></li>
+                <li><a href="#socios">🧑‍🤝‍🧑 Socios</a></li>
+                <li><a href="#ofertas" class="active">🏷 Ofertas</a></li>
+                <li><a href="#contenedores">🚛 Contenedores</a></li>
+                <li><a href="#productos">📦 Productos</a></li>
+            </ul>
+        </nav>
+        <nav class="bottom-nav">
+            <ul>
+                <li><a href="#Usuario">👤 Usuario</a></li>
+                <li><a href="#config">⚙️ Configuración</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="content-area">
+        <div class="form-card">
+            <h2>{{ isEditing ? 'Editar Oferta' : 'Crear Nueva Oferta' }}</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="tipoContenido">Tipo de Contenido:</label>
+                    <select id="tipoContenido" [(ngModel)]="tipoContenido" required>
+                        <option *ngFor="let tipo of tiposContenido" [ngValue]="tipo.value">{{ tipo.viewValue }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="valorContenido">Valor del Contenido (Texto o URL):</label>
+                    <textarea id="valorContenido" [(ngModel)]="valorContenido" required placeholder="Ingresa la promoción o la URL de TikTok/YouTube"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="orden">Orden (Opcional):</label>
+                    <input id="orden" type="number" [(ngModel)]="orden" placeholder="Número para ordenar la visualización" min="0" />
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="activo" [(ngModel)]="activo" />
+                    <label for="activo">Activo</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button (click)="guardarOActualizarOferta()">
+                    {{ isEditing ? 'Actualizar Oferta' : 'Guardar Oferta' }}
+                </button>
+                <button *ngIf="isEditing" (click)="resetForm()" class="cancel-button">Cancelar Edición</button>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <h2>Lista de Ofertas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Contenido</th>
+                        <th>Orden</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let oferta of ofertas" [class.selected]="oferta === ofertaSeleccionada">
+                        <td>{{ oferta.id_oferta }}</td>
+                        <td>{{ getTipoContenidoViewValue(oferta.tipo_contenido) }}</td>
+                        <td class="content-cell">{{ oferta.valor_contenido | slice:0:70 }}{{ oferta.valor_contenido.length > 70 ? '...' : '' }}</td>
+                        <td>{{ oferta.orden === null ? 'N/A' : oferta.orden }}</td>
+                        <td>
+                            <span [class.active-status]="oferta.activo" [class.inactive-status]="!oferta.activo">
+                                {{ oferta.activo ? 'Sí' : 'No' }}
+                            </span>
+                        </td>
+                        <td class="action-buttons">
+                            <button (click)="seleccionarOfertaParaEditar(oferta)" class="edit-button">Editar</button>
+                            <button (click)="eliminarOferta(oferta)" class="delete-button">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,12 @@
+patron decorador:
+
+decorador:
+En Angular, un decorador es una función especial que se usa para anotar o modificar clases, propiedades, métodos o parámetros. Angular los usa internamente para identificar qué es un componente, servicio, módulo, etc.
+
+Algunos decoradores comunes en Angular:
+Decorador	     Uso	                 Ejemplo
+@Component	     Declara un componente	Define un componente con HTML y lógica
+@NgModule	     Declara un módulo	    Agrupa componentes, servicios, etc.
+@Injectable	     Declara un servicio	Permite inyección de dependencias
+@Input / @Output Comunicación entre componentes	Para recibir o enviar datos
+@HostListener	 Escucha eventos del DOM	Detectar scroll, clic, etc.

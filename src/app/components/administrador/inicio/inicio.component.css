@@ -1,0 +1,171 @@
+/* Puedes definir tu variable de color principal si no está ya globalmente */
+:root {
+    --mostaza: #ce9636;
+    --beige: #f7f8f3;
+    --crema: #f9f0b6;
+    --azul: #32346B;
+    --gris-claro: #f0f2f5;
+    --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --beige: #f7f8f3;
+}
+
+.inicio-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Centra el contenido verticalmente */
+    align-items: center;
+    /* Centra el contenido horizontalmente */
+    min-height: 100vh;
+    /* Ocupa toda la altura de la vista */
+    background-color: var(--beige);
+    /* Fondo suave */
+    position: relative;
+    /* Para posicionar el usuario-info */
+    padding: 20px;
+    /* Padding general */
+    box-sizing: border-box;
+    /* Incluye padding en el tamaño total */
+}
+
+/* Estilos para el área de información del usuario */
+.user-info {
+    position: absolute;
+    /* Posicionamiento absoluto */
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    background-color: var(--mostaza);
+    padding: 10px 15px;
+    border-radius: 25px;
+    box-shadow: var(--sombra-suave);
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 500;
+}
+
+.user-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.user-name {
+    /* Puedes ajustar el tamaño o peso de la fuente si es necesario */
+}
+
+/* Contenido principal (título y botones) */
+.main-content {
+    text-align: center;
+    /* Centra el texto y los elementos en línea */
+    padding: 20px;
+    max-width: 900px;
+    /* Limita el ancho para mejor lectura/diseño */
+    width: 100%;
+}
+
+.panel-title {
+    color: var(--mostaza);
+    font-size: 2.8rem;
+    /* Tamaño grande para el título */
+    margin-bottom: 3rem;
+    /* Espacio debajo del título */
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Contenedor de los botones */
+.dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    /* Permite que los botones salten de línea en pantallas pequeñas */
+    justify-content: center;
+    /* Centra los botones horizontalmente */
+    gap: 2rem;
+    /* Espacio entre los botones */
+}
+
+.dash-button {
+    display: flex;
+    flex-direction: column;
+    /* Icono arriba, texto abajo */
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    /* Ancho fijo para cada botón */
+    height: 140px;
+    /* Altura fija */
+    background-color: var(--azul);
+    border-radius: 15px;
+    box-shadow: var(--sombra-suave);
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Borde sutil */
+}
+
+.dash-button:hover {
+    transform: translateY(-8px);
+    /* Efecto de "levantar" */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    /* Sombra más pronunciada */
+}
+
+.dash-button .icon {
+    font-size: 3.5rem;
+    /* Tamaño grande para los íconos */
+    margin-bottom: 0.5rem;
+}
+
+.dash-button .text {
+    text-align: center;
+}
+
+/* Responsividad para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .panel-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-buttons {
+        gap: 1.5rem;
+    }
+
+    .dash-button {
+        width: 140px;
+        height: 120px;
+        font-size: 1rem;
+    }
+
+    .dash-button .icon {
+        font-size: 2.8rem;
+    }
+
+    .user-info {
+        top: 15px;
+        right: 15px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel-title {
+        font-size: 1.6rem;
+    }
+
+    .dash-button {
+        width: 120px;
+        height: 100px;
+        font-size: 0.9rem;
+    }
+
+    .dash-button .icon {
+        font-size: 2.2rem;
+    }
+}
