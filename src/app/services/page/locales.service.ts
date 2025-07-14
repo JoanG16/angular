@@ -1,27 +1,29 @@
+// src/app/services/locales.service.ts (o el nombre de tu archivo)
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Local, LocalResponse } from '../../interfaces/locales.interface'; // Mantener la ruta que ya tienes
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment'; // <-- ¡AÑADE ESTA LÍNEA!
+                                                            // Asegúrate de que la ruta sea correcta para tu proyecto.
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalesService {
-  private apiUrl = 'http://localhost:3000/v1/api/locales';
+  // MODIFICADO: Ahora la URL base se construye usando environment.apiUrl
+  // Asumiendo que environment.apiUrl ya incluye 'http://localhost:3000/v1/api' (o la URL de ngrok)
+  // y solo necesitamos añadir '/locales' para este servicio.
+  private apiUrl = `${environment.apiUrl}/locales`;
 
   constructor(private http: HttpClient) { }
 
-  // CORRECCIÓN: Este método ahora mapea directamente la respuesta para devolver Local[]
   getAllLocales(): Observable<Local[]> {
-    // Asume que el backend envía { data: Local[], message: "...", status: "...", statusCode: ... }
-    // y solo nos interesa el array 'data'.
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`).pipe(
       map(response => response.data)
     );
   }
-
-  // Eliminado el método 'getLocales()' redundante
 
   createLocal(local: Local): Observable<Local> {
     return this.http.post<Local>(`${this.apiUrl}/create`, local);
