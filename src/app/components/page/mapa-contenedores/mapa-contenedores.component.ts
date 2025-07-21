@@ -72,13 +72,13 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
   private blockColorMap: Map<string, { border: string, fill: string }> = new Map([
     // Using your provided palette and some new distinct colors, with good contrast for border/fill
     ['a', { border: '#3e4077', fill: '#6a73a3' }],     // Azul oscuro para borde, azul medio para relleno
-    ['b', { border: '#ce9636', fill: '#e5c89a' }],     // Mostaza para borde, amarillo claro para relleno
-    ['c', { border: '#ac6c7a', fill: '#d39ea9' }],     // Rosado oscuro para borde, rosado claro para relleno
-    ['d', { border: '#28a745', fill: '#7ad98e' }],     // Verde intenso para borde, verde claro para relleno
-    ['e', { border: '#6f42c1', fill: '#b492e5' }],     // Morado oscuro para borde, morado claro para relleno
+    ['b', { border: '#17a2b8', fill: '#66ccdd' }],     // Mostaza para borde, amarillo claro para relleno
+    ['c', { border: '#aca46cff', fill: '#cfd39eff' }],     // Rosado oscuro para borde, rosado claro para relleno
+    ['d', { border: '#a75f28ff', fill: '#d9a07aff' }],     // Verde intenso para borde, verde claro para relleno
+    ['e', { border: '#42c1a3ff', fill: '#92e5bdff' }],     // Morado oscuro para borde, morado claro para relleno
     ['f', { border: '#dc3545', fill: '#f5a7b0' }],     // Rojo teja para borde, rojo suave para relleno
-    ['g', { border: '#17a2b8', fill: '#66ccdd' }],     // Turquesa para borde, cian claro para relleno
-    ['h', { border: '#ffc107', fill: '#ffe7a3' }]      // Amarillo vibrante para borde, amarillo pastel para relleno
+    ['g', { border: '#ce3673ff', fill: '#e59ac9ff' }],     // Turquesa para borde, cian claro para relleno
+    ['h', { border: '#5e07ffff', fill: '#7d8cfdff' }]      // Amarillo vibrante para borde, amarillo pastel para relleno
   ]);
 
 
