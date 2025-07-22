@@ -1,5 +1,5 @@
-// src/environments/environment.development.ts
+// src/environments/environment.ts
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/v1/api' // <-- ¡USA LA URL DE TU BACKEND AQUI!
+  production: true,
+  apiUrl: 'https://back-base-project-main.onrender.com/v1/api' // ¡CAMBIA ESTA LÍNEA!
 };
