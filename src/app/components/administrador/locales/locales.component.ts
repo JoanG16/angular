@@ -11,6 +11,7 @@ import { Local } from '../../../interfaces/locales.interface';
 import { Contenedor } from '../../../interfaces/contenedor.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-locales',
@@ -25,13 +26,12 @@ import { Observable, forkJoin } from 'rxjs';
   styleUrl: './locales.component.css'
 })
 export class LocalesComponent implements OnInit {
-  allLocales: Local[] = [];      // Almacena todos los locales sin filtrar
-  locales: Local[] = [];         // Almacena los locales actualmente mostrados (filtrados)
+  allLocales: Local[] = [];
+  locales: Local[] = [];
   todosLosContenedores: Contenedor[] = [];
   contenedoresFiltrados: Contenedor[] = [];
   bloquesUnicos: string[] = [];
 
-  // Propiedades para la funcionalidad del formulario (crear/editar)
   mostrarFormulario: boolean = false;
   localSeleccionado: Local | null = null;
 
@@ -45,22 +45,19 @@ export class LocalesComponent implements OnInit {
     tiktok: '',
     telefono: '',
     id_contenedor: 0,
-   creado_en: new Date().toISOString(), // Convierte la fecha a una cadena en formato ISO 8601
+    creado_en: new Date().toISOString(),
     selectedBloque: null,
-    imagen_urls: [], // Ahora es un array para múltiples imágenes
-    descripcion: '' // NUEVO CAMPO: Descripción del local
+    imagen_urls: [],
+    descripcion: ''
   };
 
-  // Referencia a los archivos de imagen seleccionados
   public selectedFiles: File[] = [];
 
-  // **CAMBIO CLAVE**: URL base de tu backend para cargar imágenes
-  public backendBaseUrl: string = 'http://localhost:3000';
+  // La URL base de tu backend es environment.apiUrl
+  public backendBaseUrl: string = environment.apiUrl;
 
-
-  // NUEVAS PROPIEDADES PARA LOS FILTROS DE BÚSQUEDA
-  filterBloque: string | null = null; // Para el filtro por bloque (valor del select)
-  filterNombreLocal: string = '';     // Para el input de búsqueda por nombre
+  filterBloque: string | null = null;
+  filterNombreLocal: string = '';
 
   constructor(
     private localesService: LocalesService,
@@ -70,33 +67,30 @@ export class LocalesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Usamos forkJoin para asegurarnos de que ambos datos estén disponibles antes de procesar
     forkJoin({
-      locales: this.localesService.getAllLocales(), // Usar getAllLocales
+      locales: this.localesService.getAllLocales(),
       contenedores: this.contenedoresService.getAllContenedores()
     }).subscribe({
       next: ({ locales, contenedores }) => {
         this.allLocales = locales;
         this.todosLosContenedores = contenedores.data;
-        this.extractUniqueBloques(); // Extrae los bloques únicos una vez cargados los contenedores
-        this.applyFilters(); // Aplica los filtros iniciales (todos los locales)
+        this.extractUniqueBloques();
+        this.applyFilters();
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al cargar datos iniciales:', err);
-        // Puedes mostrar un mensaje de error al usuario
       }
     });
   }
 
   getLocalesData(): void {
-    this.localesService.getAllLocales().subscribe({ // Usar getAllLocales
+    this.localesService.getAllLocales().subscribe({
       next: (data: Local[]) => {
         this.allLocales = data;
         this.applyFilters();
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al obtener locales:', err);
-        // ... (manejo de errores) ...
       }
     });
   }
@@ -135,7 +129,7 @@ export class LocalesComponent implements OnInit {
 
   onBloqueSelected(): void {
     this.filterContenedoresByBloque();
-    this.nuevoLocal.id_contenedor = 0; // Resetear el contenedor al cambiar el bloque
+    this.nuevoLocal.id_contenedor = 0;
   }
 
   filterContenedoresByBloque(): void {
@@ -158,10 +152,10 @@ export class LocalesComponent implements OnInit {
       tiktok: '',
       telefono: '',
       id_contenedor: 0,
-      creado_en: new Date().toISOString(), // Convierte la fecha a una cadena en formato ISO 8601
+      creado_en: new Date().toISOString(),
       selectedBloque: null,
       imagen_urls: [],
-      descripcion: '' // Reiniciar el nuevo campo
+      descripcion: ''
     };
     this.selectedFiles = [];
     this.filterContenedoresByBloque();
@@ -170,11 +164,10 @@ export class LocalesComponent implements OnInit {
 
   abrirFormularioEditar(local: Local): void {
     this.localSeleccionado = { ...local };
-    // Asegurarse de copiar todos los campos existentes, incluyendo el nuevo
     this.nuevoLocal = {
       ...local,
       imagen_urls: local.imagen_urls ? [...local.imagen_urls] : [],
-      descripcion: local.descripcion || '' // Asegurar que sea string vacío si es null/undefined
+      descripcion: local.descripcion || ''
     };
 
     this.selectedFiles = [];
@@ -205,10 +198,10 @@ export class LocalesComponent implements OnInit {
       tiktok: '',
       telefono: '',
       id_contenedor: 0,
-      creado_en: new Date().toISOString(), // Convierte la fecha a una cadena en formato ISO 8601
+      creado_en: new Date().toISOString(),
       selectedBloque: null,
       imagen_urls: [],
-      descripcion: '' // Reiniciar el nuevo campo
+      descripcion: ''
     };
     this.filterContenedoresByBloque();
   }
@@ -250,7 +243,6 @@ export class LocalesComponent implements OnInit {
     }
   }
 
-
   guardarLocal(): void {
     if (!this.nuevoLocal.nombre_del_negocio || !this.nuevoLocal.nombre_del_dueno || !this.nuevoLocal.codigo_local || !this.nuevoLocal.id_contenedor) {
       this.dialog.open(ConfirmDialogComponent, {
@@ -264,7 +256,6 @@ export class LocalesComponent implements OnInit {
       return;
     }
 
-
     let dialogMessage: string;
     let successMessage: string;
     let errorMessage: string;
@@ -274,10 +265,8 @@ export class LocalesComponent implements OnInit {
 
     const localPayload: Partial<Local> = { ...baseLocalData };
 
-    // Asegurarse de que el campo descripcion se incluya en el payload
-    localPayload.descripcion = this.nuevoLocal.descripcion || undefined; // Usa undefined para propiedades opcionales
+    localPayload.descripcion = this.nuevoLocal.descripcion || undefined;
     localPayload.imagen_urls = this.nuevoLocal.imagen_urls;
-
 
     if (this.localSeleccionado && this.localSeleccionado.id_local) {
       dialogMessage = `¿Estás seguro de que quieres guardar los cambios para el local "${this.nuevoLocal.nombre_del_negocio}"?`;
@@ -351,6 +340,7 @@ export class LocalesComponent implements OnInit {
       }
     });
   }
+
   applyFilters(): void {
     console.log('applyFilters: Valor de this.allLocales antes de la operación:', this.allLocales);
     let filtered = [...this.allLocales];
@@ -371,6 +361,7 @@ export class LocalesComponent implements OnInit {
 
     this.locales = filtered;
   }
+
   eliminarLocal(id: number, nombre: string): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -410,10 +401,29 @@ export class LocalesComponent implements OnInit {
         });
       }
     });
-    
-}
-irAPagina(titulo: string): void {
-    this.router.navigate([titulo])
+  }
 
+  // Función para obtener la URL completa de la imagen
+  getImageUrl(relativePath: string): string {
+    // Debugging: Ver el relativePath que llega
+    console.log('[getImageUrl DEBUG] Relative Path recibido:', relativePath);
+
+    // Asegurarse de que environment.apiUrl sea algo como "https://back-base-project-main.onrender.com/v1/api"
+    // Queremos la URL base del dominio: "https://back-base-project-main.onrender.com"
+    const urlParts = this.backendBaseUrl.split('/v1/api');
+    const baseDomain = urlParts[0];
+
+    // relativePath debería ser algo como "/uploads/locales/nombre_imagen.jpeg"
+    // Si por alguna razón relativePath no empieza con '/', asegúrate de añadirlo.
+    const finalUrl = `${baseDomain}${relativePath.startsWith('/') ? '' : '/'}${relativePath}`;
+
+    // Debugging: Ver la URL final generada
+    console.log('[getImageUrl DEBUG] URL final generada:', finalUrl);
+
+    return finalUrl;
+  }
+
+  irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
   }
 }
