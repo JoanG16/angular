@@ -5,13 +5,13 @@
         </div>
         <nav>
             <ul>
-                <li><a  (click)="irAPagina('inicio')">🏠 Inicio</a></li>
+                <li><a (click)="irAPagina('inicio')">🏠 Inicio</a></li>
                 <li><a (click)="irAPagina('locales')" class="active">📍 Locales</a></li>
                 <li><a (click)="irAPagina('socios')">🧑‍🤝‍🧑 Socios</a></li>
                 <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
                 <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
-                 <li><a (click)="irAPagina('producto')" >📦 Productos</a></li>
-                
+                <li><a (click)="irAPagina('producto')">📦 Productos</a></li>
+
             </ul>
         </nav>
         <nav>
@@ -51,7 +51,7 @@
                 <table>
                     <thead>
                         <tr>
-                           
+
                             <th>Nombre del Negocio</th>
                             <th>Nombre del Dueño</th>
                             <th>Código Local</th>
@@ -61,14 +61,14 @@
                             <th>Teléfono</th>
                             <th>N° Contenedor</th>
                             <th>Descripción</th> <!-- NUEVA COLUMNA -->
-                            
+
                             <th>Imágenes</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let local of locales">
-                            
+
                             <td>{{ local.nombre_del_negocio }}</td>
                             <td>{{ local.nombre_del_dueno }}</td>
                             <td>{{ local.codigo_local }}</td>
@@ -78,10 +78,11 @@
                             <td>{{ local.telefono || 'N/A' }}</td>
                             <td>{{ local.id_contenedor }}</td>
                             <td>{{ local.descripcion || 'N/A' }}</td> <!-- NUEVO CAMPO EN LA TABLA -->
-                            
+
                             <td>
                                 <div class="local-images-gallery">
-                                    <img *ngFor="let imageUrl of local.imagen_urls" [src]="backendBaseUrl + imageUrl" alt="Imagen del local"
+                                    <!-- CAMBIO CLAVE AQUÍ: Usar getImageUrl() -->
+                                    <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
                                         class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
                                 </div>
@@ -174,7 +175,8 @@
                             name="imagenLocal">
                         <div *ngIf="nuevoLocal.imagen_urls && nuevoLocal.imagen_urls.length > 0" class="images-preview-gallery">
                             <div class="image-preview-item" *ngFor="let imageUrl of nuevoLocal.imagen_urls; let i = index">
-                                <img [src]="backendBaseUrl + imageUrl" alt="Previsualización de imagen" class="image-preview">
+                                <!-- Para las imágenes nuevas que se están previsualizando (Base64), no se usa getImageUrl -->
+                                <img [src]="imageUrl" alt="Previsualización de imagen" class="image-preview">
                                 <button type="button" class="clear-image-btn" (click)="removeImage(i)">
                                     &times;
                                 </button>
