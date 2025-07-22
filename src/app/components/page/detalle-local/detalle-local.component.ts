@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router'; // Importa RouterLink aquí
 import { CommonModule, DatePipe } from '@angular/common';
-import { LocalesService } from '../../../services/administrador/locales.service';
+import { LocalesService } from '../../../services/administrador/locales.service'; // Asegúrate de que esta ruta sea correcta
 import { Local } from '../../../interfaces/locales.interface';
 import { Producto } from '../../../interfaces/producto.interface';
 import { Categoria } from '../../../interfaces/categoria.interface';
@@ -36,7 +36,8 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
         this.getLocalDetails(parseInt(id, 10));
       } else {
         console.error('No se proporcionó un ID de local en los parámetros de la ruta.');
-        this.router.navigate(['/locales']);
+        // Si no hay ID, redirigir a una página de error o a la lista de locales
+        this.router.navigate(['/mapa_contenedores']); // O a '/locales' si tienes una lista pública
       }
     });
   }
@@ -48,9 +49,10 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
   }
 
   getLocalDetails(id: number): void {
+    // CAMBIO CLAVE: Ahora el servicio devuelve directamente 'Local', no '{ data: Local }'
     this.localesService.getOneLocal(id).subscribe({
-      next: (data: Local) => {
-        this.local = data;
+      next: (data: Local) => { // Esperamos directamente el objeto Local
+        this.local = data; // Asignamos directamente el objeto Local
         console.log('Detalles del local cargados:', this.local);
         if (this.local.imagen_urls && this.local.imagen_urls.length > 0) {
           this.currentImageIndex = 0;
@@ -59,6 +61,8 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
       error: (err) => {
         console.error('Error al cargar los detalles del local:', err);
         this.local = null;
+        // Si el local no se encuentra (ej. 404), redirigir a una página segura
+        this.router.navigate(['/mapa_contenedores']); // Redirigir al mapa o a una página de error
       }
     });
   }

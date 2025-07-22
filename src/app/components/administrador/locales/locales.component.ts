@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-
+import { Router } from '@angular/router';
 
 import { LocalesService } from '../../../services/administrador/locales.service';
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
@@ -65,7 +65,8 @@ export class LocalesComponent implements OnInit {
   constructor(
     private localesService: LocalesService,
     private contenedoresService: ContenedoresService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -409,5 +410,10 @@ export class LocalesComponent implements OnInit {
         });
       }
     });
+    
+}
+irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
   }
 }

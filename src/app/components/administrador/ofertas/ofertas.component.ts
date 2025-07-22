@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { OfertaService } from '../../../services/administrador/ofertas.service';
 import { Oferta } from '../../../interfaces/oferta.interface';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-ofertas',
   standalone: true,
@@ -38,7 +38,8 @@ export class OfertasComponent implements OnInit {
 
   constructor(
     private ofertaService: OfertaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -172,5 +173,9 @@ export class OfertasComponent implements OnInit {
         hideCancelButton: true
       }
     });
+  }
+  irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
   }
 }

@@ -5,11 +5,14 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#inicio">🏠 Inicio</a></li>
-                <li><a href="#locales">📍 Locales</a></li>
-                <li><a href="#socios">🧑‍🤝‍🧑 Socios</a></li>
-                <li><a href="#ofertas">🏷 Ofertas</a></li>
-                <li><a href="#contenedores">🚛 Contenedores</a></li>
+                <li><a (click)="irAPagina('inicio')">🏠 Inicio</a></li>
+                <li><a (click)="irAPagina('locales')">📍 Locales</a></li>
+                <li><a (click)="irAPagina('socios')" class="active">🧑‍🤝‍🧑 Socios</a></li>
+                <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
+                <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
+                
+                <li><a (click)="irAPagina('producto')" >📦 Productos</a></li>
+                
             </ul>
         </nav>
         <nav>

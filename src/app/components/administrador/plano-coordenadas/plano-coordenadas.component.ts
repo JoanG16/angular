@@ -8,6 +8,7 @@ import { SociosService } from '../../../services/administrador/socios.service';
 import { Socio } from '../../../interfaces/socio.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-plano-coordenadas',
@@ -42,7 +43,8 @@ export class PlanoCoordenadasComponent implements AfterViewInit, OnInit, OnDestr
   constructor(
     private contenedorService: ContenedorService,
     private sociosService: SociosService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -412,5 +414,9 @@ export class PlanoCoordenadasComponent implements AfterViewInit, OnInit, OnDestr
     this.isEditing = false;
     this.drawnItems.clearLayers();
     this.displayContenedoresOnMap();
+  }
+  irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
   }
 }

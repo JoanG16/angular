@@ -935,6 +935,7 @@ table tbody td:empty:before {
         flex-direction: row;
         justify-content: space-evenly;
         border-radius: 0;
+        
     }
 
     main {
