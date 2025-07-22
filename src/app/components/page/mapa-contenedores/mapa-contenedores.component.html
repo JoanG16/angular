@@ -2,28 +2,28 @@
 
 <body>
   <header class="main-header">
-    <div class="header-content-wrapper">
-      <div class="site-branding">
-        <div class="logo-image"></div>
-        <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
-      </div>
-      <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
-      <label for="menu-toggle" class="hamburger-icon">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </label>
-      <nav class="main-navigation">
-        <label for="menu-toggle" class="close-menu-icon">&times;</label>
-        <ul>
-          <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
-          <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
-          <li><a href="#" class="nav-link">Locales</a></li>
-          <li><a href="#" class="nav-link">Sobre nosotros</a></li>
-        </ul>
-      </nav>
+  <div class="header-content-wrapper">
+    <div class="site-branding">
+      <div class="logo-image"></div>
+      <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
     </div>
-  </header>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+    <label for="menu-toggle" class="hamburger-icon">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </label>
+    <nav class="main-navigation">
+      <label for="menu-toggle" class="close-menu-icon">&times;</label>
+      <ul>
+        <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+        <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+        <li><a [routerLink]="['/local']" class="nav-link">Locales</a></li>
+        <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
   <!-- Añadimos la clase 'content-loaded' condicionalmente para la animación de entrada -->
   <div class="map-page-wrapper" [class.content-loaded]="!isLoading">

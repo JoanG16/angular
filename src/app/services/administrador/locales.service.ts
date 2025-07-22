@@ -29,13 +29,8 @@ export class LocalesService {
   // ya que ambos llaman a la misma URL base sin un sub-path específico.
   // Si tienen propósitos diferentes, asegúrate de que la URL sea distinta.
   // Si no, considera eliminar uno.
-  getLocales(): Observable<Local[]> {
-    // MODIFICADO: Usa this.apiUrl para construir la URL
-    // Si este endpoint es directamente 'http://localhost:3000/v1/api/locales' (sin /get-all),
-    // entonces this.apiUrl ya es esa URL base.
-    return this.http.get<{ data: Local[], message: string, status: string, statusCode: number }>(this.apiUrl).pipe(
-      map(response => response.data)
-    );
+ getLocales(): Observable<LocalResponse> {
+    return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`);
   }
 
   getOneLocal(id: number): Observable<Local> {

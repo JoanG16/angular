@@ -10,7 +10,7 @@ import { OfertasComponent } from './components/administrador/ofertas/ofertas.com
 import { DetalleLocalComponent } from './components/page/detalle-local/detalle-local.component';
 import { ProductoCrudComponent } from './components/administrador/producto-crud/producto-crud/producto-crud.component';
 import { LoginComponent } from './components/administrador/login/login.component'; // Asegúrate de que esta ruta sea correcta
-
+import {LocalComponent} from './components/page/locales/locales.component'
 // Importar el guardia de autenticación
 import { authGuardFn } from './guards/auth.guard';
 
@@ -20,7 +20,7 @@ export const routes: Routes = [
   { path: 'mapa_contenedores', component: MapaContenedoresComponent },
   { path: 'detalle-local/:id', component: DetalleLocalComponent }, // Ruta de detalle de local
   { path: 'login', component: LoginComponent },
-
+{path: 'local', component: LocalComponent},
   // Rutas protegidas (requieren autenticación)
   // Utiliza `canActivate` con el guardia de autenticación para estas rutas
   { path: 'plano_contenedores', component: PlanoCoordenadasComponent, canActivate: [authGuardFn] },

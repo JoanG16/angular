@@ -21,7 +21,7 @@ export interface Local {
     // Agrega la propiedad 'productos' para los productos asociados a este local
     // Esta propiedad debería ser un array de la interfaz Producto (que a su vez contiene la categoría)
     productos?: Producto[];
-    
+
     // Si tu local puede tener información de socio o contenedor directamente, puedes añadirlo aquí también:
     socio?: Socio; // Opcional: si el local tiene un socio asociado
     contenedor?: Contenedor; // Opcional: si el local tiene un contenedor asociado

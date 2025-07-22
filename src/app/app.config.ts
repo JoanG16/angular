@@ -1,20 +1,23 @@
+// src/app/app.config.ts
+
 import { ApplicationConfig, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { AuthService } from './services/administrador/auth.service'; // Asegúrate de que la ruta sea correcta
-import { environment } from '../environments/environment'; // Importar el archivo de entorno
+import { AuthService } from './services/administrador/auth.service';
+import { environment } from '../environments/environment';
 
 // Importar todos los servicios que necesitan ser provistos
 import { ContenedoresService } from './services/administrador/contenedores.service';
 import { LocalesService } from './services/administrador/locales.service';
 import { CategoriaService } from './services/administrador/categoria.service';
-import { ProductoService } from './services/administrador/producto.service'; // Asegúrate de la ruta correcta para el servicio de productos públicos
+import { ProductoService } from './services/administrador/producto.service';
 import { SociosService } from './services/administrador/socios.service';
 import { OfertaService } from './services/administrador/ofertas.service';
-// No es necesario importar AuthGuard aquí si está providedIn: 'root',
-// pero se mantiene en los providers para consistencia si se desea.
 import { AuthGuard } from './guards/auth.guard';
+
+// ¡IMPORTA ESTO PARA HABILITAR LAS ANIMACIONES!
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,15 +46,14 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
     // Proveer todos los servicios necesarios para la inyección de dependencias.
-    // Aunque algunos puedan tener `providedIn: 'root'`, listarlos aquí puede ayudar
-    // a una visión centralizada de las dependencias principales.
     AuthService,
-    AuthGuard, // Se provee el AuthGuard para que sus dependencias puedan ser resueltas si se inyecta directamente.
+    AuthGuard,
     ContenedoresService,
     LocalesService,
     CategoriaService,
     ProductoService,
     SociosService,
-    OfertaService
+    OfertaService,
+    provideAnimationsAsync() // <-- ¡AÑADE ESTA LÍNEA AQUÍ!
   ]
 };

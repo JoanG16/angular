@@ -3,10 +3,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Contenedor } from '../../interfaces/contenedor.interface';
 import { environment } from '../../../environments/environment'; // <-- ¡AÑADE ESTA LÍNEA!
-                                                            // Asegúrate de que la ruta sea correcta para tu proyecto.
-
+//          
+import { Contenedor, ContenedorResponse, SingleContenedorResponse } from '../../interfaces/contenedor.interface';
+// No necesitas 'map' si devuelves la respuesta completa
+// import { map } from 'rxjs/operators';                                         // Asegúrate de que la ruta sea correcta para tu proyecto.
+import { LocalResponse } from '../../interfaces/locales.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +20,12 @@ export class ContenedoresService {
 
   constructor(private http: HttpClient) { }
 
-  getAllContenedores(): Observable<{ data: Contenedor[] }> {
-    return this.http.get<any>(`${this.apiUrl}/get-all`);
+  getAllContenedores(): Observable<ContenedorResponse> {
+    return this.http.get<ContenedorResponse>(`${this.apiUrl}/get-all`);
+  }
+
+  // Si tienes otros métodos que devuelven un solo contenedor, asegúrate de que también sean correctos
+  getOneContenedor(id: number): Observable<SingleContenedorResponse> {
+    return this.http.get<SingleContenedorResponse>(`${this.apiUrl}/get-one/${id}`);
   }
 }

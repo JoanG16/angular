@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ProductoService } from '../../../../services/administrador/producto.service';
 import { CategoriaService } from '../../../../services/administrador/categoria.service';
-import { LocalesService } from '../../../../services/page/locales.service';
+import { LocalesService } from '../../../../services/administrador/locales.service';
 
 import { Producto } from '../../../../interfaces/producto.interface';
 import { Categoria } from '../../../../interfaces/categoria.interface';

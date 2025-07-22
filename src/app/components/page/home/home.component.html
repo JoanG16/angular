@@ -11,14 +11,14 @@
       <nav class="menu">
         <a href="#" style="cursor: pointer;">Inicio</a>
         <a (click)="irAPagina('mapa_contenedores')"  style="cursor: pointer;">Mapa del Mercado</a>
-        <a href="#" style="cursor: pointer;" >Locales</a>
+        <a  (click)="irAPagina('local')"  style="cursor: pointer;" >Locales</a>
         <a href="#" style="cursor: pointer;">Sobre nosotros</a>
         <label for="check" class="esconder-menu">&#215;</label>
       </nav>
     </div>
 
   <div class="texto-sobreMapa animated fade-in-up delay-2">
-    <h1 class="text.aling">Encuentra fácilmente productos y locales en el C.C Nuevo Tarqui</h1>
+    <h1 class="text.aling">Encuentra fácilmente productos y locales en el C.C. NUEVO TARQUI</h1>
   </div>
 </header>
 
@@ -28,7 +28,7 @@
 
   <section class="productos">
     <h1 class="animated fade-in-up">
-      Encuentra nuestros locales comerciales por categoría
+      Encuentra nuestros locales comerciales por categoría de productos
     </h1>
     <div class="tarjetas">
       <div id="tarjeta1" class="tarjeta animated fade-in-up delay-1" (click)="irAPagina('mapa_contenedores', 'Cárnicos y lácteos')"> <img src="assets/img/carnicos-lacteos.png" alt="carnicos">
@@ -134,9 +134,10 @@
   <div>
       <h1>Contáctanos</h1>
       <p>N° celular: <br> 0981130641 </p>
-      <p>Correo:<br> joangallardohotmail.com</p>
+      <p>Correo:<br><span [textContent]="'nuevotarqui@hotmail.com'"></span></p>
       <p>Redes sociales: <br> Facebook</p>
       <p>Ubicación: <br> Calle de la cultura</p>
       <p>&copy; 2025 Mercado de Tarqui</p>
+
     </div>
     </footer>

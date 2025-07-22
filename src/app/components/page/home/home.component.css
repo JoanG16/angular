@@ -16,6 +16,11 @@ header {
 
 }
 
+
+body{
+
+   background-color: #f7f8f3;
+}
 g {
   width: 100%;
   height: auto;
@@ -312,7 +317,7 @@ g {
 .productos {
   padding: 2rem 1rem; /* Un poco más de espacio vertical */
   text-align: center;
-  background-color: beige;
+  
   overflow: hidden; /* Importante para que las animaciones que vienen desde afuera no generen scrollbars */
 }
 

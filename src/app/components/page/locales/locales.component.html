@@ -1,0 +1,132 @@
+<!-- src/app/components/locales/locales.component.html -->
+
+<!-- Header (Integrado desde tu mapa-contenedores.component.html) -->
+<header class="main-header">
+  <div class="header-content-wrapper">
+    <div class="site-branding">
+      <div class="logo-image"></div>
+      <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+    </div>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+    <label for="menu-toggle" class="hamburger-icon">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </label>
+    <nav class="main-navigation">
+      <label for="menu-toggle" class="close-menu-icon">&times;</label>
+      <ul>
+        <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+        <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+        <li><a [routerLink]="['/locales']" class="nav-link">Locales</a></li>
+        <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Contenedor principal de la página -->
+<div class="page-wrapper">
+  <div class="main-content-area">
+    <!-- Controles de Búsqueda, Filtro y Ordenamiento -->
+    <section class="filter-controls-section">
+      <div class="form-group">
+        <label for="search" class="form-label">Buscar por Nombre:</label>
+        <input
+          type="text"
+          id="search"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange($event)"
+          placeholder="Ej. Jec. Mobile"
+          class="form-input"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="blockFilter" class="form-label">Filtrar por Bloque:</label>
+        <select
+          id="blockFilter"
+          [(ngModel)]="blockFilter"
+          (change)="onBlockFilterChange()"
+          class="form-select"
+        >
+          <option value="">Todos los Bloques</option>
+          <option *ngFor="let block of uniqueBlocks" [value]="block">{{ block }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryFilter" class="form-label">Filtrar por Categoría:</label>
+        <select
+          id="categoryFilter"
+          [(ngModel)]="categoryFilter"
+          (change)="onCategoryFilterChange()"
+          class="form-select"
+        >
+          <option value="">Todas las Categorías</option>
+          <option *ngFor="let category of uniqueCategories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <div class="form-group sort-control">
+        <label for="sortBy" class="form-label">Ordenar por:</label>
+        <select
+          id="sortBy"
+          [(ngModel)]="sortBy"
+          (change)="onSortByChange()"
+          class="form-select"
+        >
+          <option value="nombre_asc">Nombre (A-Z)</option>
+          <option value="nombre_desc">Nombre (Z-A)</option>
+        </select>
+      </div>
+    </section>
+
+    <div *ngIf="filteredLocales.length === 0" class="no-locales-message">
+      No se encontraron locales con los criterios de búsqueda/filtro actuales.
+    </div>
+
+    <div class="locales-grid">
+      <div *ngFor="let local of filteredLocales" class="local-card">
+        <div class="card-image-container">
+          <img
+            [src]="getPlaceholderImage(local)"
+            alt="Imagen de {{ local.nombre_del_negocio }}"
+            class="card-image"
+            onerror="this.onerror=null;this.src='https://placehold.co/400x200/ADD8E6/000000?text=Local';"
+          >
+        </div>
+
+        <div class="card-content">
+          <div>
+            <h2 class="card-title">{{ local.nombre_del_negocio }}</h2>
+            <p class="card-detail">
+              <span class="card-detail-label">Código Local:</span> {{ local.codigo_local }}
+            </p>
+            <p class="card-detail">
+              <span class="card-detail-label">Bloque:</span> {{ local.nombre_bloque || 'N/A' }}
+            </p>
+          </div>
+
+          <div class="card-description-section">
+            <h3 class="card-description-title">Acerca de nosotros:</h3>
+            <p class="card-description-text">
+              <!-- Muestra la descripción truncada o completa según isExpanded -->
+              {{ local.isExpanded ? local.descripcion : local.truncatedDescripcion }}
+              <!-- Muestra el botón 'más'/'Ver menos' solo si la descripción original es más larga que el límite -->
+              <ng-container *ngIf="local.descripcion && local.descripcion.length > DESCRIPTION_MAX_LENGTH">
+                <a href="javascript:void(0)" class="read-more-toggle" (click)="toggleDescription(local)">
+                  {{ local.isExpanded ? '...Ver menos' : '...más' }}
+                </a>
+              </ng-container>
+            </p>
+          </div>
+
+          <button class="detail-button" (click)="goToLocalDetail(local.id_local)">
+            Ver Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
