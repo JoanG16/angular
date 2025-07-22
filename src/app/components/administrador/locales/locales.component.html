@@ -60,8 +60,7 @@
                             <th>TikTok</th>
                             <th>Teléfono</th>
                             <th>N° Contenedor</th>
-                            <th>Descripción</th> <!-- NUEVA COLUMNA -->
-
+                            <th>Descripción</th>
                             <th>Imágenes</th>
                             <th>Acciones</th>
                         </tr>
@@ -77,11 +76,10 @@
                             <td>{{ local.tiktok || 'N/A' }}</td>
                             <td>{{ local.telefono || 'N/A' }}</td>
                             <td>{{ local.id_contenedor }}</td>
-                            <td>{{ local.descripcion || 'N/A' }}</td> <!-- NUEVO CAMPO EN LA TABLA -->
-
+                            <td>{{ local.descripcion || 'N/A' }}</td>
                             <td>
                                 <div class="local-images-gallery">
-                                    <!-- CAMBIO CLAVE AQUÍ: Usar getImageUrl() -->
+                                    <!-- Usar getImageUrl para las imágenes existentes -->
                                     <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
                                         class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
@@ -175,8 +173,8 @@
                             name="imagenLocal">
                         <div *ngIf="nuevoLocal.imagen_urls && nuevoLocal.imagen_urls.length > 0" class="images-preview-gallery">
                             <div class="image-preview-item" *ngFor="let imageUrl of nuevoLocal.imagen_urls; let i = index">
-                                <!-- Para las imágenes nuevas que se están previsualizando (Base64), no se usa getImageUrl -->
-                                <img [src]="imageUrl" alt="Previsualización de imagen" class="image-preview">
+                                <!-- Para previsualización en el formulario, usa getImageUrl también -->
+                                <img [src]="getImageUrl(imageUrl)" alt="Previsualización de imagen" class="image-preview">
                                 <button type="button" class="clear-image-btn" (click)="removeImage(i)">
                                     &times;
                                 </button>

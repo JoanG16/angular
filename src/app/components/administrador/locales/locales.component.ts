@@ -54,7 +54,7 @@ export class LocalesComponent implements OnInit {
   public selectedFiles: File[] = [];
 
   // La URL base de tu backend es environment.apiUrl
-  public backendBaseUrl: string = environment.apiUrl;
+  public backendBaseUrl: string = environment.apiUrl; // Esto ya no se usará para construir URLs de imagen, pero se mantiene si es necesario para otras llamadas API.
 
   filterBloque: string | null = null;
   filterNombreLocal: string = '';
@@ -170,7 +170,11 @@ export class LocalesComponent implements OnInit {
       descripcion: local.descripcion || ''
     };
 
-    this.selectedFiles = [];
+    this.selectedFiles = []; // Limpiar selectedFiles al editar, ya que las URLs existentes no son File objetos.
+
+    // Si las imágenes existentes son URLs de Cloudinary, no las leemos como DataURL.
+    // Solo las nuevas imágenes seleccionadas se convertirán a DataURL.
+    // Para previsualizar las existentes, simplemente se usan sus URLs.
 
     const contenedorAsociado = this.todosLosContenedores.find(c => c.id_contenedor === local.id_contenedor);
     if (contenedorAsociado && contenedorAsociado.bloque) {
@@ -217,29 +221,38 @@ export class LocalesComponent implements OnInit {
       this.selectedFiles = [];
     }
 
-    if (fileList && fileList.length > 0) {
-      this.nuevoLocal.imagen_urls = [];
-      this.selectedFiles = [];
+    // Mantener las imágenes existentes si estamos editando
+    const existingImageUrls = this.localSeleccionado ? [...this.localSeleccionado.imagen_urls || []] : [];
+    this.nuevoLocal.imagen_urls = [...existingImageUrls]; // Empezar con las URLs existentes
+    this.selectedFiles = []; // Limpiar selectedFiles para solo añadir los nuevos archivos
 
+    if (fileList && fileList.length > 0) {
       Array.from(fileList).forEach(file => {
-        this.selectedFiles.push(file);
+        this.selectedFiles.push(file); // Guardar el archivo real
 
         const reader = new FileReader();
         reader.onload = (e: any) => {
+          // Añadir la DataURL para previsualización en el formulario
           this.nuevoLocal.imagen_urls!.push(e.target.result);
         };
         reader.readAsDataURL(file);
       });
-    } else {
-      this.selectedFiles = [];
-      this.nuevoLocal.imagen_urls = [];
     }
   }
 
   removeImage(index: number): void {
     if (this.nuevoLocal.imagen_urls && index > -1 && index < this.nuevoLocal.imagen_urls.length) {
+      // Si la URL es una URL de Cloudinary (ya subida), la eliminamos de la lista
+      // Si es una DataURL (nueva y no subida), también la eliminamos
       this.nuevoLocal.imagen_urls.splice(index, 1);
-      this.selectedFiles.splice(index, 1);
+
+      // También necesitamos eliminar el archivo correspondiente de selectedFiles
+      // Esto es un poco más complejo porque selectedFiles solo contiene los archivos nuevos.
+      // Una forma simple es reconstruir selectedFiles si es necesario, o simplemente
+      // confiar en que el backend solo procesará las DataURLs.
+      // Por ahora, solo eliminamos de la previsualización.
+      // Si necesitas una eliminación precisa de archivos del input, tendrías que mapear
+      // los selectedFiles con las DataURLs generadas.
     }
   }
 
@@ -266,7 +279,14 @@ export class LocalesComponent implements OnInit {
     const localPayload: Partial<Local> = { ...baseLocalData };
 
     localPayload.descripcion = this.nuevoLocal.descripcion || undefined;
+
+    // Asegurarse de que solo las DataURLs (nuevas imágenes) se envíen al backend,
+    // o que las URLs de Cloudinary existentes también se incluyan si el backend las espera.
+    // La lógica del backend que creamos ya filtra esto.
+    // Aquí, simplemente enviamos todo lo que está en nuevoLocal.imagen_urls
+    // (que contendrá DataURLs de nuevas imágenes y URLs de Cloudinary de imágenes existentes).
     localPayload.imagen_urls = this.nuevoLocal.imagen_urls;
+
 
     if (this.localSeleccionado && this.localSeleccionado.id_local) {
       dialogMessage = `¿Estás seguro de que quieres guardar los cambios para el local "${this.nuevoLocal.nombre_del_negocio}"?`;
@@ -404,23 +424,12 @@ export class LocalesComponent implements OnInit {
   }
 
   // Función para obtener la URL completa de la imagen
-  getImageUrl(relativePath: string): string {
-    // Debugging: Ver el relativePath que llega
-    console.log('[getImageUrl DEBUG] Relative Path recibido:', relativePath);
-
-    // Asegurarse de que environment.apiUrl sea algo como "https://back-base-project-main.onrender.com/v1/api"
-    // Queremos la URL base del dominio: "https://back-base-project-main.onrender.com"
-    const urlParts = this.backendBaseUrl.split('/v1/api');
-    const baseDomain = urlParts[0];
-
-    // relativePath debería ser algo como "/uploads/locales/nombre_imagen.jpeg"
-    // Si por alguna razón relativePath no empieza con '/', asegúrate de añadirlo.
-    const finalUrl = `${baseDomain}${relativePath.startsWith('/') ? '' : '/'}${relativePath}`;
-
-    // Debugging: Ver la URL final generada
-    console.log('[getImageUrl DEBUG] URL final generada:', finalUrl);
-
-    return finalUrl;
+  // Ahora, si el backend devuelve URLs de Cloudinary, esta función simplemente las retorna.
+  // Si devuelve DataURLs (para previsualización de nuevas subidas), también las retorna.
+  getImageUrl(url: string): string {
+    // Debugging: Ver la URL que llega
+    console.log('[getImageUrl DEBUG] URL recibida:', url);
+    return url; // La URL ya es la final (Cloudinary URL o DataURL)
   }
 
   irAPagina(titulo: string): void {
