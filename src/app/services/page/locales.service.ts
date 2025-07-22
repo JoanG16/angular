@@ -15,25 +15,25 @@ export class LocalesService {
   // MODIFICADO: Ahora la URL base se construye usando environment.apiUrl
   // Asumiendo que environment.apiUrl ya incluye 'http://localhost:3000/v1/api' (o la URL de ngrok)
   // y solo necesitamos añadir '/locales' para este servicio.
-  private apiUrl = `${environment.apiUrl}/locales`;
+  private baseUrl = `${environment.apiUrl}/locales`;
 
   constructor(private http: HttpClient) { }
 
   getAllLocales(): Observable<Local[]> {
-    return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`).pipe(
+    return this.http.get<LocalResponse>(`${this.baseUrl}/get-all`).pipe(
       map(response => response.data)
     );
   }
 
   createLocal(local: Local): Observable<Local> {
-    return this.http.post<Local>(`${this.apiUrl}/create`, local);
+    return this.http.post<Local>(`${this.baseUrl}/create`, local);
   }
 
   updateLocal(id: number, local: Local): Observable<Local> {
-    return this.http.put<Local>(`${this.apiUrl}/update/${id}`, local);
+    return this.http.put<Local>(`${this.baseUrl}/update/${id}`, local);
   }
 
   deleteLocal(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/delete/${id}`);
   }
 }

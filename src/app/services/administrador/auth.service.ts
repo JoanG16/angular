@@ -23,7 +23,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`; // Endpoint de autenticación en tu backend
+  private baseUrl = `${environment.apiUrl}/auth`; // Endpoint de autenticación en tu backend
   private tokenKey = 'jwt_token'; // Clave para almacenar el token en localStorage
   private userRoleKey = 'user_role'; // Clave para almacenar el rol del usuario
   private usernameKey = 'username'; // Clave para almacenar el nombre de usuario
@@ -59,7 +59,7 @@ export class AuthService {
    */
   login(username: string, password: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.http.post<LoginResponse>(`${this.apiUrl}/login`, { username, password })
+      this.http.post<LoginResponse>(`${this.baseUrl}/login`, { username, password })
         .pipe(
           tap(response => {
             // Almacenar el token y el rol en localStorage

@@ -11,6 +11,7 @@ import { Local } from '../../../interfaces/locales.interface';
 import { Contenedor } from '../../../interfaces/contenedor.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
+import { environment } from '../../../../environments/environment'; // ¡IMPORTA EL ARCHIVO DE ENTORNO!
 
 @Component({
   selector: 'app-locales',
@@ -45,7 +46,7 @@ export class LocalesComponent implements OnInit {
     tiktok: '',
     telefono: '',
     id_contenedor: 0,
-   creado_en: new Date().toISOString(), // Convierte la fecha a una cadena en formato ISO 8601
+    creado_en: new Date().toISOString(), // Convierte la fecha a una cadena en formato ISO 8601
     selectedBloque: null,
     imagen_urls: [], // Ahora es un array para múltiples imágenes
     descripcion: '' // NUEVO CAMPO: Descripción del local
@@ -55,7 +56,8 @@ export class LocalesComponent implements OnInit {
   public selectedFiles: File[] = [];
 
   // **CAMBIO CLAVE**: URL base de tu backend para cargar imágenes
-  public backendBaseUrl: string = 'http://localhost:3000';
+  // Ahora usa environment.apiUrl, que ya apunta a tu backend de Render
+  public backendBaseUrl: string = environment.apiUrl;
 
 
   // NUEVAS PROPIEDADES PARA LOS FILTROS DE BÚSQUEDA
@@ -250,7 +252,6 @@ export class LocalesComponent implements OnInit {
     }
   }
 
-
   guardarLocal(): void {
     if (!this.nuevoLocal.nombre_del_negocio || !this.nuevoLocal.nombre_del_dueno || !this.nuevoLocal.codigo_local || !this.nuevoLocal.id_contenedor) {
       this.dialog.open(ConfirmDialogComponent, {
@@ -264,7 +265,6 @@ export class LocalesComponent implements OnInit {
       return;
     }
 
-
     let dialogMessage: string;
     let successMessage: string;
     let errorMessage: string;
@@ -277,7 +277,6 @@ export class LocalesComponent implements OnInit {
     // Asegurarse de que el campo descripcion se incluya en el payload
     localPayload.descripcion = this.nuevoLocal.descripcion || undefined; // Usa undefined para propiedades opcionales
     localPayload.imagen_urls = this.nuevoLocal.imagen_urls;
-
 
     if (this.localSeleccionado && this.localSeleccionado.id_local) {
       dialogMessage = `¿Estás seguro de que quieres guardar los cambios para el local "${this.nuevoLocal.nombre_del_negocio}"?`;
@@ -351,6 +350,7 @@ export class LocalesComponent implements OnInit {
       }
     });
   }
+
   applyFilters(): void {
     console.log('applyFilters: Valor de this.allLocales antes de la operación:', this.allLocales);
     let filtered = [...this.allLocales];
@@ -371,6 +371,7 @@ export class LocalesComponent implements OnInit {
 
     this.locales = filtered;
   }
+
   eliminarLocal(id: number, nombre: string): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -410,10 +411,21 @@ export class LocalesComponent implements OnInit {
         });
       }
     });
-    
-}
-irAPagina(titulo: string): void {
-    this.router.navigate([titulo])
+  }
 
+  // Función para obtener la URL completa de la imagen
+  getImageUrl(relativePath: string): string {
+    // La URL de tu backend es environment.apiUrl, que incluye /v1/api
+    // Si tus imágenes se sirven desde /uploads en la raíz del backend (no bajo /v1/api),
+    // entonces necesitas quitar /v1/api de la URL base antes de añadir /uploads.
+    // Por ejemplo, si environment.apiUrl es "https://tu-backend.com/v1/api"
+    // y tus imágenes están en "https://tu-backend.com/uploads/imagen.jpg"
+    // entonces la siguiente línea funciona.
+    const baseUrlWithoutApi = this.backendBaseUrl.replace('/v1/api', '');
+    return `${baseUrlWithoutApi}/uploads/${relativePath}`;
+  }
+
+  irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
   }
 }
