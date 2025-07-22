@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import { environment } from '../../../environments/environment';
 // Interfaz para la respuesta de login del backend
 interface LoginResponse {
   statusCode: number;
@@ -23,7 +23,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/v1/api/auth'; // Endpoint de autenticación en tu backend
+  private apiUrl = `${environment.apiUrl}/auth`; // Endpoint de autenticación en tu backend
   private tokenKey = 'jwt_token'; // Clave para almacenar el token en localStorage
   private userRoleKey = 'user_role'; // Clave para almacenar el rol del usuario
   private usernameKey = 'username'; // Clave para almacenar el nombre de usuario
