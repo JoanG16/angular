@@ -385,6 +385,6 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
     console.log('Redirigiendo a detalles del local:', localId);
     // Asume que la ruta para el detalle del local es '/detalle-local/:id'
     // Deberás configurar esta ruta en tu archivo de enrutamiento de Angular (app-routing.module.ts)
-    this.router.navigate(['/detalle', localId]);
+    this.router.navigate(['/detalle-local', localId]);
   }
 }

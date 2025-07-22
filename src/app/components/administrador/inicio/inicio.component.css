@@ -6,7 +6,6 @@
     --azul: #32346B;
     --gris-claro: #f0f2f5;
     --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --beige: #f7f8f3;
 }
 
 .inicio-container {
@@ -28,12 +27,16 @@
     /* Incluye padding en el tamaño total */
 }
 
-/* Estilos para el área de información del usuario */
-.user-info {
+/* Contenedor del menú de usuario (para posicionar el dropdown) */
+.user-menu-container {
     position: absolute;
-    /* Posicionamiento absoluto */
     top: 20px;
     right: 20px;
+    z-index: 10; /* Asegura que el dropdown esté sobre otros elementos */
+}
+
+/* Estilos para el área de información del usuario (el botón que abre el dropdown) */
+.user-info {
     display: flex;
     align-items: center;
     background-color: var(--mostaza);
@@ -43,6 +46,13 @@
     font-size: 1rem;
     color: #fff;
     font-weight: 500;
+    cursor: pointer; /* Indica que es clickeable */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-info:hover {
+    background-color: #b88a2e; /* Tono más oscuro al pasar el ratón */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
 .user-icon {
@@ -51,8 +61,66 @@
 }
 
 .user-name {
-    /* Puedes ajustar el tamaño o peso de la fuente si es necesario */
+    margin-right: 8px; /* Espacio entre el nombre y la flecha */
 }
+
+.dropdown-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg); /* Gira la flecha cuando está abierto */
+}
+
+/* Estilos para el menú desplegable */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px); /* Debajo del user-info con un pequeño margen */
+    right: 0;
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    min-width: 180px; /* Ancho mínimo del menú */
+    overflow: hidden; /* Para que los bordes redondeados se apliquen a los ítems */
+    /* CAMBIO CLAVE AQUÍ: */
+    display: none; /* Oculto por defecto */
+    opacity: 0; /* Para la transición de opacidad */
+    transform: translateY(-10px); /* Para la transición de movimiento */
+    pointer-events: none; /* No interactuable cuando está oculto */
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Transiciones */
+    /* TEMPORAL: Añadido para depuración */
+   
+    background-color: lightblue;
+}
+
+/* Estado visible del menú desplegable (controlado por ngClass) */
+.dropdown-menu.show-dropdown {
+    display: block; /* Mostrar cuando la clase está presente */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Habilita los clics cuando está visible */
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    color: var(--azul);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+   
+}
+
+.dropdown-item:hover {
+    background-color: var(--gris-claro); /* Fondo gris claro al pasar el ratón */
+    color: var(--mostaza); /* Texto mostaza al pasar el ratón */
+}
+
 
 /* Contenido principal (título y botones) */
 .main-content {
@@ -152,6 +220,16 @@
         padding: 8px 12px;
         font-size: 0.9rem;
     }
+
+    .dropdown-menu {
+        min-width: 150px;
+        top: calc(100% + 8px);
+    }
+
+    .dropdown-item {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -167,5 +245,31 @@
 
     .dash-button .icon {
         font-size: 2.2rem;
+    }
+
+    .user-menu-container {
+        top: 10px;
+        right: 10px;
+    }
+    .user-info {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    .user-icon {
+        font-size: 1rem;
+        margin-right: 5px;
+    }
+    .user-name {
+        margin-right: 5px;
+    }
+    .dropdown-arrow {
+        font-size: 0.7rem;
+    }
+    .dropdown-menu {
+        min-width: 120px;
+    }
+    .dropdown-item {
+        padding: 8px 12px;
+        font-size: 0.8rem;
     }
 }

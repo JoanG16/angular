@@ -13,6 +13,7 @@ import { Local } from '../../../../interfaces/locales.interface'; // Importar Lo
 
 import { ConfirmDialogComponent } from '../../../confirm-dialog/confirm-dialog.component';
 import { SelectLocalesDialogComponent } from '../../select-locales-dialog/select-locales-dialog/select-locales-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-producto-crud',
@@ -39,7 +40,8 @@ export class ProductoCrudComponent implements OnInit {
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private localService: LocalesService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -228,5 +230,9 @@ export class ProductoCrudComponent implements OnInit {
         hideCancelButton: true
       }
     });
+  }
+   irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
   }
 }

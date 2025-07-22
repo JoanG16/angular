@@ -301,7 +301,7 @@ body {
 }
 
 .local-list li {
-  background-color: var(--light-bg-secondary); /* Crema para los items de la lista de locales */
+  background-color: #f7f8f3; /* Crema para los items de la lista de locales */
   padding: 12px 15px;
   border-radius: 8px;
   margin-bottom: 10px;

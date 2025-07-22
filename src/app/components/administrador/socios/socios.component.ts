@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { SociosService } from '../../../services/administrador/socios.service';
 import { Socio } from '../../../interfaces/socio.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component'; // Asegúrate de la ruta
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-socios',
@@ -42,7 +43,8 @@ export class SociosComponent implements OnInit {
 
   constructor(
     private sociosService: SociosService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -247,5 +249,9 @@ export class SociosComponent implements OnInit {
         });
       }
     });
+  }
+   irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
   }
 }
