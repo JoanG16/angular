@@ -19,6 +19,11 @@ import { AuthGuard } from './guards/auth.guard';
 // ¡IMPORTA ESTO PARA HABILITAR LAS ANIMACIONES!
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+
+// Importar el nuevo interceptor
+import { AuthInterceptor } from './interceptors/auth.interceptor'; // <-- ¡IMPORTA ESTO!
+import { HTTP_INTERCEPTORS } from '@angular/common/http'; // <-- ¡IMPORTA ESTO!
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -54,6 +59,12 @@ export const appConfig: ApplicationConfig = {
     ProductoService,
     SociosService,
     OfertaService,
-    provideAnimationsAsync() // <-- ¡AÑADE ESTA LÍNEA AQUÍ!
+    provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true // Permite múltiples interceptores
+    } // <-- ¡AÑADE ESTA LÍNEA AQUÍ!
   ]
+   
 };
