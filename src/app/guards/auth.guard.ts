@@ -1,21 +1,17 @@
-// src/app/guards/auth.guard.ts
+// src/app/guards/auth.guard.ts (Solo si la Opción 1 no funciona)
 
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/administrador/auth.service';
-import { map, take } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators'; // CAMBIO: Usar 'delay'
 import { Observable } from 'rxjs';
 
-// Función CanActivate para usar con provideRouter
 export const authGuardFn: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Observa el estado de autenticación.
-  // take(1) asegura que solo se tome el primer valor emitido y luego se complete el observable.
-  // Esto es importante para que el guardia no se quede suscrito indefinidamente.
   return authService.isAuthenticated$.pipe(
-    take(1),
+    delay(0), // CAMBIO CLAVE: Introduce un micro-retraso
     map(isAuthenticated => {
       if (isAuthenticated) {
         console.log('AuthGuard: Usuario autenticado. Acceso permitido.');

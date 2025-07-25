@@ -2,7 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs'; // Importar 'of'
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
@@ -13,6 +13,7 @@ export class AuthService {
   public apiUrl = environment.apiUrl;
   private tokenKey = 'authToken';
   // Inicializar BehaviorSubject con el estado actual del token
+  // Esto asegura que al cargar la app, el estado sea correcto
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkAuthenticationStatus());
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -22,8 +23,8 @@ export class AuthService {
   // Método para verificar el estado de autenticación basado en el token
   private checkAuthenticationStatus(): boolean {
     const token = localStorage.getItem(this.tokenKey);
-    // Aquí podrías añadir lógica para verificar si el token es válido/no expirado
-    // Por ahora, solo verificamos su existencia
+    // Podrías añadir lógica para verificar si el token es válido/no expirado aquí
+    // Por ahora, solo verificamos su existencia.
     return !!token;
   }
 
@@ -39,7 +40,8 @@ export class AuthService {
       tap(response => {
         if (response.token) {
           localStorage.setItem(this.tokenKey, response.token);
-          this.isAuthenticatedSubject.next(true); // Emitir true después de guardar el token
+          // ¡IMPORTANTE! Emitir true DESPUÉS de guardar el token
+          this.isAuthenticatedSubject.next(true);
         }
       })
     );
@@ -86,6 +88,7 @@ export class AuthService {
    */
   logout(): void {
     localStorage.removeItem(this.tokenKey);
-    this.isAuthenticatedSubject.next(false); // Emitir false después de eliminar el token
+    // ¡IMPORTANTE! Emitir false DESPUÉS de eliminar el token
+    this.isAuthenticatedSubject.next(false);
   }
 }
