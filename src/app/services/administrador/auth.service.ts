@@ -2,9 +2,9 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment'; // Asegúrate de la ruta correcta
+import { Observable, BehaviorSubject, of } from 'rxjs'; // Importar 'of'
+import { tap, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +12,19 @@ import { environment } from '../../../environments/environment'; // Asegúrate d
 export class AuthService {
   public apiUrl = environment.apiUrl;
   private tokenKey = 'authToken';
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  // Inicializar BehaviorSubject con el estado actual del token
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkAuthenticationStatus());
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+  // Método para verificar el estado de autenticación basado en el token
+  private checkAuthenticationStatus(): boolean {
+    const token = localStorage.getItem(this.tokenKey);
+    // Aquí podrías añadir lógica para verificar si el token es válido/no expirado
+    // Por ahora, solo verificamos su existencia
+    return !!token;
   }
 
   /**
@@ -29,13 +34,12 @@ export class AuthService {
    * @returns Un Observable con la respuesta del servidor.
    */
   login(username: string, password: string): Observable<any> {
-    // Crear el objeto de credenciales que el backend espera
     const credentials = { username, password };
     return this.http.post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         if (response.token) {
           localStorage.setItem(this.tokenKey, response.token);
-          this.isAuthenticatedSubject.next(true);
+          this.isAuthenticatedSubject.next(true); // Emitir true después de guardar el token
         }
       })
     );
@@ -66,12 +70,8 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       try {
-        // Los JWT tienen 3 partes: header.payload.signature
-        // La parte del payload es la segunda (índice 1)
         const payloadBase64 = token.split('.')[1];
-        // Decodificar la cadena Base64 a una cadena JSON
         const decodedPayload = JSON.parse(atob(payloadBase64));
-        // Asumimos que el payload del token tiene una propiedad 'username'
         return decodedPayload.username || null;
       } catch (e) {
         console.error('Error al decodificar el token:', e);
@@ -86,6 +86,6 @@ export class AuthService {
    */
   logout(): void {
     localStorage.removeItem(this.tokenKey);
-    this.isAuthenticatedSubject.next(false);
+    this.isAuthenticatedSubject.next(false); // Emitir false después de eliminar el token
   }
 }
