@@ -14,15 +14,19 @@ import { CategoriaService } from './services/administrador/categoria.service';
 import { ProductoService } from './services/administrador/producto.service';
 import { SociosService } from './services/administrador/socios.service';
 import { OfertaService } from './services/administrador/ofertas.service';
-import { AuthGuard } from './guards/auth.guard';
 
 // ¡IMPORTA ESTO PARA HABILITAR LAS ANIMACIONES!
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-
 // Importar el nuevo interceptor
-import { AuthInterceptor } from './interceptors/auth.interceptor'; // <-- ¡IMPORTA ESTO!
-import { HTTP_INTERCEPTORS } from '@angular/common/http'; // <-- ¡IMPORTA ESTO!
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// CAMBIO CLAVE: Importar authGuardFn en lugar de AuthGuard
+// Ya no necesitas importar AuthGuard como una clase, solo la función si la usas directamente
+// import { AuthGuard } from './guards/auth.guard'; // ELIMINAR O COMENTAR ESTO
+// La función authGuardFn se inyecta directamente en las rutas, no necesita ser provista aquí
+// si solo la usas como CanActivateFn.
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,12 +37,9 @@ export const appConfig: ApplicationConfig = {
           const authService = inject(AuthService);
           const authToken = authService.getToken();
 
-          // Definir las URLs de autenticación completas usando environment.apiUrl
           const loginUrl = `${environment.apiUrl}/auth/login`;
           const registerUrl = `${environment.apiUrl}/auth/register`;
 
-          // Clonar la solicitud y añadir el encabezado de autorización si el token existe
-          // y si la solicitud NO es para las rutas de login o registro.
           if (authToken && request.url !== loginUrl && request.url !== registerUrl) {
             request = request.clone({
               setHeaders: {
@@ -50,9 +51,10 @@ export const appConfig: ApplicationConfig = {
         }
       ])
     ),
-    // Proveer todos los servicios necesarios para la inyección de dependencias.
+    // Proveer todos los servicios necesarios
     AuthService,
-    AuthGuard,
+    // CAMBIO CLAVE: Eliminar AuthGuard de los providers, ya no es una clase provista
+    // AuthGuard, // ELIMINAR O COMENTAR ESTA LÍNEA
     ContenedoresService,
     LocalesService,
     CategoriaService,
@@ -63,8 +65,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true // Permite múltiples interceptores
-    } // <-- ¡AÑADE ESTA LÍNEA AQUÍ!
+      multi: true
+    }
   ]
-   
 };
