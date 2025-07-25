@@ -1,0 +1,104 @@
+<!-- src/app/components/page/sobre-nosotros/sobre-nosotros.component.html -->
+
+<!-- Header (Mantén el mismo header que en otros componentes para consistencia) -->
+<header class="main-header">
+  <div class="header-content-wrapper">
+    <div class="site-branding">
+      <div class="logo-image"></div>
+      <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+    </div>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+    <label for="menu-toggle" class="hamburger-icon">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </label>
+    <nav class="main-navigation">
+      <label for="menu-toggle" class="close-menu-icon">&times;</label>
+      <ul>
+        <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+        <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+        <li><a [routerLink]="['/local']" class="nav-link">Locales</a></li>
+        <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="main-content-area">
+    <section class="hero-section">
+      <h1 class="hero-title">Descubre la Historia del <span class="highlight">Nuevo Tarqui</span></h1>
+      <p class="hero-subtitle">Un relato de resiliencia, transformación y el espíritu comercial de Manta.</p>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-heading">El Legado del Terremoto del 2016</h2>
+      <p>
+        El 16 de abril de 2016, un terremoto de 7.8 grados Richter devastó Manabí y Esmeraldas, cambiando para siempre la realidad de Tarqui, en Manta. Esta parroquia urbana, antes bulliciosa y repleta de comerciantes informales y locales en cada casa, se convirtió en la "zona cero" debido al impacto humano y material.
+      </p>
+      <p>
+        La tragedia dejó 673 muertos, 200 de ellos en Manta, la mayoría en Tarqui. El Centro Comercial Felipe Navarrete, abarrotado de familias comprando útiles escolares, fue uno de los puntos más afectados, cobrando la vida de 99 personas.
+      </p>
+      <p>
+        Tras el desastre, los aproximadamente 1,400 comerciantes censados en 2014 quedaron sin sus puestos de trabajo. Aunque muchos se dispersaron, 336 de ellos encontraron un nuevo comienzo en contenedores y 1,064 en módulos.
+      </p>
+    </section>
+
+    <section class="content-section alternate-background">
+      <h2 class="section-heading">El Renacer: El Nuevo Tarqui</h2>
+      <p>
+        Impulsado por la necesidad de reactivar el comercio, el Nuevo Tarqui se estableció en la avenida de la Cultura. Este espacio vital no solo acogió a los comerciantes afectados, sino también a nuevos emprendedores.
+      </p>
+      <p>
+        Ubicado en un terreno de INMOBILIAR, el proyecto fue diseñado por la constructora ISABA S.A., que planificó meticulosamente la disposición de cada contenedor. Es importante destacar que cada comerciante financió individualmente sus contenedores mediante préstamos personales, sin recibir apoyo gubernamental directo para esta área.
+      </p>
+      <div class="image-with-caption">
+        <!-- Placeholder for the scheme image -->
+        <img src="/assets/NuevoTarquiDespues.jpg" alt="Esquema del nuevo Tarqui al momento de la creación de planos por la constructora ISABA S.A." class="content-image">
+        <p class="image-caption">
+          Ilustración: Esquema del Nuevo Tarqui al momento de la creación de planos por la constructora ISABA S.A.
+          <br>
+          <small>Imagen de referencia basada en la página oficial de ISABA S.A.</small>
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-heading">Desafíos y Resiliencia Comercial</h2>
+      <p>
+        El camino del Nuevo Tarqui no ha estado exento de obstáculos. Inicialmente, el factor "nostalgia" jugó un papel importante; muchos mantenses preferían el antiguo estándar de comercio y la falta de información sobre la nueva ubicación afectó las ventas. La directiva del Nuevo Tarqui reconoció que al principio las ventas no fueron óptimas, pero con el tiempo, la gente se fue adaptando y el comercio se recuperó.
+      </p>
+      <p>
+        Otro desafío surgió con la llegada de un gran centro comercial en Manta. Sin embargo, la directiva observó que, una vez superada la "novedad" del nuevo centro y al comparar los precios más competitivos del Nuevo Tarqui, las ventas volvieron a repuntar.
+      </p>
+      <p>
+        Actualmente, el Nuevo Tarqui, como gran parte de Ecuador, enfrenta los desafíos de la crisis energética, lo que impacta directamente en las operaciones comerciales. A pesar de estos inconvenientes, la comunidad de comerciantes sigue buscando soluciones y adaptándose.
+      </p>
+    </section>
+
+    <section class="content-section alternate-background">
+      <h2 class="section-heading">Contenedores Comerciales: Una Tendencia Global</h2>
+      <p>
+        La adaptación de contenedores de transporte en espacios comerciales es una solución innovadora y económica que ha ganado popularidad a nivel mundial. Estos "container locales" son transformados en funcionales y atractivos puntos de venta, equipados con todas las comodidades necesarias.
+      </p>
+      <p>
+        Ofrecen una solución versátil para emprendedores, permitiendo la creación de espacios únicos y personalizados para tiendas de ropa, cafeterías, restaurantes, salones de belleza y mucho más. Además, el uso de contenedores reciclados contribuye a la sostenibilidad y promueve la reutilización de materiales, un valor añadido en la economía actual.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-heading">El Nuevo Tarqui Hoy: Un Corazón Comercial en Evolución</h2>
+      <p>
+        Ubicado a 2 kilómetros del antiguo Tarqui, en la avenida La Cultura, el Nuevo Tarqui es ahora el espacio definitivo para casi 1,800 mercaderes minoristas en módulos e islas, y 150 comerciantes mayoristas en contenedores. Esta zona, que antes del terremoto era un área de expansión y plusvalía, ha sido acondicionada para ser el nuevo epicentro comercial de Manta.
+      </p>
+      <p>
+        Aunque los minoristas señalan que sus ingresos no son los mismos que antes del sismo (apenas el 30% de los USD 400,000 diarios que se registraban), la directiva y el municipio trabajan en estrategias como la planificación de nuevas rutas de buses para mejorar la afluencia de clientes. La idea de un cambio de nombre para diferenciarse del área mayorista también ha sido sugerida por los minoristas.
+      </p>
+      <p>
+        El Nuevo Tarqui es un testimonio de la capacidad de adaptación y el espíritu inquebrantable de los comerciantes de Manta, que continúan construyendo un futuro próspero en este renovado espacio.
+      </p>
+    </section>
+
+  </div>
+</div>

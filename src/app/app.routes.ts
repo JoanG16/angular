@@ -11,6 +11,7 @@ import { DetalleLocalComponent } from './components/page/detalle-local/detalle-l
 import { ProductoCrudComponent } from './components/administrador/producto-crud/producto-crud/producto-crud.component';
 import { LoginComponent } from './components/administrador/login/login.component'; // Asegúrate de que esta ruta sea correcta
 import {LocalComponent} from './components/page/locales/locales.component'
+import { SobreNosotrosComponent } from './components/page/sobre-nosotros/sobre-nosotros.component';
 // Importar el guardia de autenticación
 import { authGuardFn } from './guards/auth.guard';
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'detalle-local/:id', component: DetalleLocalComponent }, // Ruta de detalle de local
   { path: 'login', component: LoginComponent },
 {path: 'local', component: LocalComponent},
+{path: 'sobre-nosotros', component: SobreNosotrosComponent},
   // Rutas protegidas (requieren autenticación)
   // Utiliza `canActivate` con el guardia de autenticación para estas rutas
   { path: 'plano_contenedores', component: PlanoCoordenadasComponent, canActivate: [authGuardFn] },
