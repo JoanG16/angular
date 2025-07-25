@@ -56,7 +56,8 @@ export class LoginComponent {
       next: (response) => {
         console.log('Inicio de sesión exitoso:', response); // LOG DE DEPURACIÓN
         // Redirigir al panel de administración o a una página de inicio segura
-        this.router.navigate(['/inicio']);
+       this.router.navigate(['/mapa_contenedores']);
+        console.log('Intentando navegar a /mapa_contenedores');
       },
       error: (error) => {
         console.error('Error durante el inicio de sesión (Observable):', error); // LOG DE DEPURACIÓN
