@@ -35,29 +35,31 @@
   --transition-speed-normal: 0.3s;
   --transition-timing-ease: ease-in-out;
 
-  /* Tipografía */
-  --font-inter: 'Inter', sans-serif;
+ 
 }
 
 /* Estilos globales y reseteo básico para el body del componente */
 body {
+  font-family: var(--font-inter);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--beige); /* Fondo general de la página */
+  color: var(--azul); /* Color de texto base */
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--beige); /* Fondo general de la página - Beige */
-  color: var(--text-main);
-  min-height: 100vh; /* Asegura que el body ocupe toda la altura */
-  display: flex;
-  flex-direction: column;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
+.main-content-area {
+  flex-grow: 1; /* Permite que el contenido principal ocupe el espacio restante */
+  max-width: 1200px; /* Ancho máximo para el contenido */
+  margin: 2rem auto; /* Centra el contenedor y añade margen superior/inferior */
+  padding: 0 1.5rem; /* Espaciado lateral */
 }
-
 /* --- Header (Copied from mapa-contenedores.component.css for consistency) --- */
 .main-header {
   width: 100%;

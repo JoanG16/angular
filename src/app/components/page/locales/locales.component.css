@@ -47,11 +47,6 @@ body {
 }
 
 /* --- Contenedor Principal de la Página --- */
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la vista */
-}
 
 .main-content-area {
   flex-grow: 1; /* Permite que el contenido principal ocupe el espacio restante */
