@@ -4,10 +4,10 @@ import { ApplicationConfig, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { AuthService } from './services/administrador/auth.service';
+import { AuthService } from './services/administrador/auth.service'; // Asegúrate de que esta importación sea correcta
 import { environment } from '../environments/environment';
 
-// Importar todos los servicios que necesitan ser provistos
+// Importar todos los servicios que necesitan ser provistos (si no tienen providedIn: 'root')
 import { ContenedoresService } from './services/administrador/contenedores.service';
 import { LocalesService } from './services/administrador/locales.service';
 import { CategoriaService } from './services/administrador/categoria.service';
@@ -18,15 +18,9 @@ import { OfertaService } from './services/administrador/ofertas.service';
 // ¡IMPORTA ESTO PARA HABILITAR LAS ANIMACIONES!
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-// Importar el nuevo interceptor
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+// Importar el interceptor
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
-// CAMBIO CLAVE: Importar authGuardFn en lugar de AuthGuard
-// Ya no necesitas importar AuthGuard como una clase, solo la función si la usas directamente
-// import { AuthGuard } from './guards/auth.guard'; // ELIMINAR O COMENTAR ESTO
-// La función authGuardFn se inyecta directamente en las rutas, no necesita ser provista aquí
-// si solo la usas como CanActivateFn.
+import { AuthInterceptor } from './interceptors/auth.interceptor'; // Asegúrate de que este interceptor exista
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -51,10 +45,7 @@ export const appConfig: ApplicationConfig = {
         }
       ])
     ),
-    // Proveer todos los servicios necesarios
-    AuthService,
-    // CAMBIO CLAVE: Eliminar AuthGuard de los providers, ya no es una clase provista
-    // AuthGuard, // ELIMINAR O COMENTAR ESTA LÍNEA
+    // AuthService ya tiene providedIn: 'root', no es necesario listarlo aquí.
     ContenedoresService,
     LocalesService,
     CategoriaService,

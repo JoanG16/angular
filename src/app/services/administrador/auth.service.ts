@@ -1,9 +1,12 @@
+// src/app/services/administrador/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators'; // Añadir 'map' si no está
+
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+
 // Interfaz para la respuesta de login del backend
 interface LoginResponse {
   statusCode: number;
@@ -23,23 +26,23 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${environment.apiUrl}/auth`; // Endpoint de autenticación en tu backend
-  private tokenKey = 'jwt_token'; // Clave para almacenar el token en localStorage
-  private userRoleKey = 'user_role'; // Clave para almacenar el rol del usuario
-  private usernameKey = 'username'; // Clave para almacenar el nombre de usuario
+  public apiUrl = `${environment.apiUrl}/auth`; // Usar apiUrl directamente para el endpoint auth
+  private tokenKey = 'jwt_token';
+  private userRoleKey = 'user_role';
+  private usernameKey = 'username';
 
-  // BehaviorSubject para el estado de autenticación (observable)
-  // Emite true si el usuario está logueado, false si no
-  private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
-  isAuthenticated$ = this._isAuthenticated.asObservable(); // Observable público
+  // BehaviorSubject para el estado de autenticación
+  // Se inicializa con el estado actual del token en localStorage
+  private _isAuthenticated = new BehaviorSubject<boolean>(this.checkAuthenticationStatus());
+  isAuthenticated$ = this._isAuthenticated.asObservable();
 
-  // BehaviorSubject para el rol del usuario (observable)
+  // BehaviorSubject para el rol del usuario
   private _userRole = new BehaviorSubject<string | null>(localStorage.getItem(this.userRoleKey));
-  userRole$ = this._userRole.asObservable(); // Observable público
+  userRole$ = this._userRole.asObservable();
 
-  // BehaviorSubject para el nombre de usuario (observable)
+  // BehaviorSubject para el nombre de usuario
   private _username = new BehaviorSubject<string | null>(localStorage.getItem(this.usernameKey));
-  username$ = this._username.asObservable(); // Observable público
+  username$ = this._username.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -47,54 +50,60 @@ export class AuthService {
   ) { }
 
   /**
-   * Verifica si hay un token en localStorage para determinar el estado inicial de autenticación.
+   * Verifica si hay un token válido en localStorage.
+   * Puedes añadir aquí lógica para verificar la validez del JWT (ej. expiración)
+   * si quieres que el estado inicial sea más preciso.
    */
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+  private checkAuthenticationStatus(): boolean {
+    const token = localStorage.getItem(this.tokenKey);
+    // Para una verificación más robusta, podrías decodificar el token y verificar su expiración aquí
+    // if (token) {
+    //   try {
+    //     const decoded = jwt_decode(token); // Necesitarías una librería como jwt-decode
+    //     return decoded.exp * 1000 > Date.now();
+    //   } catch (e) {
+    //     return false; // Token inválido
+    //   }
+    // }
+    return !!token; // Por ahora, solo verifica si existe el token
   }
 
   /**
    * Intenta iniciar sesión con las credenciales proporcionadas.
-   * @returns Una promesa que resuelve a true si el login fue exitoso, o false si falló.
+   * Ahora devuelve un Observable<LoginResponse> para ser más idiomático con Angular.
    */
-  login(username: string, password: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.http.post<LoginResponse>(`${this.baseUrl}/login`, { username, password })
-        .pipe(
-          tap(response => {
-            // Almacenar el token y el rol en localStorage
+  login(username: string, password: string): Observable<LoginResponse> {
+    const credentials = { username, password };
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials)
+      .pipe(
+        tap(response => {
+          if (response.data && response.data.token) {
             localStorage.setItem(this.tokenKey, response.data.token);
             localStorage.setItem(this.userRoleKey, response.data.user.role);
             localStorage.setItem(this.usernameKey, response.data.user.username);
-            // Actualizar el estado de autenticación y rol
+            // Actualizar los BehaviorSubjects DESPUÉS de guardar en localStorage
             this._isAuthenticated.next(true);
             this._userRole.next(response.data.user.role);
-            this._username.next(response.data.user.username); // Actualizar el nombre de usuario
-            console.log('Login exitoso. Token guardado:', response.data.token);
-          }),
-          catchError(this.handleError) // Manejo de errores centralizado
-        )
-        .subscribe({
-          next: () => resolve(true),
-          error: (err) => reject(err) // Rechazar la promesa con el error
-        });
-    });
+            this._username.next(response.data.user.username);
+            console.log('Login exitoso. Token y datos guardados.');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   /**
    * Cierra la sesión del usuario.
    */
   logout(): void {
-    // Eliminar el token y el rol de localStorage
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userRoleKey);
     localStorage.removeItem(this.usernameKey);
-    // Actualizar el estado de autenticación y rol
+    // Actualizar los BehaviorSubjects a null/false DESPUÉS de limpiar localStorage
     this._isAuthenticated.next(false);
     this._userRole.next(null);
-    this._username.next(null); // Limpiar el nombre de usuario
-    // Redirigir a la página de login o al inicio
-    this.router.navigate(['/login']); // Ajusta esta ruta si tu página de login es diferente
+    this._username.next(null);
+    this.router.navigate(['/login']);
   }
 
   /**
@@ -127,12 +136,10 @@ export class AuthService {
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Un error desconocido ocurrió.';
     if (error.error instanceof ErrorEvent) {
-      // Error del lado del cliente
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Error del lado del servidor
       if (error.status === 401) {
-        errorMessage = 'Credenciales inválidas.';
+        errorMessage = 'Credenciales inválidas o token expirado. Por favor, inicie sesión de nuevo.';
       } else if (error.error && error.error.message) {
         errorMessage = error.error.message;
       } else {
@@ -140,6 +147,7 @@ export class AuthService {
       }
     }
     console.error('AuthService error:', errorMessage);
+    // Es importante lanzar un nuevo error para que el suscriptor del componente pueda manejarlo
     return throwError(() => new Error(errorMessage));
   }
 }
