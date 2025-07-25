@@ -1,8 +1,9 @@
+// src/app/components/administrador/login/login.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importar FormsModule para ngModel
-import { Router, RouterLink } from '@angular/router'; // Importar RouterLink aquí
-import { AuthService } from '../../../services/administrador/auth.service'; // Ruta a tu nuevo servicio de autenticación
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/administrador/auth.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,9 +13,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // Necesario para el two-way data binding con ngModel
-    MatDialogModule, // Para usar MatDialog
-    RouterLink // ¡Añadir RouterLink aquí!
+    FormsModule,
+    MatDialogModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -22,19 +23,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class LoginComponent {
   username = '';
   password = '';
-  errorMessage: string | null = null; // Para mostrar mensajes de error al usuario
+  errorMessage: string | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog // Inyectar MatDialog
+    private dialog: MatDialog
   ) { }
 
   /**
    * Maneja el envío del formulario de inicio de sesión.
    */
-  async onLoginSubmit(): Promise<void> {
-    this.errorMessage = null; // Limpiar cualquier mensaje de error anterior
+  onLoginSubmit(): void { // Cambiado a void porque ya no es async/await directo
+    this.errorMessage = null;
 
     if (!this.username || !this.password) {
       this.dialog.open(ConfirmDialogComponent, {
@@ -48,17 +49,31 @@ export class LoginComponent {
       return;
     }
 
-    try {
-      // Llamar al servicio de autenticación para intentar iniciar sesión
-      const success = await this.authService.login(this.username, this.password);
+    console.log('Intentando iniciar sesión con:', this.username); // LOG DE DEPURACIÓN
 
-      if (success) {
+    // Suscribirse al Observable devuelto por authService.login
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        console.log('Inicio de sesión exitoso:', response); // LOG DE DEPURACIÓN
         // Redirigir al panel de administración o a una página de inicio segura
-        this.router.navigate(['/inicio']); // Ajusta esta ruta a tu panel de administración
-      } else {
-        // Esto no debería ejecutarse si el servicio lanza un error para credenciales inválidas
-        // Pero es un fallback
-        this.errorMessage = 'Credenciales inválidas. Inténtalo de nuevo.';
+        this.router.navigate(['/inicio']);
+      },
+      error: (error) => {
+        console.error('Error durante el inicio de sesión (Observable):', error); // LOG DE DEPURACIÓN
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 401) {
+            this.errorMessage = 'Nombre de usuario o contraseña incorrectos.';
+          } else if (error.error && error.error.message) {
+            // Si el backend envía un mensaje de error específico
+            this.errorMessage = error.error.message;
+          }
+          else {
+            this.errorMessage = `Error en el servidor: ${error.status} - ${error.statusText || 'Error desconocido'}`;
+          }
+        } else {
+          this.errorMessage = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
+        }
+
         this.dialog.open(ConfirmDialogComponent, {
           data: {
             title: 'Error de Inicio de Sesión',
@@ -67,27 +82,10 @@ export class LoginComponent {
             hideCancelButton: true
           }
         });
+      },
+      complete: () => {
+        console.log('Proceso de inicio de sesión completado.'); // LOG DE DEPURACIÓN
       }
-    } catch (error) {
-      console.error('Error durante el inicio de sesión:', error);
-      if (error instanceof HttpErrorResponse) {
-        if (error.status === 401) {
-          this.errorMessage = 'Nombre de usuario o contraseña incorrectos.';
-        } else {
-          this.errorMessage = `Error en el servidor: ${error.message}`;
-        }
-      } else {
-        this.errorMessage = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
-      }
-
-      this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Error de Inicio de Sesión',
-          message: this.errorMessage,
-          confirmButtonText: 'Aceptar',
-          hideCancelButton: true
-        }
-      });
-    }
+    });
   }
 }
