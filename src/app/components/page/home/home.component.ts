@@ -1,3 +1,4 @@
+// src/app/components/page/home/home.component.ts
 import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../../../safe-url.pipe';
@@ -6,6 +7,13 @@ import { Router } from '@angular/router';
 // NUEVO: Importar el servicio de ofertas y la interfaz
 import { OfertaService } from '../../../services/administrador/ofertas.service';
 import { Oferta } from '../../../interfaces/oferta.interface';
+
+// Declarar window.tiktok para que TypeScript no se queje
+declare global {
+  interface Window {
+    tiktok: any;
+  }
+}
 
 @Component({
   selector: 'app-home',
@@ -55,12 +63,6 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-
-   const script = document.createElement('script');
-    script.src = 'https://www.tiktok.com/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
-
     // Ajustar videosPerPage en función del tamaño de la pantalla
     this.adjustVideosPerPage();
     window.addEventListener('resize', this.adjustVideosPerPage.bind(this));
@@ -102,18 +104,20 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
         this.youtubeUrlsCargados = ofertas.filter(o => o.tipo_contenido === 'youtube' && o.activo);
 
         this.promociones = this.promocionesCargadas
-                               .sort((a, b) => (a.orden || 0) - (b.orden || 0))
-                               .map(o => ({ promocion: o.valor_contenido }));
+          .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+          .map(o => ({ promocion: o.valor_contenido }));
 
         this.tiktokVideos = this.tiktokVideosCargados
-                                 .sort((a, b) => (a.orden || 0) - (b.orden || 0))
-                                 .map(o => o.valor_contenido);
+          .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+          .map(o => o.valor_contenido);
 
         this.youtubeUrls = this.youtubeUrlsCargados
-                               .sort((a, b) => (a.orden || 0) - (b.orden || 0))
-                               .map(o => o.valor_contenido);
+          .sort((a, b) => (a.orden || 0) - (b.orden || 0))
+          .map(o => o.valor_contenido);
 
         console.log('URLs de YouTube cargadas para incrustar:', this.youtubeUrls);
+        console.log('URLs de TikTok cargadas para incrustar:', this.tiktokVideos);
+
 
         // Reiniciar índices de carrusel después de cargar y ajustar vistas
         this.currentTiktokIndex = 0;
@@ -124,12 +128,49 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
           tiktokVideos: this.tiktokVideos,
           youtubeUrls: this.youtubeUrls
         });
+
+        // Cargar y procesar los embeds de TikTok después de que los datos estén disponibles
+        this.loadTikTokEmbeds();
       },
       error: (err) => {
         console.error('Error al cargar las ofertas:', err);
       }
     });
   }
+
+  /**
+   * Carga el script de TikTok y le indica que procese los embeds.
+   * Se llama después de que los videos de TikTok son cargados.
+   */
+  loadTikTokEmbeds(): void {
+    // Solo cargar el script si hay videos de TikTok y no se ha cargado ya
+    if (this.tiktokVideos.length > 0 && !document.getElementById('tiktok-embed-script')) {
+      const script = document.createElement('script');
+      script.src = 'https://www.tiktok.com/embed.js';
+      script.async = true;
+      script.id = 'tiktok-embed-script'; // Añadir un ID para evitar recargas
+      script.onload = () => {
+        // Asegurarse de que el objeto tiktok.embed esté disponible
+        if (window.tiktok && window.tiktok.embed && typeof window.tiktok.embed.load === 'function') {
+          console.log('TikTok embed script loaded. Attempting to load embeds.');
+          window.tiktok.embed.load(); // Le dice a TikTok que busque nuevos embeds
+        } else {
+          console.warn('window.tiktok.embed.load is not available yet.');
+        }
+      };
+      script.onerror = (error) => {
+        console.error('Error loading TikTok embed script:', error);
+      };
+      document.body.appendChild(script);
+    } else if (this.tiktokVideos.length > 0 && document.getElementById('tiktok-embed-script')) {
+      // Si el script ya está cargado, solo intentar recargar los embeds
+      if (window.tiktok && window.tiktok.embed && typeof window.tiktok.embed.load === 'function') {
+        console.log('TikTok embed script already loaded. Reloading embeds.');
+        window.tiktok.embed.load();
+      }
+    }
+  }
+
 
   // Métodos de navegación para TikTok
   get visibleTiktokVideos(): string[] {
@@ -142,8 +183,8 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.currentTiktokIndex + this.tiktokVideosPerPage < this.tiktokVideos.length) {
       this.currentTiktokIndex++;
     } else {
-      // Para un carrusel que no es infinito y va al final
-      this.currentTiktokIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
+      // Para un carrusel que no es infinito y va al principio
+      this.currentTiktokIndex = 0;
     }
   }
 
@@ -197,10 +238,26 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Extrae el ID numérico de un URL de TikTok.
+   * Asume URLs como:
+   * - https://www.tiktok.com/@username/video/1234567890123456789
+   * - https://vm.tiktok.com/ZM839dG/ (Para estas, el ID no es numérico, TikTok las maneja por el cite)
+   * Devolverá el ID numérico si lo encuentra, de lo contrario, una cadena vacía.
+   */
   getVideoId(url: string): string {
-    const match = url.match(/\/video\/(\d+)/);
-    return match ? match[1] : '';
+    // Intenta extraer el ID numérico de URLs largas
+    const longUrlMatch = url.match(/\/video\/(\d+)/);
+    if (longUrlMatch && longUrlMatch[1]) {
+      return longUrlMatch[1];
+    }
+
+    // Para URLs cortas como vm.tiktok.com, TikTok embed script a menudo solo necesita el 'cite'
+    // No extraemos un 'data-video-id' numérico en este caso, el script lo resolverá.
+    // Si necesitas un ID único para cada video en tu lógica interna, podrías generar uno.
+    return ''; // Devuelve vacío si no es una URL con ID numérico explícito
   }
+
 
   // Método irAPagina actualizado para aceptar un parámetro de categoría
   irAPagina(path: string, category: string | null = null): void {
