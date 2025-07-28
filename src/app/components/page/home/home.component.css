@@ -1,664 +1,349 @@
-header {
+/* Mis estilos CSS: ¡Aquí le doy vida a la página! */
 
-  width: 100%;
-  height: 70vh;
-  background: var(--azul);
-  padding: 0;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: linear-gradient(to bottom, rgb(0 0 0 / .25), rgb(0 0 0 /1)), url(/assets/img/plano/ChatGP.png);
-  background-size: cover;
-  background-position: center;
-
-
-
+/* Primero, me aseguro de que no haya barras de scroll horizontales molestas.
+   Así, el diseño se mantiene limpio en todas las pantallas. */
+.servicios,
+.productos,
+.services-section,
+.tiktok,
+.youtube,
+#clientes {
+    overflow-x: hidden;
+}
+html, body {
+    overflow-x: hidden;
 }
 
-
+/* Defino el color de fondo general para toda la página. */
 body{
-
-   background-color: #f7f8f3;
+    background-color: #f7f8f3;
 }
+/* Esto parece ser para un elemento SVG 'g', lo uso para que ocupe todo el espacio. */
 g {
-  width: 100%;
-  height: auto;
-
-}
-
-
-
-#logo-tarqui {
-  width: 36px;
-  aspect-ratio: 1 / 1;
-  background-image: url(/assets/icon/logo.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-  margin-right: 10px;
-  margin-left: 10px;
-
-
-}
-
-
-.container {
-  width: 90%;
-  max-width: 1300px;
-  margin-top: 10px;
-  line-height: 1.5;
-  border-radius: 20px;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #00000005;
-  background: #0000005c;
-}
-
-
-.logo {
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: 420px;
-  font-size: 14px;
-
-}
-
-.logo-main {
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-
-}
-
-
-
-.logo mark {
-  background-color: transparent;
-  color: var(--crema);
-}
-
-.menu a {
-
-  color: #fff;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 0 10px;
-  transition: 0.4s;
-  font-weight: 500;
-  font-size: 13px;
-
-}
-
-
-.mostrar-menu,
-.esconder-menu {
-  font-size: 30px;
-  cursor: pointer;
-  display: none;
-  transition: 0.4s;
-
-}
-
-
-.mostrar-menu {
-
-  order: 1;
-}
-
-.menu a:hover,
-.mostrar-menu:hover,
-.esconder-menu:hover {
-  color: #a5891b
-}
-
-
-#check {
-
-  display: none;
-}
-
-
-
-/* servicios */
-
-.servicios {
-
-  padding: 1rem;
-  text-align: center;
-  margin-top: 40px;
-}
-
-.contenedor .mapa-img {
-  width: 100%;
-  height: auto;
-
-
-}
-
-
-.texto-sobreMapa {
-
-  width: 80%;
-  height: 80%;
-  display: flex;
-  align-items: end;
-  justify-content: start;
-
-}
-
-.texto-sobreMapa h1 {
-  font-size: 54px;
-  width: 790px;
-}
-
-
-.header-im-servicios {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1rem;
-
-
-}
-
-.texto-servicios {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-}
-
-.texto-servicios h1 {
-  width: 40%;
-  font-size: 15px;
-}
-
-.iconos {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-
-
-}
-
-
-.icono {
-
-  margin: 5px;
-  padding: 10px;
-  border: 5px solid var(--azul);
-  border-radius: 10px;
-  width: 6%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-
-}
-
-.icono img {
-  width: 40%;
-  height: 40px;
-  margin: 10px;
-
-}
-
-.icono p {
-  margin: auto;
-  color: var(--azul);
-  font-size: 13px;
-}
-
-
-
-@media(max-width: 768px) {
-
-  .mostrar-menu,
-  .esconder-menu {
-    display: block;
-  }
-
-  .menu {
-    position: fixed;
     width: 100%;
-    height: 100vh;
-    background: #3e4077;
+    height: auto;
+}
 
-    right: -100%;
-    top: 0;
-    text-align: center;
-    padding: 100px 0px;
-    z-index: 100;
-    transition: 0.8s;
-  }
+/* --- Animaciones base --- */
+/* Clase base para los elementos que tendrán animaciones de entrada. */
+.animated {
+    opacity: 0;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
 
-  .menu a {
-    display: block;
-    padding: 20px;
+/* Efectos de entrada específicos (desde dónde aparecerán los elementos). */
+.fade-in-up {
+    transform: translateY(40px);
+}
 
-  }
+.fade-in-down {
+    transform: translateY(-40px);
+}
 
-  .esconder-menu {
+.fade-in-left {
+    transform: translateX(-40px);
+}
 
-    position: absolute;
-    top: 40px;
-    right: 40px;
-  }
+.fade-in-right {
+    transform: translateX(40px);
+}
 
-  #check:checked~.menu {
+.zoom-in {
+    transform: scale(0.9);
+}
 
-    right: 0;
-  }
+/* Cuando el elemento es visible, se vuelve opaco y su transformación se reinicia. */
+.animated.is-visible {
+    opacity: 1;
+    transform: none; /* Resetea la transformación a su estado original */
+}
 
-  .texto-sobreMapa {
-    width: 80%;
-  }
+/* Clases para añadir retrasos a las animaciones, útiles para listas de elementos. */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
 
-  .texto-sobreMapa h1 {
-    font-size: 25px;
-  }
 
-  header {
-    background-size: cover;
-    background-position: center;
-
-  }
-
-  #logo-tarqui {
-    width: 55px;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border-radius: 100%;
-    position: relative;
-    left: -10px;
-    top: -2px;
-  }
-
-  .servicios {
+/* --- HEADER --- */
+/* Configuro mi encabezado: un fondo grande y responsivo, centrado y con texto blanco. */
+header {
+    width: 100%;
+    height: 70vh;
+    background: var(--azul);
+    padding: 0;
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    background: linear-gradient(to bottom, rgb(0 0 0 / .25), rgb(0 0 0 /1)), url(/assets/img/plano/ChatGP.png);
+    background-size: cover;
+    background-position: center;
+    box-sizing: border-box;
+}
 
-  }
-
-  .servicios h1 {
-    width: 80%;
-    margin-top: 40px;
-
-  }
-
-  .iconos {
-    display: inline-block;
-  }
-
-  .icono {
-    margin: 30px;
-    border-radius: 20px;
+/* Este es el contenedor de mi barra de navegación en la parte superior. */
+.container {
+    width: 90%;
+    max-width: 1300px;
+    margin-top: 10px;
     line-height: 1.5;
-    background-color: #3e40771b;
-  }
+    border-radius: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00000005;
+    background: #0000005c;
+}
+
+/* Alineo el icono y el texto de mi logo. */
+.logo-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Estilo mi logo en el encabezado: un círculo con mi imagen. */
+#logo-tarqui {
+    width: 36px;
+    aspect-ratio: 1 / 1;
+    background-image: url(/assets/icon/logo.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+/* Estilos para el texto principal del logo. */
+.logo {
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 420px;
+    font-size: 14px;
+}
+
+/* Le doy un color especial a la parte 'mark' de mi logo. */
+.logo mark {
+    background-color: transparent;
+    color: var(--crema);
+}
+
+/* Defino los botones para mostrar/ocultar el menú en móviles (inicialmente ocultos). */
+.mostrar-menu,
+.esconder-menu {
+    font-size: 30px;
+    cursor: pointer;
+    display: none;
+    transition: 0.4s;
+}
+
+/* Este checkbox oculto me ayuda a controlar el menú en móvil con CSS. */
+#check {
+    display: none;
+}
+
+/* Estilos de los enlaces de mi menú de navegación. */
+.menu a {
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0 10px;
+    transition: 0.4s;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+/* Contenedor para el texto que va encima del mapa, lo alineo abajo a la izquierda. */
+.texto-sobreMapa {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: end;
+    justify-content: start;
+}
+
+/* Estilo el título grande sobre el mapa. ¡Ojo con el ancho fijo para móvil! */
+.texto-sobreMapa h1 {
+    font-size: 54px;
+    width: 790px;
 }
 
 
+/* --- MAIN CONTENT --- */
 
-
-
-
-
-.productos {
-  padding: 2rem 1rem; /* Un poco más de espacio vertical */
-  text-align: center;
-  
-  overflow: hidden; /* Importante para que las animaciones que vienen desde afuera no generen scrollbars */
-}
-
-.productos h1 {
-  font-size: 35px;
-  color: #3e4077;
-  margin-bottom: 2rem; /* Espacio entre el título y las tarjetas */
-}
-
-.tarjetas {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.5rem; /* Un poco más de espacio entre tarjetas */
-}
-
-/* Usamos la clase .tarjeta para los estilos comunes */
-.tarjeta {
-  width: 10%; /* Ajustado ligeramente */
-  min-width: 120px; /* Ancho mínimo para que no se deforme */
-  height: 155px;
-  background: #fbf4de;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  /* La magia para una animación suave */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.tarjeta img {
-  width: 80%;
-  height: 90px;
-  object-fit: contain; /* Asegura que la imagen se vea completa sin deformarse */
-}
-
-.tarjeta .texto h3 {
-  color: #3e4077;
-  font-size: 14px;
-  text-align: center;
-}
-
-
-/* --- Media Query para Responsive --- */
-@media screen and (max-width: 1200px) {
-    .tarjeta {
-        width: 15%;
+/* --- Slider de Promociones (asumo que es el `div.slider` inicial) --- */
+/* Defino la animación de desplazamiento infinito para el slider. */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-250px * 7));
     }
 }
 
-@media screen and (max-width: 768px) {
-  .tarjetas {
+/* Contenedor principal del slider, con fondo, sombra y ocultando el desbordamiento. */
+.slider {
+    background: linear-gradient(135deg, #ff5722, #ff9800);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+/* Pseudo-elementos para crear un efecto de "fade" en los bordes del slider. */
+.slider::before,
+.slider::after {
+    background: linear-gradient(to right, white 0%, transparent 100%);
+    content: "";
+    height: auto;
+    position: absolute;
+    width: 200px;
+    z-index: 2;
+}
+
+/* Posiciono el fade derecho. */
+.slider::after {
+    right: 0;
+    top: 0;
+    transform: rotateZ(180deg);
+}
+
+/* Posiciono el fade izquierdo. */
+.slider::before {
+    left: 0;
+    top: 0;
+}
+
+/* El contenedor de todas las diapositivas, con la animación de scroll aplicada. */
+.slide-track {
+    animation: scroll 40s linear infinite;
+    display: flex;
+    width: calc(250px * 14);
+}
+
+/* Estilo cada diapositiva individual en el slider. */
+.slide {
+    height: auto;
+    width: 250px;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(255, 87, 34, 0.3);
+}
+
+/* Estilo el párrafo dentro de cada diapositiva. */
+.slide p {
+    font-size: 14px;
+}
+
+/* --- PRODUCTOS SECTION --- */
+/* Configuración general de la sección de productos. */
+.productos {
+    padding: 2rem 1rem;
+    text-align: center;
+    overflow: hidden; /* Evito scrollbars por animaciones que entran */
+}
+
+/* Estilo el título de la sección de productos. */
+.productos h1 {
+    font-size: 35px;
+    color: #3e4077;
+    margin-bottom: 2rem;
+}
+
+/* Contenedor de las tarjetas de productos, las distribuyo y permito que se envuelvan. */
+.tarjetas {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+/* Estilos para cada tarjeta de producto. */
+.tarjeta {
+    width: 10%;
+    min-width: 120px;
+    height: 155px;
+    background: #fbf4de;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
     flex-direction: column;
     align-items: center;
-  }
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .tarjeta {
+/* Estilos para la imagen dentro de cada tarjeta. */
+.tarjeta img {
     width: 80%;
-    max-width: 300px; /* Un ancho máximo para tabletas */
-    flex-direction: row; /* En móvil, puede quedar mejor en fila */
-    height: auto;
-    justify-content: flex-start;
-  }
-
-  .tarjeta img {
-      width: 80px;
-      height: 80px;
-      margin-right: 1rem;
-  }
+    height: 90px;
+    object-fit: contain;
 }
+
+/* Estilos para el texto (título) dentro de cada tarjeta. */
+.tarjeta .texto h3 {
+    color: #3e4077;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Efecto hover para las tarjetas de productos, las "levanto" y les doy sombra. */
 .tarjeta:hover {
-  transform: translateY(-10px) scale(1.05); /* La levanta y la agranda un poco */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
-  cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
 }
 
 
-
-
-
-
-/* --- NUEVA SECCIÓN: SERVICIOS --- */
-.services-section {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto 3rem auto;
-  padding: 2.5rem;
-  background-color: var(--white);
-  border-radius: 10px;
-  box-shadow: var(--shadow-md);
-  text-align: center;
-}
-
-.services-title {
-  font-size: 1.8em;
-  color: var(--azul);
-  margin-bottom: 2.5rem;
-  font-weight: 600;
-  line-height: 1.4;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 20px;
-  justify-items: center;
-}
-
-.service-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 15px;
-  background-color: var(--beige);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s var(--transition-timing-ease), box-shadow 0.3s var(--transition-timing-ease);
-}
-
-.service-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-}
-
-.service-icon {
-  width: 60px;
-  height: 60px;
-  background-color: var(--mostaza);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  box-shadow: var(--shadow-sm);
-  flex-shrink: 0; /* Prevent icon container from shrinking */
-}
-
-.service-icon svg {
-  width: 35px;
-  height: 35px;
-  color: var(--white);
-}
-
-.service-name {
-  font-size: 1em;
-  font-weight: 500;
-  color: var(--azul);
-  line-height: 1.3;
-}
-
-
-
-
-
-
-
-
-
-
-/* --- Footer --- */
-footer {
-  background-color: var(--azul);
-  color: var(--white);
-  padding: 2rem 1.5rem;
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  flex-shrink: 0;
-}
-
-.footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto 2rem auto;
-}
-
-.contact-info,
-.social-media,
-.map-section {
-  flex: 1;
-  min-width: 250px;
-  text-align: left;
-}
-
-footer h3 {
-  color: var(--mostaza);
-  font-size: 1.3em;
-  margin-bottom: 1rem;
-}
-
-footer p,
-footer a,
-footer li {
-  color: var(--gris-claro);
-  font-size: 0.95em;
-  text-decoration: none;
-  line-height: 1.8;
-}
-
-footer a:hover {
-  color: var(--white);
-  text-decoration: underline;
-}
-
-footer ul {
-  list-style: none;
-  padding: 0;
-}
-
-footer li {
-  margin-bottom: 5px;
-}
-
-.map-section iframe {
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 10px;
-}
-
-.copyright {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1rem;
-  margin-top: 1rem;
-  font-size: 0.85em;
-  color: var(--gris);
-}
-
-
-/* Media Queries para responsividad */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column; /* Apila las columnas en pantallas más pequeñas */
-    align-items: center; /* Centra los ítems cuando están apilados */
-    text-align: center; /* Centra el texto en pantallas pequeñas */
-  }
-
-  .footer-content > div {
-    min-width: unset; /* Quita el ancho mínimo para permitir que se ajusten al 100% */
-    width: 100%; /* Ocupa todo el ancho disponible */
-    margin-bottom: 1.5rem; /* Espacio entre secciones apiladas */
-  }
-
-  .footer-content h3 {
-    text-align: center; /* Centra los títulos en pantallas pequeñas */
-  }
-}
-
-
-
-/* Carrusel de TikTok */
+/* --- TIKTOK SECTION --- */
+/* Configuración general para la sección de TikTok. */
 .tiktok {
     padding: 1rem;
     text-align: center;
     background-color: #3e4077;
     margin-top: 50px;
-    display: flex; /* Usar flexbox para el contenedor principal */
-    flex-direction: column; /* Apilar título y carrusel */
-    align-items: center; /* Centrar contenido horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Contenedor de servicios dentro de TikTok (posiblemente un remanente o para futuros usos). */
+.tiktok .contenedor-servicios {
+    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+       así que lo dejo sin reglas de CSS aquí. */
+}
+
+/* Estilo el título de la sección de TikTok. */
 .tiktok h1 {
-    color: white; /* Color de título claro */
-    margin-bottom: 20px; /* Espacio debajo del título */
+    color: white;
+    margin-bottom: 20px;
     font-size: 2em;
 }
 
-.tiktok .carousel { /* Contenedor del carrusel y botones */
+/* Contenedor del carrusel de TikTok y sus botones. */
+.tiktok .carousel {
     display: flex;
     align-items: center;
-    width: 100%; /* Ocupa todo el ancho disponible */
-    max-width: 900px; /* Limitar ancho máximo para desktop */
-    overflow: hidden; /* Ocultar el desbordamiento si no queremos scroll manual */
-    position: relative; /* Para posicionar botones */
-    padding: 20px 0; /* Padding interno para espacio de botones */
+    width: 100%;
+    max-width: 900px;
+    overflow: hidden; /* ¡Importante para ocultar el scroll horizontal de los embeds! */
+    position: relative;
+    padding: 20px 0;
 }
 
-.tiktok .carousel-slide { /* El contenedor de los videos que se desplazan */
-    display: flex;
-    flex-grow: 1; /* Permite que tome el espacio disponible */
-    gap: 20px; /* Espacio entre los videos */
-    transition: transform 0.5s ease-in-out; /* Animación de desplazamiento */
-    /* overflow-x: auto; Removido si se usa JS para navegación, o se puede mantener si quieres scroll manual */
-    /* scrollbar-width: none; // Firefox */
-    /* -ms-overflow-style: none; // IE y Edge */
-    /* &::-webkit-scrollbar { display: none; } // Chrome, Safari y Opera */
-    /* Estas reglas se trasladan a .carousel-slide si se desea scroll manual */
-}
-
-/* Removido el width fijo y height en .video-item para hacerlo flexible */
-.tiktok .video-item {
-    flex-shrink: 0; /* Evita que los videos se encojan */
-    /* width: calc(100% / var(--tiktokVideosPerPage) - var(--gap-between-videos)); */
-    /* Usaremos el adjustVideosPerPage en TS y CSS para definir el ancho */
-    width: 32%; /* Aproximadamente 3 videos por fila con gap */
-    max-width: 300px; /* Un ancho máximo razonable para un video de TikTok */
-    height: auto; /* Permitir que la altura se ajuste al contenido del embed */
-    background-color: #000; /* Fondo negro para los videos */
-    border-radius: 12px;
-    padding: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    overflow: hidden; /* Para asegurar que el bloque de tiktok no se desborde */
-}
-
-/* Estilo para los iframes de tiktok dentro de blockquote */
-.tiktok .video-item blockquote {
-    margin: 0; /* Eliminar margen predeterminado de blockquote */
-    padding: 0;
-    display: block; /* Asegurarse de que el blockquote sea un bloque */
-    width: 100%; /* Que el blockquote ocupe todo el ancho */
-    height: 100%; /* Que el blockquote ocupe toda la altura */
-    min-height: 400px; /* Altura mínima para el embed, ajusta según necesites */
-    max-height: 580px; /* Altura máxima */
-    box-sizing: border-box;
-}
-
-.tiktok .video-item blockquote > section {
-    display: none; /* Ocultar la sección de texto de TikTok, ya que la API la inserta */
-}
-
-
-/* Navigation buttons for TikTok carousel */
+/* Estilo los botones de navegación del carrusel de TikTok. */
 .tiktok .nav-button {
     background-color: var(--crema);
     color: white;
@@ -669,295 +354,510 @@ footer li {
     font-size: 1.5em;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    position: absolute; /* Posicionamiento absoluto */
-    top: 50%; /* Centrar verticalmente */
-    transform: translateY(-50%); /* Ajuste fino */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 10;
 }
 
+/* Posiciono el botón de "anterior". */
 .tiktok .nav-button.prev {
     left: 10px;
 }
 
+/* Posiciono el botón de "siguiente". */
 .tiktok .nav-button.next {
     right: 10px;
 }
 
+/* Efecto hover para los botones de navegación de TikTok. */
 .tiktok .nav-button:hover {
     background-color: #8c7317;
-    transform: translateY(-50%) scale(1.05); /* Mantener centrado al escalar */
+    transform: translateY(-50%) scale(1.05);
 }
 
-/* Media queries para el carrusel de TikTok */
-@media (max-width: 1200px) {
-    .tiktok .video-item {
-        width: 48%; /* 2 videos por fila en pantallas medianas */
+/* Contenedor de los videos que se desplazan en el carrusel de TikTok. */
+.tiktok .carousel-slide {
+    display: flex;
+    flex-grow: 1;
+    gap: 20px;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Estilo cada ítem de video en el carrusel de TikTok. */
+.tiktok .video-item {
+    flex-shrink: 0;
+    width: 32%;
+    max-width: 300px;
+    height: auto;
+    background-color: #000;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+/* Estilo específico para los iframes de TikTok dentro de los blockquotes. */
+.tiktok .video-item blockquote {
+    margin: 0;
+    padding: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    max-height: 580px;
+    box-sizing: border-box;
+}
+
+/* Oculto la sección de texto que a veces añade la API de TikTok. */
+.tiktok .video-item blockquote > section {
+    display: none;
+}
+
+/* Mensaje cuando no hay contenido disponible. */
+.tiktok .no-content-message {
+    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+       así que lo dejo sin reglas de CSS aquí. */
+}
+
+
+/* --- SERVICES SECTION (NUEVA SECCIÓN) --- */
+/* Contenedor principal de la sección de servicios, con sombra y centrado. */
+.services-section {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 2.5rem;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+}
+
+/* Contenedor de los servicios (no tiene estilos directos en el HTML proporcionado, así que no hay reglas aquí). */
+.services-container {
+    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+       así que lo dejo sin reglas de CSS aquí. */
+}
+
+/* Estilo el título de la nueva sección de servicios. */
+.services-title {
+    font-size: 1.8em;
+    color: var(--azul);
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Organizo los ítems de servicio en una cuadrícula responsiva. */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Estilo cada ítem individual de servicio. */
+.service-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    background-color: var(--beige);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s var(--transition-timing-ease), box-shadow 0.3s var(--transition-timing-ease);
+}
+
+/* Efecto hover para los ítems de servicio. */
+.service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Estilo el círculo que contiene el icono del servicio. */
+.service-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--mostaza);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+
+/* Estilo el icono SVG dentro del círculo. */
+.service-icon svg {
+    width: 35px;
+    height: 35px;
+    color: var(--white);
+}
+
+/* Estilo el nombre del servicio. */
+.service-name {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--azul);
+    line-height: 1.3;
+}
+
+
+/* --- CLIENTES SECTION --- */
+/* Configuración general de la sección de clientes (testimonios). */
+#clientes {
+    background: #3e4077;
+    padding: 50px 20px;
+    font-family: "Segoe UI", sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    color:#FFF;
+}
+
+/* Estilo el título de la sección de clientes. */
+.section-title {
+    /* No hay estilos directos en el HTML proporcionado para esta clase,
+       así que lo dejo sin reglas de CSS aquí. Se hereda el color y el centrado de #clientes. */
+}
+
+/* Contenedor para el testimonio, centrado y con altura mínima. */
+.testimonio-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    display: block;
+    align-content: center;
+    min-height: 160px;
+}
+
+/* Contenedor del slider de testimonios (no tiene estilos directos en el HTML). */
+.testimonio-slider {
+    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+       así que lo dejo sin reglas de CSS aquí. */
+}
+
+/* Estilo cada testimonio individual (inicialmente oculto y con animación). */
+.testimonio {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Cuando un testimonio está activo, se muestra y se vuelve visible. */
+.testimonio.active {
+    display: block;
+    opacity: 1;
+    position: relative;
+}
+
+/* Estilo el párrafo del testimonio. */
+.testimonio p {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #fff;
+    margin: 0;
+}
+
+/* Estilo el nombre del autor del testimonio. */
+.autor {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #555;
+}
+
+
+/* --- YOUTUBE SECTION --- */
+/* Configuración general de la sección de YouTube. */
+.youtube {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin: 50px;
+}
+
+/* Estilo el título de la sección de YouTube. */
+.youtube h1 {
+    text-align: center;
+    color: #3e4077;
+}
+
+/* Contenedor principal para el carrusel de videos de YouTube, centrado. */
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    overflow: hidden;
+}
+
+/* Estilo los botones de navegación para el carrusel. */
+.nav-button {
+    font-size: 24px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s;
+}
+
+/* Efecto hover para los botones de navegación. */
+.nav-button:hover {
+    transform: scale(1.2);
+}
+
+/* Contenedor de las diapositivas de videos de YouTube. */
+.carousel-slide {
+    display: flex;
+    gap: 16px;
+}
+
+/* Estilo los iframes de los videos de YouTube. */
+.carousel-slide iframe {
+    width: 360px;
+    height: 215px;
+    border-radius: 12px;
+}
+
+/* Mensaje cuando no hay contenido de YouTube. */
+.youtube .no-content-message {
+    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+       así que lo dejo sin reglas de CSS aquí. */
+}
+
+
+/* --- FOOTER --- */
+/* Configuración general de mi pie de página. */
+footer {
+    background-color: var(--azul);
+    color: var(--white);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+}
+
+/* Contenedor del contenido del footer, con columnas responsivas. */
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+}
+
+/* Estilos comunes para las secciones de contacto, redes y mapa en el footer. */
+.contact-info,
+.social-media,
+.map-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: left;
+}
+
+/* Estilo los títulos dentro del footer. */
+footer h3 {
+    color: var(--mostaza);
+    font-size: 1.3em;
+    margin-bottom: 1rem;
+}
+
+/* Estilos para los párrafos, enlaces y elementos de lista en el footer. */
+footer p,
+footer a,
+footer li {
+    color: var(--gris-claro);
+    font-size: 0.95em;
+    text-decoration: none;
+    line-height: 1.8;
+}
+
+/* Efecto hover para los enlaces del footer. */
+footer a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+/* Quito estilos por defecto de las listas en el footer. */
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Margen para los ítems de lista en el footer. */
+footer li {
+    margin-bottom: 5px;
+}
+
+/* Estilos para el iframe del mapa en el footer. */
+.map-section iframe {
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 10px;
+}
+
+/* Estilo el texto de derechos de autor. */
+.copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    font-size: 0.85em;
+    color: var(--gris);
+}
+
+
+/* --- MEDIA QUERIES --- */
+
+/* --- Media Queries Generales --- */
+/* Efecto hover para los enlaces del menú y los botones. */
+.menu a:hover,
+.mostrar-menu:hover,
+.esconder-menu:hover {
+    color: #a5891b
+}
+
+/* --- Media Queries para Teléfonos y Tabletas (máximo 768px) --- */
+@media(max-width: 768px) {
+    /* Hago visibles los botones de mostrar/esconder menú. */
+    .mostrar-menu,
+    .esconder-menu {
+        display: block;
     }
-}
 
-@media (max-width: 768px) {
+    /* El menú se transforma en una barra lateral que se desliza. */
+    .menu {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: #3e4077;
+        right: -100%;
+        top: 0;
+        text-align: center;
+        padding: 100px 0px;
+        z-index: 100;
+        transition: 0.8s;
+    }
+
+    /* Cada enlace del menú en móvil ocupa su propia línea. */
+    .menu a {
+        display: block;
+        padding: 20px;
+    }
+
+    /* Posiciono el botón para esconder el menú. */
+    .esconder-menu {
+        position: absolute;
+        top: 40px;
+        right: 40px;
+    }
+
+    /* Cuando el checkbox está marcado, el menú se muestra. */
+    #check:checked~.menu {
+        right: 0;
+    }
+
+    /* El texto sobre el mapa reduce su tamaño en móvil. */
+    .texto-sobreMapa h1 {
+        font-size: 25px;
+    }
+
+    /* La imagen de fondo del encabezado se ajusta. */
+    header {
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Ajusto el tamaño y posición del logo en móvil. */
+    #logo-tarqui {
+        width: 55px;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 100%;
+        position: relative;
+        left: -10px;
+        top: -2px;
+    }
+
+    /* Las tarjetas se apilan en columna en móvil. */
+    .tarjetas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Ajusto el estilo de las tarjetas en móvil para que sean en fila. */
+    .tarjeta {
+        width: 80%;
+        max-width: 300px;
+        flex-direction: row;
+        height: auto;
+        justify-content: flex-start;
+    }
+
+    /* Ajusto el tamaño de la imagen dentro de la tarjeta en móvil. */
+    .tarjeta img {
+        width: 80px;
+        height: 80px;
+        margin-right: 1rem;
+    }
+
+    /* El carrusel de TikTok es más ancho en móviles. */
     .tiktok .carousel {
-        width: 95%; /* Más ancho en móviles */
+        width: 95%;
     }
+    /* Muestro 1 video por fila en móvil en TikTok. */
     .tiktok .video-item {
-        width: 98%; /* 1 video por fila en móviles */
-        max-width: 350px; /* Limitar el tamaño si la pantalla es muy grande pero es mobile */
+        width: 98%;
+        max-width: 350px;
     }
+    /* Ajusto el tamaño de los botones de navegación de TikTok en móvil. */
     .tiktok .nav-button {
         padding: 8px 12px;
         font-size: 1.2em;
     }
+
+    /* Las columnas del footer se apilan en móvil. */
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Ajusto el ancho y margen de las secciones del footer en móvil. */
+    .footer-content > div {
+        min-width: unset;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Centro los títulos del footer en móvil. */
+    .footer-content h3 {
+        text-align: center;
+    }
 }
 
+/* --- Media Queries para pantallas medianas (máximo 1200px) --- */
+@media screen and (max-width: 1200px) {
+    /* Ajusto el ancho de las tarjetas para pantallas medianas. */
+    .tarjeta {
+        width: 15%;
+    }
 
-/* clientes */
-
-.youtube {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  margin: 50px;
+    /* Muestro 2 videos por fila en pantallas medianas en TikTok. */
+    .tiktok .video-item {
+        width: 48%;
+    }
 }
-
-.youtube h1 {
-  text-align: center;
-  color: #3e4077;
-}
-
-#clientes {
-  background: #3e4077;
-  padding: 50px 20px;
-  font-family: "Segoe UI", sans-serif;
-  text-align: center;
-  margin-top: 50px;
-  color:#FFF;
-}
-
-.testimonio-wrapper {
-  max-width: 700px;
-  margin: 0 auto;
-  display: block;
-  align-content: center;
-  min-height: 160px;
-}
-
-.testimonio {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.testimonio.active {
-  display: block;
-  opacity: 1;
-  position: relative;
-}
-
-.testimonio p {
-  font-size: 18px;
-  line-height: 1.5;
-  color: #fff;
-  margin: 0;
-}
-
-.autor {
-  margin-top: 10px;
-  font-weight: 600;
-  color: #555;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* carrusel youtbe */
-
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(calc(-250px * 7));
-  }
-}
-
-.slider {
-  background: linear-gradient(135deg, #ff5722, #ff9800);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
-  height: auto;
-  margin: auto;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.slider::before,
-.slider::after {
-  /* Quita esta línea si no tienes definido un degradado, o reemplázala por uno real */
-  background: linear-gradient(to right, white 0%, transparent 100%);
-  content: "";
-  height: auto;
-  position: absolute;
-  width: 200px;
-  z-index: 2;
-}
-
-.slider::after {
-  right: 0;
-  top: 0;
-  transform: rotateZ(180deg);
-}
-
-.slider::before {
-  left: 0;
-  top: 0;
-}
-
-.slide-track {
-  animation: scroll 40s linear infinite;
-  display: flex;
-  width: calc(250px * 14);
-  /* Puedes ajustar el número de slides según tu necesidad */
-}
-
-.slide {
-  height: auto;
-  width: 250px;
-
-  /* degradado naranja/rojo */
-  color: white;
-  font-weight: bold;
-
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(255, 87, 34, 0.3);
-}
-
-.slide p {
-
-  font-size: 14px;
-}
-
-
-
-
-.carousel-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 16px;
-  overflow: hidden;
-}
-
-.carousel-slide {
-  display: flex;
-  gap: 16px;
-}
-
-.carousel-slide iframe {
-  width: 360px;
-  height: 215px;
-  border-radius: 12px;
-}
-
-.nav-button {
-  font-size: 24px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #333;
-  transition: transform 0.2s;
-}
-
-.nav-button:hover {
-  transform: scale(1.2);
-}
-
-
-
-
-
-
-
-
-
-
-/* ==========================================================================
-   Motor de Animaciones al Hacer Scroll
-   ========================================================================== */
-
-/*
- * 1. Ocultamos los elementos por defecto.
- * 2. Preparamos una transición suave para cuando se hagan visibles.
- */
-.animated {
-  opacity: 0;
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-/*
- * Efectos de entrada.
- * Aquí definimos desde dónde aparecerán los elementos.
- */
-.fade-in-up {
-  transform: translateY(40px);
-}
-
-.fade-in-down {
-    transform: translateY(-40px);
-}
-
-.fade-in-left {
-  transform: translateX(-40px);
-}
-
-.fade-in-right {
-  transform: translateX(40px);
-}
-
-.zoom-in {
-    transform: scale(0.9);
-}
-
-
-/*
- * La clase .is-visible es la que activa la animación.
- * La añadiremos con JavaScript cuando el elemento entre en la pantalla.
- */
-.animated.is-visible {
-  opacity: 1;
-  transform: none; /* Resetea la transformación a su estado original */
-}
-
-/*
- * Clases opcionales para retrasar animaciones (efecto escalonado).
- * Útiles para listas de elementos como las tarjetas de productos o los iconos.
- */
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
-.delay-5 { transition-delay: 0.5s; }
-.delay-6 { transition-delay: 0.6s; }
-.delay-7 { transition-delay: 0.7s; }
-.delay-8 { transition-delay: 0.8s; }
