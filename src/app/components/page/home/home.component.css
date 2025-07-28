@@ -94,7 +94,7 @@ header::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* Negro con 40% de opacidad */
+  background-color: rgba(0, 0, 0, 0.6); /* Negro con 40% de opacidad */
   z-index: 1; /* ¡NUEVO Z-INDEX! Ahora está entre el video y el contenido. */
 }
 

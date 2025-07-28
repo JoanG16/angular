@@ -64,31 +64,46 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Ajustar videosPerPage en función del tamaño de la pantalla
-    this.adjustCarouselSettings(); // Cambiado el nombre de la función para ser más genérica
-    window.addEventListener('resize', this.adjustCarouselSettings.bind(this)); // Cambiado aquí también
+  // Ajustar videosPerPage en función del tamaño de la pantalla
+  this.adjustCarouselSettings();
+  window.addEventListener('resize', this.adjustCarouselSettings.bind(this));
 
-    const options = {
-      root: null, // El viewport del navegador
-      rootMargin: '0px',
-      threshold: 0.1 // Se activa cuando el 10% del elemento es visible
-    };
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
 
-    const observer = new IntersectionObserver((entries, observerInstance) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Añade la clase 'is-visible' al elemento que entró en la pantalla
-          entry.target.classList.add('is-visible');
-          // Una vez animado, deja de observarlo para mejorar el rendimiento
-          observerInstance.unobserve(entry.target);
-        }
+  const observer = new IntersectionObserver((entries, observerInstance) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observerInstance.unobserve(entry.target);
+      }
+    });
+  }, options);
+
+  const animatedElements = document.querySelectorAll('.animated');
+  animatedElements.forEach(el => observer.observe(el));
+
+  // ✅ Forzar reproducción automática del video una vez montado el DOM
+  const video = document.getElementById('header-video') as HTMLVideoElement;
+  if (video) {
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+
+    // Esperar al siguiente tick del DOM para asegurar carga completa
+    setTimeout(() => {
+      video.play().then(() => {
+        console.log('Autoplay ok');
+      }).catch((error) => {
+        console.warn('Autoplay bloqueado por el navegador:', error);
       });
-    }, options);
-
-    // Selecciona todos los elementos que quieres animar y ponlos a observar
-    const animatedElements = document.querySelectorAll('.animated');
-    animatedElements.forEach(el => observer.observe(el));
+    }, 0);
   }
+}
+
 
   ngOnDestroy(): void {
     if (this.intervalo) {
@@ -272,4 +287,6 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     const navigationExtras = category ? { queryParams: { category: category } } : {};
     this.router.navigate([path], navigationExtras);
   }
+
+  
 }
