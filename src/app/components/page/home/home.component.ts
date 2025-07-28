@@ -1,5 +1,5 @@
 // src/app/components/page/home/home.component.ts
-import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy, HostListener } from '@angular/core'; // Añadir HostListener
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../../../safe-url.pipe';
 import { Router } from '@angular/router';
@@ -32,10 +32,11 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   youtubeUrls: string[] = []; // Se poblará desde youtubeUrlsCargados
   promociones: { promocion: string }[] = []; // Se poblará desde promocionesCargadas
 
-  currentTiktokIndex: number = 0;
+  // Renombra currentTiktokIndex a currentSlideIndex para que coincida con el HTML
+  currentSlideIndex: number = 0; // Este es para el carrusel de TikTok
   tiktokVideosPerPage: number = 3; // Valor inicial, ajustado por CSS/JS
 
-  currentIndex: number = 0;
+  currentIndex: number = 0; // Este es para el carrusel de YouTube
   videosPerPage: number = 2; // Valor inicial, ajustado por CSS/JS
 
   comentarioActual = 0;
@@ -64,8 +65,8 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     // Ajustar videosPerPage en función del tamaño de la pantalla
-    this.adjustVideosPerPage();
-    window.addEventListener('resize', this.adjustVideosPerPage.bind(this));
+    this.adjustCarouselSettings(); // Cambiado el nombre de la función para ser más genérica
+    window.addEventListener('resize', this.adjustCarouselSettings.bind(this)); // Cambiado aquí también
 
     const options = {
       root: null, // El viewport del navegador
@@ -93,7 +94,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.intervalo) {
       clearInterval(this.intervalo);
     }
-    window.removeEventListener('resize', this.adjustVideosPerPage.bind(this));
+    window.removeEventListener('resize', this.adjustCarouselSettings.bind(this)); // Cambiado aquí también
   }
 
   cargarOfertas(): void {
@@ -118,11 +119,11 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
         console.log('URLs de YouTube cargadas para incrustar:', this.youtubeUrls);
         console.log('URLs de TikTok cargadas para incrustar:', this.tiktokVideos);
 
-
         // Reiniciar índices de carrusel después de cargar y ajustar vistas
-        this.currentTiktokIndex = 0;
-        this.currentIndex = 0;
-        this.adjustVideosPerPage();
+        this.currentSlideIndex = 0; // Para TikTok
+        this.currentIndex = 0; // Para YouTube
+        this.adjustCarouselSettings(); // Ajustar configuración de carrusel
+
         console.log('Ofertas cargadas y distribuidas:', {
           promociones: this.promociones,
           tiktokVideos: this.tiktokVideos,
@@ -173,29 +174,36 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
   // Métodos de navegación para TikTok
-  get visibleTiktokVideos(): string[] {
-    const startIndex = this.currentTiktokIndex;
-    const endIndex = startIndex + this.tiktokVideosPerPage;
-    return this.tiktokVideos.slice(startIndex, endIndex);
-  }
+  // Ya no necesitas visibleTiktokVideos si el transform se encarga de todo
+  // get visibleTiktokVideos(): string[] {
+  //   const startIndex = this.currentSlideIndex;
+  //   const endIndex = startIndex + this.tiktokVideosPerPage;
+  //   return this.tiktokVideos.slice(startIndex, endIndex);
+  // }
 
   nextTiktokVideo(): void {
-    if (this.currentTiktokIndex + this.tiktokVideosPerPage < this.tiktokVideos.length) {
-      this.currentTiktokIndex++;
+    // Asegúrate de que el índice no supere el número total de videos menos los videos por página
+    if (this.currentSlideIndex < this.tiktokVideos.length - this.tiktokVideosPerPage) {
+      this.currentSlideIndex++;
+      console.log('nextTiktokVideo: currentSlideIndex =', this.currentSlideIndex);
     } else {
-      // Para un carrusel que no es infinito y va al principio
-      this.currentTiktokIndex = 0;
+      // Si llegamos al final, volvemos al principio
+      this.currentSlideIndex = 0;
+      console.log('nextTiktokVideo: Reiniciado a 0');
     }
   }
 
   prevTiktokVideo(): void {
-    if (this.currentTiktokIndex > 0) {
-      this.currentTiktokIndex--;
+    if (this.currentSlideIndex > 0) {
+      this.currentSlideIndex--;
+      console.log('prevTiktokVideo: currentSlideIndex =', this.currentSlideIndex);
     } else {
-      // Para un carrusel que no es infinito y va al final
-      this.currentTiktokIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
+      // Si estamos en el principio, vamos al final (o al último conjunto visible)
+      this.currentSlideIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
+      console.log('prevTiktokVideo: Reiniciado al final (o último conjunto visible) =', this.currentSlideIndex);
     }
   }
+
 
   // Métodos de navegación para YouTube
   get visibleVideos(): string[] {
@@ -218,7 +226,8 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  adjustVideosPerPage(): void {
+  // Renombrada la función para ser más genérica, ya que ajusta settings para ambos carruseles
+  adjustCarouselSettings(): void {
     if (window.innerWidth <= 768) { // Mobile and small tablets
       this.tiktokVideosPerPage = 1;
       this.videosPerPage = 1;
@@ -229,9 +238,9 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
       this.tiktokVideosPerPage = 3;
       this.videosPerPage = 2;
     }
-    // Asegurar que el índice actual no exceda los límites después del ajuste
-    if (this.currentTiktokIndex + this.tiktokVideosPerPage > this.tiktokVideos.length) {
-      this.currentTiktokIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
+    // Asegurar que los índices actuales no excedan los límites después del ajuste
+    if (this.currentSlideIndex + this.tiktokVideosPerPage > this.tiktokVideos.length) {
+      this.currentSlideIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
     }
     if (this.currentIndex + this.videosPerPage > this.youtubeUrls.length) {
       this.currentIndex = Math.max(0, this.youtubeUrls.length - this.videosPerPage);
@@ -257,7 +266,6 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     // Si necesitas un ID único para cada video en tu lógica interna, podrías generar uno.
     return ''; // Devuelve vacío si no es una URL con ID numérico explícito
   }
-
 
   // Método irAPagina actualizado para aceptar un parámetro de categoría
   irAPagina(path: string, category: string | null = null): void {

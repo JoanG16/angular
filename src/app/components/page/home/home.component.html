@@ -6,20 +6,25 @@
       </div>
       <input type="checkbox" id="check">
       <label for="check" class="mostrar-menu">
-        &#8801;
+        ≡
       </label>
       <nav class="menu">
         <a href="#" style="cursor: pointer;">Inicio</a>
         <a (click)="irAPagina('mapa_contenedores')"  style="cursor: pointer;">Mapa del Mercado</a>
         <a  (click)="irAPagina('local')"  style="cursor: pointer;" >Locales</a>
         <a (click)="irAPagina('sobre-nosotros')" style="cursor: pointer;">Sobre nosotros</a>
-        <label for="check" class="esconder-menu">&#215;</label>
+        <label for="check" class="esconder-menu">×</label>
       </nav>
     </div>
 
-  <div class="texto-sobreMapa animated fade-in-up delay-2">
-    <h1 class="text.aling">Encuentra fácilmente productos y locales en el C.C. NUEVO TARQUI</h1>
-  </div>
+   <video autoplay loop id="header-video">
+    <source src="/assets/icon/video.mp4" type="video/mp4">
+    Tu navegador no soporta la etiqueta de video.
+</video>
+
+    <div class="texto-sobreMapa animated fade-in-up delay-2">
+      <h1 class="text.aling">Encuentra fácilmente productos y locales en el C.C. NUEVO TARQUI</h1>
+    </div>
 </header>
 
 <main>
@@ -76,16 +81,17 @@
       </div>
        <div class="carousel" *ngIf="tiktokVideos.length > 0">
         <button class="nav-button prev" (click)="prevTiktokVideo()">&#10094;</button>
-        <div class="carousel-slide">
-          <div class="video-item" *ngFor="let video of visibleTiktokVideos">
-            <blockquote class="tiktok-embed" [attr.cite]="video" [attr.data-video-id]="getVideoId(video)"
-              style="max-width: 705px; min-width: 325px;">
-              <section>
-                <p><a target="_blank" [attr.title]="'video'" [attr.href]="video"></a></p>
-              </section>
-            </blockquote>
-          </div>
-        </div>
+       <div class="carousel-slide" [style.transform]="'translateX(-' + currentSlideIndex * 100 + '%)'">
+  <div class="video-item" *ngFor="let video of tiktokVideos">
+    <blockquote class="tiktok-embed"
+                [attr.cite]="video"
+                [attr.data-video-id]="getVideoId(video)">
+      <section>
+        <p><a target="_blank" [attr.title]="'video'" [attr.href]="video"></a></p>
+      </section>
+    </blockquote>
+  </div>
+</div>
         <button class="nav-button next" (click)="nextTiktokVideo()">&#10095;</button>
       </div>
       <div class="no-content-message" *ngIf="tiktokVideos.length === 0">

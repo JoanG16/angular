@@ -1,61 +1,61 @@
 /* Mis estilos CSS: ¡Aquí le doy vida a la página! */
 
 /* Primero, me aseguro de que no haya barras de scroll horizontales molestas.
-   Así, el diseño se mantiene limpio en todas las pantallas. */
+   Así, el diseño se mantiene limpio en todas las pantallas. */
 .servicios,
 .productos,
 .services-section,
 .tiktok,
 .youtube,
 #clientes {
-    overflow-x: hidden;
+ overflow-x: hidden;
 }
 html, body {
-    overflow-x: hidden;
+ overflow-x: hidden;
 }
 
 /* Defino el color de fondo general para toda la página. */
 body{
-    background-color: #f7f8f3;
+ background-color: #f7f8f3;
 }
 /* Esto parece ser para un elemento SVG 'g', lo uso para que ocupe todo el espacio. */
 g {
-    width: 100%;
-    height: auto;
+ width: 100%;
+ height: auto;
 }
 
 /* --- Animaciones base --- */
 /* Clase base para los elementos que tendrán animaciones de entrada. */
 .animated {
-    opacity: 0;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+ opacity: 0;
+ transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 /* Efectos de entrada específicos (desde dónde aparecerán los elementos). */
 .fade-in-up {
-    transform: translateY(40px);
+ transform: translateY(40px);
 }
 
 .fade-in-down {
-    transform: translateY(-40px);
+ transform: translateY(-40px);
 }
 
 .fade-in-left {
-    transform: translateX(-40px);
+ transform: translateX(0px);
 }
 
 .fade-in-right {
-    transform: translateX(40px);
+ transform: translateX(0px);
 }
 
 .zoom-in {
-    transform: scale(0.9);
+ transform: scale(0.9);
 }
 
 /* Cuando el elemento es visible, se vuelve opaco y su transformación se reinicia. */
 .animated.is-visible {
-    opacity: 1;
-    transform: none; /* Resetea la transformación a su estado original */
+ opacity: 1;
+ transform: none; /* Resetea la transformación a su estado original */
 }
 
 /* Clases para añadir retrasos a las animaciones, útiles para listas de elementos. */
@@ -72,108 +72,141 @@ g {
 /* --- HEADER --- */
 /* Configuro mi encabezado: un fondo grande y responsivo, centrado y con texto blanco. */
 header {
-    width: 100%;
-    height: 70vh;
-    background: var(--azul);
-    padding: 0;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: linear-gradient(to bottom, rgb(0 0 0 / .25), rgb(0 0 0 /1)), url(/assets/img/plano/ChatGP.png);
-    background-size: cover;
-    background-position: center;
-    box-sizing: border-box;
+  width: 100%;
+  height: 100vh;
+  /* IMPORTANTE: Comenta o quita el color de fondo aquí. */
+  /* background: var(--azul); */ /* COMENTAR O QUITAR ESTO */
+  padding: 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  /* z-index: 1; */ /* Puedes añadir un z-index al header si necesitas que se posicione sobre otros elementos fuera de él, pero no es estrictamente necesario para el video interno si quitamos su background. */
 }
 
+header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Negro con 40% de opacidad */
+  z-index: 1; /* ¡NUEVO Z-INDEX! Ahora está entre el video y el contenido. */
+}
+
+
+#header-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0; /* ¡NUEVO Z-INDEX! El video está en la capa base del header. */
+  filter: brightness(0.7);
+}
+
+
 /* Este es el contenedor de mi barra de navegación en la parte superior. */
+/* Le damos un z-index positivo para que siempre esté sobre el video. */
 .container {
-    width: 90%;
-    max-width: 1300px;
-    margin-top: 10px;
-    line-height: 1.5;
-    border-radius: 20px;
-    height: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #00000005;
-    background: #0000005c;
+ width: 90%;
+ max-width: 1300px;
+ margin-top: 10px;
+ line-height: 1.5;
+ border-radius: 20px;
+ height: 50px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background-color: #00000005;
+ background: #0000005c;
+ position: relative; /* Necesario para que z-index tenga efecto */
+ z-index: 10; /* ¡MUY CLAVE! Subimos el z-index un poco más, por si acaso. */
 }
 
 /* Alineo el icono y el texto de mi logo. */
 .logo-main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+ display: flex;
+align-items: center;
+ justify-content: space-between;
 }
 
 /* Estilo mi logo en el encabezado: un círculo con mi imagen. */
 #logo-tarqui {
-    width: 36px;
-    aspect-ratio: 1 / 1;
-    background-image: url(/assets/icon/logo.jpg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 50%;
-    margin-right: 10px;
-    margin-left: 10px;
+ width: 36px;
+ aspect-ratio: 1 / 1;
+ background-image: url(/assets/icon/logo.jpg);
+ background-size: contain;
+ background-repeat: no-repeat;
+ border-radius: 50%;
+ margin-right: 10px;
+ margin-left: 10px;
 }
 
 /* Estilos para el texto principal del logo. */
 .logo {
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: 420px;
-    font-size: 14px;
+ text-transform: uppercase;
+ color: #fff;
+ font-weight: 420px;
+ font-size: 14px;
 }
 
 /* Le doy un color especial a la parte 'mark' de mi logo. */
 .logo mark {
-    background-color: transparent;
-    color: var(--crema);
+ background-color: transparent;
+color: var(--crema);
 }
 
 /* Defino los botones para mostrar/ocultar el menú en móviles (inicialmente ocultos). */
 .mostrar-menu,
 .esconder-menu {
-    font-size: 30px;
-    cursor: pointer;
-    display: none;
-    transition: 0.4s;
+ font-size: 30px;
+ cursor: pointer;
+ display: none;
+ transition: 0.4s;
 }
 
 /* Este checkbox oculto me ayuda a controlar el menú en móvil con CSS. */
 #check {
-    display: none;
+ display: none;
 }
 
 /* Estilos de los enlaces de mi menú de navegación. */
 .menu a {
-    color: #fff;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 0 10px;
-    transition: 0.4s;
-    font-weight: 500;
-    font-size: 13px;
+ color: #fff;
+ text-transform: uppercase;
+ text-decoration: none;
+ padding: 0 10px;
+ transition: 0.4s;
+ font-weight: 500;
+ font-size: 13px;
 }
 
 /* Contenedor para el texto que va encima del mapa, lo alineo abajo a la izquierda. */
 .texto-sobreMapa {
-    width: 80%;
-    height: 80%;
-    display: flex;
-    align-items: end;
-    justify-content: start;
+ width: 80%;
+ height: 80%;
+ display: flex;
+ flex-direction: column; /* Asegúrate de que es column si quieres justificar al final */
+ align-items: flex-start; /* Alinea el texto a la izquierda */
+ justify-content: flex-end; /* Lo baja */
+ position: relative; /* Necesario para que z-index tenga efecto */
+ z-index: 5; /* ¡CLAVE! Asegura que este contenido esté por encima del video. */
+ 
 }
 
 /* Estilo el título grande sobre el mapa. ¡Ojo con el ancho fijo para móvil! */
 .texto-sobreMapa h1 {
-    font-size: 54px;
-    width: 790px;
+  font-size: 54px;
+  width: 790px; /* ¡POSIBLE CULPABLE AQUÍ! */
+  text-align: left;
+  padding-left: 5%;
 }
-
 
 /* --- MAIN CONTENT --- */
 
@@ -271,19 +304,20 @@ header {
 
 /* Estilos para cada tarjeta de producto. */
 .tarjeta {
-    width: 10%;
-    min-width: 120px;
-    height: 155px;
+    width: 10%; /* Mantener para escritorio */
+    min-width: 120px; /* Mantener para escritorio */
+    height: 155px; /* Mantener para escritorio */
     background: #fbf4de;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
-    padding: 12px;
+    padding: 12px; /* Mantener para escritorio */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Mantener para escritorio */
     align-items: center;
     justify-content: space-between;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 /* Estilos para la imagen dentro de cada tarjeta. */
 .tarjeta img {
@@ -295,8 +329,12 @@ header {
 /* Estilos para el texto (título) dentro de cada tarjeta. */
 .tarjeta .texto h3 {
     color: #3e4077;
-    font-size: 14px;
+    font-size: 14px; /* Mantener para escritorio */
     text-align: center;
+    /* Asegurar que el texto se envuelva si es muy largo, aunque se priorizará el ajuste de fuente en móvil */
+    white-space: normal;
+    overflow-wrap: break-word; /* Para palabras que no quepan en una línea */
+    word-break: break-word; /* Para forzar saltos de línea dentro de palabras si es necesario */
 }
 
 /* Efecto hover para las tarjetas de productos, las "levanto" y les doy sombra. */
@@ -424,18 +462,15 @@ header {
 /* --- SERVICES SECTION (NUEVA SECCIÓN) --- */
 /* Contenedor principal de la sección de servicios, con sombra y centrado. */
 .services-section {
-    width: 90%;
+    width: 90%; /* Mantener para escritorio */
     max-width: 1200px;
     margin: 0 auto 3rem auto;
-    padding: 2.5rem;
-    background-color: var(--white);
-    border-radius: 10px;
-    box-shadow: var(--shadow-md);
-    text-align: center;
+    padding: 2.5rem; /* Mantener para escritorio */
+    box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho/alto total */
 }
-
 /* Contenedor de los servicios (no tiene estilos directos en el HTML proporcionado, así que no hay reglas aquí). */
 .services-container {
+  
     /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
        así que lo dejo sin reglas de CSS aquí. */
 }
@@ -455,8 +490,8 @@ header {
 /* Organizo los ítems de servicio en una cuadrícula responsiva. */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Mantener para escritorio */
+    gap: 20px; /* Mantener para escritorio */
     justify-items: center;
 }
 
@@ -730,6 +765,10 @@ footer li {
 
 /* --- Media Queries para Teléfonos y Tabletas (máximo 768px) --- */
 @media(max-width: 768px) {
+   .carousel-slide {
+        /* Podrías reducir el gap en móvil si es necesario */
+        gap: 10px;
+    }
     /* Hago visibles los botones de mostrar/esconder menú. */
     .mostrar-menu,
     .esconder-menu {
@@ -793,41 +832,190 @@ footer li {
     }
 
     /* Las tarjetas se apilan en columna en móvil. */
-    .tarjetas {
-        flex-direction: column;
+   .tarjetas {
+        flex-direction: column; /* Esto está bien si quieres una tarjeta por fila */
+        /* Si prefieres 2 tarjetas por fila en móvil, cambia esto a: */
+        /* flex-direction: row; */
+        flex-wrap: wrap; /* Permite que las tarjetas se envuelvan a la siguiente línea */
+        justify-content: center; /* Centra las tarjetas horizontalmente */
+        gap: 1rem; /* Reduce el espacio entre tarjetas si son 2 por fila */
         align-items: center;
+        
     }
 
+#tarjeta1,
+#tarjeta2,
+#tarjeta3,
+#tarjeta4,
+#tarjeta5,
+#tarjeta6,
+#tarjeta7,
+#tarjeta8{
+
+width: 70%;
+height: 90px;
+
+
+}
     /* Ajusto el estilo de las tarjetas en móvil para que sean en fila. */
-    .tarjeta {
-        width: 80%;
-        max-width: 300px;
-        flex-direction: row;
+   .tarjeta {
+        width: 80%; /* Un ancho fijo para móvil está bien si es una columna */
+        max-width: 300px; /* Limita el ancho máximo de la tarjeta */
+        flex-direction: row; /* Esto hace que el icono y el texto estén en la misma fila */
         height: auto;
-        justify-content: flex-start;
-    }
+        justify-content: flex-start; /* Alinea el contenido a la izquierda dentro de la tarjeta */
+        padding: 10px; /* Reduce un poco el padding de la tarjeta */
 
+        /* Si quieres 2 tarjetas por fila en móvil, puedes probar con: */
+        /* width: 45%; */ /* Deja espacio para otra tarjeta y el gap */
+        /* min-width: 140px; */ /* Asegura que la tarjeta no sea demasiado pequeña */
+        /* height: 100px; */ /* Altura fija si es necesario para mantener uniformidad */
+    }
     /* Ajusto el tamaño de la imagen dentro de la tarjeta en móvil. */
     .tarjeta img {
-        width: 80px;
-        height: 80px;
-        margin-right: 1rem;
+        width: 60px; /* Reduce el tamaño de la imagen */
+        height: 60px; /* Reduce el tamaño de la imagen */
+        margin-right: 0.8rem; /* Un poco menos de margen a la derecha */
+        flex-shrink: 0; /* Evita que la imagen se encoja si no hay espacio */
     }
 
+    /* Contenedor del texto dentro de la tarjeta */
+    .tarjeta .texto {
+        flex-grow: 1; /* Permite que el contenedor de texto ocupe el espacio restante */
+        display: flex;
+        align-items: center; /* Centra verticalmente el texto si hay espacio */
+        justify-content: center; /* Centra horizontalmente el texto */
+        /* min-width: 0; */ /* NECESARIO para que el texto se envuelva correctamente */
+    }
+
+      /* *** ESTOS SON LOS CAMBIOS CLAVE PARA EL TEXTO DE LA CATEGORÍA *** */
+    .tarjeta .texto h3 {
+        font-size: 0.85em; /* ¡REDUCE EL TAMAÑO DE LA FUENTE! (aprox. 13-14px) */
+        /* Puedes probar con 0.8em o 0.75em si sigue desbordándose */
+        line-height: 1.2; /* Ajusta la altura de línea para que ocupe menos espacio vertical */
+        text-align: center; /* Asegura que el texto esté centrado si hay varias líneas */
+        word-break: break-word; /* Rompe palabras largas para que quepan */
+        white-space: normal; /* Asegura que el texto se envuelva normalmente */
+        padding-left: 5px; /* Pequeño padding si necesitas separar del borde izquierdo del div.texto */
+        padding-right: 5px; /* Pequeño padding si necesitas separar del borde derecho del div.texto */
+    }
+
+    /* ... (el resto de tus media queries existentes para servicios, tiktok, footer) ... */
+
+    /* --- Otros ajustes que pueden influir en el desbordamiento general --- */
+    /* Asegúrate de que .texto-sobreMapa h1 se ajuste bien en móvil */
+    .texto-sobreMapa h1 {
+        font-size: 28px; /* Reduce el tamaño de la fuente para pantallas pequeñas */
+        width: 100%; /* Elimina el ancho fijo de 790px */
+        padding-left: 0; /* Ajusta o elimina el padding-left si no es necesario */
+        text-align: center; /* Centra el texto */
+    }
+      .services-section {
+        padding: 1rem; /* Reduce el padding, ej. a 16px por lado */
+        width: 95%; /* Puedes jugar con este valor si quieres más espacio a los lados */
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr; /* Una sola columna para móviles */
+        gap: 15px; /* Un poco más de espacio vertical entre los ítems */
+    }
+
+    .service-item {
+        width: 100%; /* El ítem de servicio ocupa todo el ancho de su columna */
+        max-width: 250px; /* Limita el ancho máximo para que no sea excesivamente grande en tablets o viewports un poco más anchos que el móvil */
+        margin: 0 auto; /* Centra el ítem si tiene un max-width */
+    }
+
+    /* Ajusta el tamaño del ícono si quieres que sea más pequeño en móvil */
+    .service-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+    .service-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+.contenedor-servicios{
+width: 100%;
+  height: 1000px;
+}
     /* El carrusel de TikTok es más ancho en móviles. */
-    .tiktok .carousel {
-        width: 95%;
+    /* Ajustes generales para el carrusel de TikTok en móviles */
+  .tiktok .carousel {
+        /* Ya no necesitamos un width fijo como 180vw,
+           el flexbox con scroll-snap lo manejará mejor. */
+        width: 180vw; /* Ocupa el 100% del contenedor padre */
+        max-width: unset; /* Elimina cualquier limitación de ancho máximo en móvil */
+        padding: 20px 0; /* Mantiene el padding vertical */
+        overflow-x: scroll; /* ¡CLAVE! Permite el scroll horizontal */
+        overflow-y: hidden; /* Oculta el scroll vertical */
+        position: relative;
+        /* Habilitar el desplazamiento suave con la mano (swipe) */
+        scroll-snap-type: x mandatory; /* ¡CLAVE! Habilita el snap en el eje X, forzando la alineación */
+        -webkit-overflow-scrolling: touch; /* Mejora el rendimiento del scroll en iOS */
+        scrollbar-width: none; /* Oculta la barra de desplazamiento en Firefox */
+        -ms-overflow-style: none;  /* Oculta la barra de desplazamiento en IE/Edge */
+        /* Para Chrome/Safari (Webkit), se oculta con ::-webkit-scrollbar en un bloque CSS aparte si no lo tienes */
+        box-sizing: border-box;
     }
-    /* Muestro 1 video por fila en móvil en TikTok. */
-    .tiktok .video-item {
-        width: 98%;
-        max-width: 350px;
+
+ .tiktok .carousel::-webkit-scrollbar {
+        display: none;
     }
-    /* Ajusto el tamaño de los botones de navegación de TikTok en móvil. */
-    .tiktok .nav-button {
-        padding: 8px 12px;
+ .tiktok .carousel-slide {
+        display: flex; /* Sigue siendo un flex container */
+        gap: 0; /* No queremos espacio entre los videos si solo se ve uno a la vez */
+        /* Quita el transition de aquí, ya que el scroll-snap lo maneja */
+        /* transition: transform 0.5s ease-in-out; */
+        width: 100%; /* Esto es el ancho del *viewport* del slide en un momento dado, pero el contenido se desbordará */
+        flex-grow: 1; /* Permite que ocupe el espacio disponible */
+        /* IMPORTANTE: No le pongas overflow: hidden; aquí, ya que queremos que el contenido desborde para el scroll */
+    }
+ .tiktok .video-item {
+        flex-shrink: 0; /* ¡CLAVE! Evita que el video se encoja */
+        width: 100%; /* ¡CLAVE! Cada video ocupa el 100% del ancho del carrusel visible */
+        max-width: 100%; /* Asegura que no crezca más de lo debido */
+        box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+        min-height: 350px; /* Ajusta este valor si necesitas más o menos altura para el video */
+        height: auto; /* Permite que la altura se ajuste al contenido si es necesario */
+        margin: 0; /* Asegura que no haya márgenes externos */
+        padding: 0; /* Asegura que no haya padding externo */
+        scroll-snap-align: center; /* ¡CLAVE! Alinea el inicio de cada elemento al centro del contenedor de desplazamiento */
+    }
+
+     .tiktok .nav-button {
+        display: none; /* Oculta los botones de navegación cuando el swipe está activo */
+        /* Si quieres mantener los botones, asegúrate de que no interfieran con el gesto de swipe */
+        /* padding: 8px 12px;
         font-size: 1.2em;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        left: 5px;
+        right: 5px; */
     }
+
+    .tiktok .video-item blockquote {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        width: 100% !important; /* ¡FUERZA el 100% de ancho! */
+        height: 100% !important; /* ¡FUERZA el 100% de altura del video-item! */
+        min-height: 100% !important; /* Asegura que la altura mínima sea la del padre */
+        max-width: 100% !important; /* Evita que crezca más allá del 100% */
+        box-sizing: border-box !important;
+    }
+ .tiktok .video-item blockquote iframe {
+        width: 100% !important; /* El iframe debe ocupar todo el blockquote */
+        height: 100% !important; /* El iframe debe ocupar todo el blockquote */
+        display: block !important; /* Asegura que no haya espacios extra */
+    }
+
+
+
 
     /* Las columnas del footer se apilan en móvil. */
     .footer-content {
