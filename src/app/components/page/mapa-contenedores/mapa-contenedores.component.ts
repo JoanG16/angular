@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router'; // Importar ActivatedRoute
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 // Importar servicios y interfaces
@@ -34,6 +34,14 @@ interface IMergedLocal extends Local {
 interface IMergedContenedor extends Contenedor {
   locales?: IMergedLocal[]; // List of locals within this container
   leafletPolygon?: L.Polygon; // Reference to the L.Polygon object on the map
+  // leafletNumberMarker?: L.Marker; // Eliminado: Ya no necesitamos el marcador de número
+}
+
+// Interfaz para la leyenda de colores (se mantiene por si decides usarla de otra forma, pero no se usará directamente para la leyenda de bloques en el HTML)
+interface BlockLegend {
+  bloque: string;
+  borderColor: string;
+  fillColor: string;
 }
 
 @Component({
@@ -68,23 +76,57 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
 
   // --- Properties for polygon colors per block ---
-  // Fixed color map for each block
-  private blockColorMap: Map<string, { border: string, fill: string }> = new Map([
+  // Vuelvo a tus colores originales y los mapeo a los bloques
+     private blockColorMap: Map<string, { border: string, fill: string }> = new Map([
+
+
+
     // Using your provided palette and some new distinct colors, with good contrast for border/fill
+
+
+
     ['a', { border: '#3e4077', fill: '#6a73a3' }],     // Azul oscuro para borde, azul medio para relleno
+
+
+
     ['b', { border: '#17a2b8', fill: '#66ccdd' }],     // Mostaza para borde, amarillo claro para relleno
+
+
+
     ['c', { border: '#aca46cff', fill: '#cfd39eff' }],     // Rosado oscuro para borde, rosado claro para relleno
+
+
+
     ['d', { border: '#a75f28ff', fill: '#d9a07aff' }],     // Verde intenso para borde, verde claro para relleno
+
+
+
     ['e', { border: '#42c1a3ff', fill: '#92e5bdff' }],     // Morado oscuro para borde, morado claro para relleno
+
+
+
     ['f', { border: '#dc3545', fill: '#f5a7b0' }],     // Rojo teja para borde, rojo suave para relleno
+
+
+
     ['g', { border: '#ce3673ff', fill: '#e59ac9ff' }],     // Turquesa para borde, cian claro para relleno
+
+
+
     ['h', { border: '#5e07ffff', fill: '#7d8cfdff' }]      // Amarillo vibrante para borde, amarillo pastel para relleno
+
+
+
   ]);
+
+  // Propiedad para la leyenda de colores que se mostrará en el HTML
+  // Se mantiene, pero la generación de la leyenda en HTML será diferente.
+  blockLegends: BlockLegend[] = [];
 
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute, // Inyectar ActivatedRoute
+    private route: ActivatedRoute,
     private contenedoresService: ContenedoresService,
     private localesService: LocalesService,
     private categoriaService: CategoriaService,
@@ -94,6 +136,14 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initMap();
     this.cargarDatosCombinados();
+    // Inicializa la leyenda de bloques al cargar el componente
+    // Esto es para que la propiedad 'blockLegends' tenga los datos,
+    // aunque la forma de renderizarla en el HTML puede cambiar.
+    this.blockLegends = Array.from(this.blockColorMap.entries()).map(([bloque, colors]) => ({
+      bloque: bloque.toUpperCase(), // Muestra el bloque en mayúsculas
+      borderColor: colors.border,
+      fillColor: colors.fill
+    }));
   }
 
   ngOnDestroy(): void {
@@ -114,7 +164,7 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
       crs: L.CRS.Simple,
       minZoom: -1,
       maxZoom: 1,
-      zoomControl: false,
+      zoomControl: true, // Habilitar los controles de zoom por defecto de Leaflet
       maxBounds: this.imageBounds,
       maxBoundsViscosity: 1.0
     });
@@ -234,8 +284,9 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
    * @param contenedoresToRender The list of containers to draw.
    */
   private renderContenedores(contenedoresToRender: IMergedContenedor[]): void {
+    // Eliminar solo polígonos existentes (ya no hay marcadores de números)
     this.map.eachLayer(layer => {
-      if (layer instanceof L.Polygon) {
+      if (layer instanceof L.Polygon) { // Solo eliminar polígonos
         this.map.removeLayer(layer);
       }
     });
@@ -246,15 +297,17 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
         const coords: [number, number][] = contenedor.geom.coordinates[0] as [number, number][];
         const latlngs: L.LatLngTuple[] = coords.map(([lng, lat]) => [lat, lng]);
 
-        const colors = this.getPolygonColors(contenedor.bloque); // Get colors based on the block
+        const colors = this.getPolygonColors(contenedor.bloque);
         const polygon = L.polygon(latlngs, {
-          color: colors.border,       // Use specific block border color
-          fillColor: colors.fill,     // Use specific block fill color
-          fillOpacity: 0.6,           // Maintain opacity to see background image
+          color: colors.border,
+          fillColor: colors.fill,
+          fillOpacity: 0.6,
           weight: 2
         }).addTo(this.map);
 
         contenedor.leafletPolygon = polygon;
+
+        // Eliminado: Lógica para añadir el número del contenedor
 
         const tooltipText = `Bloque: ${contenedor.bloque || 'N/A'}<br>Contenedor: ${contenedor.numero_contenedor || contenedor.id_contenedor}`;
         polygon.bindTooltip(tooltipText, { sticky: true });
@@ -313,11 +366,13 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
       this.highlightedLayer = contenedor.leafletPolygon;
       // Highlight colors consistent, regardless of the original block color
       this.highlightedLayer.setStyle({
-        color: 'var(--accent-color)',       // Border: Mostaza (defined in CSS)
+        color: 'var(--accent-color)',      // Border: Mostaza (defined in CSS)
         fillColor: 'var(--amarillo-suave)', // Fill: Soft yellow (defined in CSS)
         weight: 3,
         fillOpacity: 0.8 // Slightly higher opacity for highlight
       });
+
+      // Eliminado: Lógica para resaltar el número del contenedor
 
       if (this.highlightedLayer.getBounds().isValid()) {
         this.map.fitBounds(this.highlightedLayer.getBounds(), {
@@ -333,21 +388,22 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
    */
   clearHighlight(): void {
     if (this.highlightedLayer) {
-      // Find the original container to get its block colors
+      // Encuentra el contenedor original para obtener sus colores de bloque
       const originalContenedor = this.allContenedores.find(c => c.leafletPolygon === this.highlightedLayer);
       if (originalContenedor) {
-        const colors = this.getPolygonColors(originalContenedor.bloque); // Get original block colors
+        const colors = this.getPolygonColors(originalContenedor.bloque); // Obtener colores originales del bloque
         this.highlightedLayer.setStyle({
-          color: colors.border,       // Revert to original block border color
-          fillColor: colors.fill,     // Revert to original block fill color
-          fillOpacity: 0.6,           // Revert to original opacity
+          color: colors.border,
+          fillColor: colors.fill,
+          fillOpacity: 0.6,
           weight: 2
         });
+        // Eliminado: Lógica para remover el resaltado del número
       } else {
-        // Fallback if for some reason the original container is not found (should be rare)
+        // Fallback si por alguna razón el contenedor original no se encuentra
         this.highlightedLayer.setStyle({
-          color: '#888888', // Default grey border
-          fillColor: '#cccccc', // Default light grey fill
+          color: '#888888',
+          fillColor: '#cccccc',
           fillOpacity: 0.6,
           weight: 2
         });
@@ -383,8 +439,6 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
    */
   verDetalleLocal(localId: number): void {
     console.log('Redirigiendo a detalles del local:', localId);
-    // Asume que la ruta para el detalle del local es '/detalle-local/:id'
-    // Deberás configurar esta ruta en tu archivo de enrutamiento de Angular (app-routing.module.ts)
     this.router.navigate(['/detalle-local', localId]);
   }
 }

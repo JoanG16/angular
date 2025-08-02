@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog'; // Importar MatDialog
 
 import { ProductoService } from '../../../../services/administrador/producto.service';
 import { CategoriaService } from '../../../../services/administrador/categoria.service';
@@ -9,10 +9,11 @@ import { LocalesService } from '../../../../services/administrador/locales.servi
 
 import { Producto } from '../../../../interfaces/producto.interface';
 import { Categoria } from '../../../../interfaces/categoria.interface';
-import { Local } from '../../../../interfaces/locales.interface'; // Importar LocalResponse
+import { Local } from '../../../../interfaces/locales.interface';
 
 import { ConfirmDialogComponent } from '../../../confirm-dialog/confirm-dialog.component';
 import { SelectLocalesDialogComponent } from '../../select-locales-dialog/select-locales-dialog/select-locales-dialog.component';
+import { EditProductoDialogComponent } from '../../edit-producto-dialog/edit-producto-dialog.component'; // Importar el nuevo diálogo de edición
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,37 +25,39 @@ import { Router } from '@angular/router';
 })
 export class ProductoCrudComponent implements OnInit {
   productos: Producto[] = [];
+  filteredProductos: Producto[] = []; // Nueva lista para productos filtrados
   categorias: Categoria[] = [];
   allLocales: Local[] = []; // Todos los locales disponibles
 
-  // Formulario
-  productoSeleccionado: Producto | null = null;
+  // Propiedades para el formulario de CREACIÓN (el de edición se mueve al modal)
   nombre: string = '';
   descripcion_adicional: string = '';
   id_categoria: number | null = null;
-  localesSeleccionados: number[] = []; // Array de IDs de locales seleccionados
+  localesSeleccionados: number[] = []; // Array de IDs de locales seleccionados para el formulario de creación
 
-  isEditing: boolean = false;
+  searchTerm: string = ''; // Nuevo: para el buscador
 
   constructor(
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private localService: LocalesService,
-    private dialog: MatDialog,
+    private dialog: MatDialog, // Inyectar MatDialog
     private router:Router
   ) { }
 
   ngOnInit(): void {
     this.cargarCategorias();
-    this.cargarLocales(); // Cargar todos los locales al inicio
+    this.cargarLocales();
     this.cargarProductos();
   }
 
+  // Carga todos los productos y aplica el filtro inicial
   cargarProductos(): void {
     this.productoService.getAllProductos().subscribe({
       next: (data) => {
         this.productos = data;
-        console.log('Categorías asignadas al componente (producto-crud):', this.productos);
+        this.applyProductFilter(); // Aplicar filtro inicial al cargar productos
+        console.log('Productos cargados (producto-crud):', this.productos);
       },
       error: (err) => {
         console.error('Error al cargar productos:', err);
@@ -63,12 +66,12 @@ export class ProductoCrudComponent implements OnInit {
     });
   }
 
+  // Carga todas las categorías disponibles
   cargarCategorias(): void {
     this.categoriaService.getAllCategorias().subscribe({
-      next: (data: Categoria[]) => { // Esperamos directamente un array de Categoria[]
-        console.log('Categorías recibidas del servicio (producto-crud):', data); // LOG de depuración
-        this.categorias = data; // Asignar los datos al array del componente
-        console.log('Categorías asignadas al componente (producto-crud):', this.categorias); // LOG de depuración
+      next: (data: Categoria[]) => {
+        this.categorias = data;
+        console.log('Categorías asignadas al componente (producto-crud):', this.categorias);
       },
       error: (err) => {
         console.error('Error al cargar categorías (producto-crud):', err);
@@ -77,10 +80,10 @@ export class ProductoCrudComponent implements OnInit {
     });
   }
 
+  // Carga todos los locales disponibles
   cargarLocales(): void {
-    // El servicio ahora devuelve Local[] directamente
     this.localService.getAllLocales().subscribe({
-      next: (data: Local[]) => { // data es directamente Local[]
+      next: (data: Local[]) => {
         this.allLocales = data;
       },
       error: (err) => {
@@ -88,6 +91,18 @@ export class ProductoCrudComponent implements OnInit {
         this.mostrarMensajeError('Error de Carga', 'No se pudieron cargar los locales.');
       }
     });
+  }
+
+  // Nuevo método para filtrar productos por nombre
+  applyProductFilter(): void {
+    const lowerSearchTerm = this.searchTerm.toLowerCase().trim();
+    if (lowerSearchTerm) {
+      this.filteredProductos = this.productos.filter(producto =>
+        producto.nombre.toLowerCase().includes(lowerSearchTerm)
+      );
+    } else {
+      this.filteredProductos = [...this.productos]; // Mostrar todos si no hay término de búsqueda
+    }
   }
 
   // Métodos de utilidad para el template
@@ -107,7 +122,8 @@ export class ProductoCrudComponent implements OnInit {
     return locales.map(l => l.nombre_del_negocio).join(', ');
   }
 
-  guardarOActualizarProducto(): void {
+  // Método para crear un nuevo producto (antes era guardarOActualizarProducto)
+  crearProducto(): void {
     if (!this.nombre || this.id_categoria === null || this.localesSeleccionados.length === 0) {
       this.mostrarMensajeError('Campos Incompletos', 'Por favor, completa todos los campos obligatorios (Nombre, Categoría, Locales).');
       return;
@@ -120,44 +136,35 @@ export class ProductoCrudComponent implements OnInit {
       locales: this.localesSeleccionados // IDs de locales
     };
 
-    if (this.isEditing && this.productoSeleccionado) {
-      this.productoService.updateProducto(this.productoSeleccionado.id_producto, payload).subscribe({
-        next: () => {
-          this.mostrarMensajeExito('Producto actualizado correctamente.');
-          this.resetForm();
-          this.cargarProductos();
-        },
-        error: (err) => {
-          console.error('Error al actualizar producto:', err);
-          this.mostrarMensajeError('Error al Actualizar', 'Hubo un error al actualizar el producto: ' + (err.error?.message || 'Error desconocido.'));
-        }
-      });
-    } else {
-      this.productoService.createProducto(payload).subscribe({
-        next: () => {
-          this.mostrarMensajeExito('Producto creado correctamente.');
-          this.resetForm();
-          this.cargarProductos();
-        },
-        error: (err) => {
-          console.error('Error al crear producto:', err);
-          this.mostrarMensajeError('Error al Crear', 'Hubo un error al crear el producto: ' + (err.error?.message || 'Error desconocido.'));
-        }
-      });
-    }
+    this.productoService.createProducto(payload).subscribe({
+      next: () => {
+        this.mostrarMensajeExito('Producto creado correctamente.');
+        this.resetForm(); // Resetear solo el formulario de creación
+        this.cargarProductos(); // Recargar la lista para ver el nuevo producto
+      },
+      error: (err) => {
+        console.error('Error al crear producto:', err);
+        this.mostrarMensajeError('Error al Crear', 'Hubo un error al crear el producto: ' + (err.error?.message || 'Error desconocido.'));
+      }
+    });
   }
 
-  seleccionarProductoParaEditar(producto: Producto): void {
-    this.productoSeleccionado = producto;
-    this.isEditing = true;
+  // Nuevo método para abrir el modal de edición
+  openEditProductoDialog(producto: Producto): void {
+    const dialogRef = this.dialog.open(EditProductoDialogComponent, {
+      width: '650px', // Ancho del modal de edición
+      data: { producto: producto } // Pasa el producto seleccionado al modal
+    });
 
-    this.nombre = producto.nombre;
-
-    this.descripcion_adicional = producto.descripcion_adicional || '';
-    this.id_categoria = producto.id_categoria;
-    this.localesSeleccionados = producto.locales ? producto.locales.map(l => l.id_local) : [];
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Si el diálogo devuelve un resultado (producto actualizado), recarga los productos
+        this.cargarProductos();
+      }
+    });
   }
 
+  // Elimina un producto
   eliminarProducto(producto: Producto): void {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -172,8 +179,8 @@ export class ProductoCrudComponent implements OnInit {
         this.productoService.deleteProducto(producto.id_producto).subscribe({
           next: () => {
             this.mostrarMensajeExito('Producto eliminado correctamente.');
-            this.cargarProductos();
-            this.resetForm();
+            this.cargarProductos(); // Recargar la lista después de eliminar
+            this.resetForm(); // Resetear el formulario de creación si estaba en uso
           },
           error: (err) => {
             console.error('Error al eliminar producto:', err);
@@ -184,15 +191,15 @@ export class ProductoCrudComponent implements OnInit {
     });
   }
 
+  // Resetea solo el formulario de creación
   resetForm(): void {
     this.nombre = '';
     this.descripcion_adicional = '';
     this.id_categoria = null;
     this.localesSeleccionados = [];
-    this.productoSeleccionado = null;
-    this.isEditing = false;
   }
 
+  // Abre el diálogo para seleccionar locales para el formulario de creación
   openSelectLocalesDialog(): void {
     const dialogRef = this.dialog.open(SelectLocalesDialogComponent, {
       width: '600px',
@@ -209,6 +216,7 @@ export class ProductoCrudComponent implements OnInit {
     });
   }
 
+  // Muestra un mensaje de éxito usando el diálogo de confirmación
   private mostrarMensajeExito(message: string): void {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -220,6 +228,7 @@ export class ProductoCrudComponent implements OnInit {
     });
   }
 
+  // Muestra un mensaje de error usando el diálogo de confirmación
   private mostrarMensajeError(title: string, message: string): void {
     this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -231,8 +240,9 @@ export class ProductoCrudComponent implements OnInit {
       }
     });
   }
-   irAPagina(titulo: string): void {
+  
+  // Navega a otras páginas de la aplicación
+  irAPagina(titulo: string): void {
     this.router.navigate([titulo])
-
   }
 }

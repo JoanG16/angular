@@ -41,7 +41,6 @@
 
         <div class="image-gallery">
           <div class="main-image-container">
-            <!-- CORRECCIÓN CLAVE: Usa la URL de la imagen directamente sin backendBaseUrl -->
             <img
               [src]="local.imagen_urls && local.imagen_urls.length > 0 ? local.imagen_urls[currentImageIndex] : 'https://placehold.co/600x400/ADD8E6/000000?text=No+Image'"
               alt="Imagen de {{ local.nombre_del_negocio }}"
@@ -76,11 +75,10 @@
           </div>
           <div class="info-item">
             <span class="info-label">Contenedor N°:</span>
-            <span class="info-value">{{ local.id_contenedor || 'N/A' }}</span>
+            <span class="info-value">{{ local.codigo_local }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Bloque:</span>
-            <!-- Asumiendo que 'local' ya tiene 'nombre_bloque' si lo mapeaste en el servicio o componente padre -->
             <span class="info-value">{{ local.nombre_bloque || 'N/A' }}</span>
           </div>
         </div>
@@ -93,13 +91,14 @@
         <div class="social-links-section" *ngIf="local.facebook || local.instagram || local.tiktok">
           <h3 class="section-title">Síguenos en redes:</h3>
           <div class="social-links-container">
-            <a *ngIf="local.facebook" [href]="local.facebook" target="_blank" class="social-link facebook">
+            <!-- USO DE LA NUEVA FUNCIÓN getSocialLink -->
+            <a *ngIf="local.facebook" [href]="getSocialLink('facebook', local.facebook)" target="_blank" class="social-link facebook">
               <i class="fab fa-facebook-f"></i> Facebook
             </a>
-            <a *ngIf="local.instagram" [href]="local.instagram" target="_blank" class="social-link instagram">
+            <a *ngIf="local.instagram" [href]="getSocialLink('instagram', local.instagram)" target="_blank" class="social-link instagram">
               <i class="fab fa-instagram"></i> Instagram
             </a>
-            <a *ngIf="local.tiktok" [href]="local.tiktok" target="_blank" class="social-link tiktok">
+            <a *ngIf="local.tiktok" [href]="getSocialLink('tiktok', local.tiktok)" target="_blank" class="social-link tiktok">
               <i class="fab fa-tiktok"></i> TikTok
             </a>
           </div>

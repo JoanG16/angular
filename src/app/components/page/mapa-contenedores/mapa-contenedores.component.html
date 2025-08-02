@@ -2,28 +2,28 @@
 
 <body>
   <header class="main-header">
-  <div class="header-content-wrapper">
-    <div class="site-branding">
-      <div class="logo-image"></div>
-      <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+    <div class="header-content-wrapper">
+      <div class="site-branding">
+        <div class="logo-image"></div>
+        <h1 class="site-title">CENTRO COMERCIAL <mark>NUEVO TARQUI</mark></h1>
+      </div>
+      <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+      <label for="menu-toggle" class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </label>
+      <nav class="main-navigation">
+        <label for="menu-toggle" class="close-menu-icon">&times;</label>
+        <ul>
+          <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
+          <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
+          <li><a [routerLink]="['/local']" class="nav-link">Locales</a></li>
+          <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
+        </ul>
+      </nav>
     </div>
-    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
-    <label for="menu-toggle" class="hamburger-icon">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </label>
-    <nav class="main-navigation">
-      <label for="menu-toggle" class="close-menu-icon">&times;</label>
-      <ul>
-        <li><a [routerLink]="['/']" class="nav-link">Inicio</a></li>
-        <li><a [routerLink]="['/mapa_contenedores']" class="nav-link">Mapa del Mercado</a></li>
-        <li><a [routerLink]="['/local']" class="nav-link">Locales</a></li>
-        <li><a [routerLink]="['/sobre-nosotros']" class="nav-link">Sobre nosotros</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  </header>
 
   <!-- Añadimos la clase 'content-loaded' condicionalmente para la animación de entrada -->
   <div class="map-page-wrapper" [class.content-loaded]="!isLoading">
@@ -54,7 +54,7 @@
         <div *ngIf="contenedorSeleccionado">
           <p><strong>Número Contenedor:</strong> {{ contenedorSeleccionado.numero_contenedor }}</p>
           <p><strong>Bloque:</strong> {{ contenedorSeleccionado.bloque }}</p>
-         
+          
           <div *ngIf="contenedorSeleccionado.locales && contenedorSeleccionado.locales.length > 0">
             <h4>Locales en este Contenedor:</h4>
             <ul class="local-list">
@@ -88,10 +88,17 @@
 
     <!-- Contenedor del mapa -->
     <div class="map-area">
+      <!-- Leyenda de colores de bloques -->
+      <!-- <div class="block-legend">
+        <h4 class="legend-title">Bloques por Color</h4>
+        <div class="legend-items">
+          <div *ngFor="let legend of blockLegends" class="legend-item">
+            <span class="legend-color-box" [style.background-color]="legend.fillColor" [style.border-color]="legend.borderColor"></span>
+            <span class="legend-label">Bloque {{ legend.bloque }}</span>
+          </div>
+        </div>
+      </div> -->
       <div id="map"></div>
     </div>
   </div>
-
-
-
 </body>

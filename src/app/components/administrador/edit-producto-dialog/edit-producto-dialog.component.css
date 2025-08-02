@@ -1,0 +1,170 @@
+/* src/app/components/administrador/producto-crud/edit-producto-dialog/edit-producto-dialog.component.css */
+
+/* Contenedor principal del diálogo */
+.dialog-container {
+  padding: 25px;
+  background-color: #ffffff; /* Fondo del modal */
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: auto; /* Centrar el modal si no es un overlay */
+  color: #333; /* Color de texto general */
+}
+
+.dialog-title {
+  color: #3e4077; /* Color del título (azul de tu paleta) */
+  font-size: 1.8em;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Estilos de la cuadrícula del formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Una columna por defecto */
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 600px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas en pantallas más grandes */
+  }
+  .form-group.full-width {
+    grid-column: span 2; /* Ocupa ambas columnas */
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #555; /* Color de etiquetas */
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+  padding: 12px;
+  border: 1px solid #cacfea; /* Color de borde (gris claro de tu paleta) */
+  border-radius: 8px;
+  font-size: 1em;
+  color: #2c2c2c; /* Texto principal de tu paleta */
+  background-color: #f8f9fa; /* Fondo de input (similar al beige) */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #ce9636; /* Mostaza de tu paleta */
+  box-shadow: 0 0 0 3px rgba(206, 150, 54, 0.25);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical; /* Permitir redimensionar verticalmente */
+  min-height: 80px;
+}
+
+/* Estilos para la visualización de locales seleccionados (chips) */
+.selected-locales-display {
+  border: 1px solid #cacfea;
+  border-radius: 8px;
+  padding: 10px;
+  min-height: 50px; /* Altura mínima para cuando no hay chips */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f9fa;
+  position: relative; /* Para posicionar el botón */
+}
+
+.placeholder-text {
+  color: #999eb9; /* Gris sutil de tu paleta */
+  font-style: italic;
+  padding: 5px;
+}
+
+.locales-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.local-chip {
+  background-color: #3e4077; /* Azul de tu paleta */
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.select-locales-button {
+  background-color: #ce9636; /* Mostaza de tu paleta */
+  color: #ffffff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: auto; /* Empuja el botón a la derecha */
+}
+
+.select-locales-button:hover {
+  background-color: #ab802c; /* Tono más oscuro de mostaza */
+  transform: translateY(-2px);
+}
+
+/* Acciones del diálogo */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinear botones a la derecha */
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 1px solid #cacfea; /* Separador */
+  margin-top: 20px;
+}
+
+.dialog-actions button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #3e4077; /* Azul de tu paleta */
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: #323565; /* Tono más oscuro de azul */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+  background-color: #e9ecef; /* Gris claro */
+  color: #495057; /* Gris oscuro para texto */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+  background-color: #dae0e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

@@ -24,7 +24,7 @@
   
   /* Colores específicos para el header del mapa (si son diferentes a los de arriba) */
   --accent-gold: var(--mostaza); /* Usamos mostaza para el acento dorado */
-  --text-light: var(--white); /* Texto claro para el header */
+  /* --text-light: var(--white);  <-- This variable is not defined, assuming it should be #fff */
 
   /* Sombras */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -34,13 +34,11 @@
   /* Transiciones */
   --transition-speed-normal: 0.3s;
   --transition-timing-ease: ease-in-out;
-
- 
 }
 
 /* Estilos globales y reseteo básico para el body del componente */
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-inter); /* Assuming --font-inter is defined globally or imported */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -458,7 +456,7 @@ body {
   display:flex;
   justify-content: center;
   align-items: center;
-   /* Fondo del área del mapa - Beige */
+    /* Fondo del área del mapa - Beige */
 }
 
 #map {
@@ -466,7 +464,7 @@ body {
   height: 88%;
   border-radius: 50px;
   background-color: #fff;
-   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* --- Chatbot Flotante --- */
@@ -556,7 +554,7 @@ body {
     width: 100%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     order: 1;
-   
+    
   }
 
   .info-panel {
@@ -687,5 +685,93 @@ body {
   .chatbot-floating img {
     width: 28px;
     height: 28px;
+  }
+}
+
+/* --- NUEVOS ESTILOS PARA LOS NÚMEROS DE CONTENEDOR EN EL MAPA --- */
+.container-number-icon {
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+  border: 1px solid var(--primary-color); /* Borde azul */
+  border-radius: 50%;
+  width: 30px; /* Tamaño del círculo */
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  color: var(--primary-color); /* Texto azul */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7); /* Sombra de texto para visibilidad */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* ELIMINADO: transform: translate(-50%, -50%); - Leaflet ya lo centra con iconAnchor */
+  pointer-events: none; /* No interactuable con el ratón */
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estilo para el número cuando el contenedor está resaltado */
+.container-number-icon.highlighted-number {
+  background-color: var(--amarillo-suave); /* Fondo amarillo suave */
+  border-color: var(--accent-color); /* Borde mostaza */
+  color: var(--azul); /* Texto azul oscuro */
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* --- NUEVOS ESTILOS PARA LA LEYENDA DE BLOQUES --- */
+.block-legend {
+  position: absolute;
+  top: 20px; /* Ajusta la posición vertical */
+  left: 20px; /* Ajusta la posición horizontal */
+  background-color: var(--crema); /* Fondo de la leyenda (usando tu var --crema) */
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra */
+  padding: 15px;
+  z-index: 500; /* Asegura que esté por encima del mapa */
+  max-height: 80%; /* Limita la altura en caso de muchos bloques */
+  overflow-y: auto; /* Habilita scroll si hay muchos bloques */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.legend-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--primary-color); /* Color del título de la leyenda */
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-color-box {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  border: 2px solid; /* El color del borde se establecerá dinámicamente */
+  flex-shrink: 0; /* Evita que el cuadro de color se encoja */
+}
+
+.legend-label {
+  font-size: 0.9em;
+  color: var(--text-main); /* Color del texto de la leyenda (usando tu var --text-main) */
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+/* --- Media Queries para Responsividad de los NUEVOS elementos --- */
+@media (max-width: 768px) {
+  .block-legend {
+    position: static; /* No flotante en móvil, se integra en el flujo */
+    margin: 20px auto 0 auto; /* Centra y añade margen superior */
+    width: 90%; /* Ancho ajustado */
+    max-height: none; /* Sin límite de altura */
+    overflow-y: visible;
   }
 }
