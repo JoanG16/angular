@@ -2,18 +2,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { LocalesService } from '../../../services/administrador/locales.service'; // Asegúrate de que esta ruta sea correcta
-import { ContenedoresService } from '../../../services/administrador/contenedores.service'; // <-- Importa ContenedoresService
+import { LocalesService } from '../../../services/administrador/locales.service';
+import { ContenedoresService } from '../../../services/administrador/contenedores.service';
 import { Local } from '../../../interfaces/locales.interface';
-import { Contenedor, ContenedorResponse } from '../../../interfaces/contenedor.interface'; // <-- Importa Contenedor y ContenedorResponse
+import { Contenedor, ContenedorResponse } from '../../../interfaces/contenedor.interface';
 import { Producto } from '../../../interfaces/producto.interface';
 import { Categoria } from '../../../interfaces/categoria.interface';
 import { HttpClientModule } from '@angular/common/http';
-import { forkJoin } from 'rxjs'; // Necesario para combinar observables
+import { forkJoin } from 'rxjs';
 
 // Extender la interfaz Local para incluir el nombre del bloque para la vista de detalle
 interface LocalDetalle extends Local {
-  nombre_bloque?: string; // Propiedad para el nombre del bloque
+  nombre_bloque?: string;
 }
 
 @Component({
@@ -24,7 +24,7 @@ interface LocalDetalle extends Local {
   styleUrls: ['./detalle-local.component.css']
 })
 export class DetalleLocalComponent implements OnInit, OnDestroy {
-  local: LocalDetalle | null = null; // Usar la interfaz extendida
+  local: LocalDetalle | null = null;
   currentImageIndex: number = 0;
   currentYear: number = new Date().getFullYear();
   isLoading: boolean = true;
@@ -35,7 +35,7 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private localesService: LocalesService,
-    private contenedoresService: ContenedoresService // <-- Inyecta ContenedoresService
+    private contenedoresService: ContenedoresService
   ) { }
 
   ngOnInit(): void {
@@ -43,10 +43,10 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
       const id = params.get('id');
       if (id) {
         this.isLoading = true;
-        this.loadLocalAndContenedorDetails(parseInt(id, 10)); // <-- Llama a la nueva función
+        this.loadLocalAndContenedorDetails(parseInt(id, 10));
       } else {
         console.error('No se proporcionó un ID de local en los parámetros de la ruta.');
-        this.router.navigate(['/locales']); // Redirigir a la lista de locales
+        this.router.navigate(['/locales']);
         this.isLoading = false;
       }
     });
@@ -60,17 +60,14 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
 
   loadLocalAndContenedorDetails(localId: number): void {
     forkJoin({
-      localResponse: this.localesService.getOneLocal(localId), // Este ya devuelve Local
-      contenedoresResponse: this.contenedoresService.getAllContenedores() // Este devuelve ContenedorResponse
+      localResponse: this.localesService.getOneLocal(localId),
+      contenedoresResponse: this.contenedoresService.getAllContenedores()
     }).subscribe({
       next: ({ localResponse, contenedoresResponse }: { localResponse: Local, contenedoresResponse: ContenedorResponse }) => {
-        // Asignar el local
-        const localData: Local = localResponse; // localResponse ya es de tipo Local
+        const localData: Local = localResponse;
 
-        // Encontrar el contenedor asociado
         const contenedor = contenedoresResponse.data.find(c => c.id_contenedor === localData.id_contenedor);
 
-        // Crear el objeto local extendido
         this.local = {
           ...localData,
           nombre_bloque: contenedor ? contenedor.bloque : 'N/A'
@@ -82,13 +79,46 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
         }
         this.isLoading = false;
       },
-      error: (err: any) => { // Tipado de 'err'
+      error: (err: any) => {
         console.error('Error al cargar los detalles del local o contenedores:', err);
         this.local = null;
         this.isLoading = false;
-        this.router.navigate(['/locales']); // Redirigir a la lista de locales
+        this.router.navigate(['/locales']);
       }
     });
+  }
+
+  /**
+   * Normaliza una URL de red social.
+   * Si la entrada es un nombre de usuario (ej. "@usuario"), la convierte en una URL completa.
+   * Si ya es una URL completa, la devuelve tal cual.
+   * @param platform La plataforma de la red social ('facebook', 'instagram', 'tiktok').
+   * @param usernameOrUrl El nombre de usuario o la URL completa.
+   * @returns La URL completa y válida para el enlace.
+   */
+  getSocialLink(platform: string, usernameOrUrl: string | undefined | null): string {
+    if (!usernameOrUrl) {
+      return '#'; // Devuelve un enlace vacío o un placeholder si no hay valor
+    }
+
+    // Si ya es una URL completa, la devuelve
+    if (usernameOrUrl.startsWith('http://') || usernameOrUrl.startsWith('https://')) {
+      return usernameOrUrl;
+    }
+
+    // Si es un nombre de usuario (ej. @maxi.sport8), construye la URL completa
+    const cleanedUsername = usernameOrUrl.startsWith('@') ? usernameOrUrl.substring(1) : usernameOrUrl;
+
+    switch (platform.toLowerCase()) {
+      case 'facebook':
+        return `https://www.facebook.com/${cleanedUsername}`;
+      case 'instagram':
+        return `https://www.instagram.com/${cleanedUsername}`;
+      case 'tiktok':
+        return `https://www.tiktok.com/@${cleanedUsername}`;
+      default:
+        return '#'; // Plataforma no reconocida
+    }
   }
 
   prevImage(): void {

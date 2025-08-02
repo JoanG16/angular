@@ -1,101 +1,105 @@
 <!-- src/app/components/administrador/producto-crud/producto-crud.component.html -->
 <div class="crud-container">
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="assets/icon/logo.jpg" alt="Logo" />
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/icon/logo.jpg" alt="Logo" />
+    </div>
+    <nav>
+      <ul>
+        <li><a (click)="irAPagina('inicio')">🏠 Inicio</a></li>
+        <li><a (click)="irAPagina('locales')">📍 Locales</a></li>
+        <li><a (click)="irAPagina('socios')">🧑‍🤝‍🧑 Socios</a></li>
+        <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
+        <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
+        <li><a (click)="irAPagina('producto')" class="active">📦 Productos</a></li>
+      </ul>
+    </nav>
+    <nav class="bottom-nav">
+      <ul>
+        <li><a href="#Usuario">👤 Usuario</a></li>
+        <li><a href="#config">⚙️ Configuración</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content-area">
+    <!-- Formulario para CREAR Nuevo Producto -->
+    <div class="form-card">
+      <h2>Crear Nuevo Producto</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre del Producto:</label>
+          <input id="nombre" type="text" [(ngModel)]="nombre" required />
         </div>
-        <nav>
-            <ul>
-                <li><a (click)="irAPagina('inicio')">🏠 Inicio</a></li>
-                <li><a (click)="irAPagina('locales')">📍 Locales</a></li>
-                <li><a (click)="irAPagina('socios')">🧑‍🤝‍🧑 Socios</a></li>
-                <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
-                <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
-                <li><a (click)="irAPagina('producto')" class="active">📦 Productos</a></li>
-            </ul>
-        </nav>
-        <nav class="bottom-nav">
-            <ul>
-                <li><a href="#Usuario">👤 Usuario</a></li>
-                <li><a href="#config">⚙️ Configuración</a></li>
-            </ul>
-        </nav>
-    </aside>
 
-    <main class="content-area">
-        <div class="form-card">
-            <h2>{{ isEditing ? 'Editar Producto' : 'Crear Nuevo Producto' }}</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="nombre">Nombre del Producto:</label>
-                    <input id="nombre" type="text" [(ngModel)]="nombre" required />
-                </div>
+        <div class="form-group full-width">
+          <label for="descripcion_adicional">Descripción Adicional:</label>
+          <textarea id="descripcion_adicional" [(ngModel)]="descripcion_adicional"></textarea>
+        </div>
 
-                <div class="form-group full-width">
-                    <label for="descripcion_adicional">Descripción Adicional:</label>
-                    <textarea id="descripcion_adicional" [(ngModel)]="descripcion_adicional"></textarea>
-                </div>
+        <div class="form-group">
+          <label for="categoria">Categoría:</label>
+          <select id="categoria" [(ngModel)]="id_categoria" required>
+            <option [ngValue]="null">Seleccionar Categoría</option>
+            <option *ngFor="let categoria of categorias" [ngValue]="categoria.id_categoria">{{ categoria.nombre_categoria }}</option>
+          </select>
+        </div>
 
-                <div class="form-group">
-                    <label for="categoria">Categoría:</label>
-                    <select id="categoria" [(ngModel)]="id_categoria" required>
-                        <option [ngValue]="null">Seleccionar Categoría</option>
-                        <option *ngFor="let categoria of categorias" [ngValue]="categoria.id_categoria">{{
-                            categoria.nombre_categoria }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Locales Asignados:</label>
-                    <div class="selected-locales-display">
-                        <span *ngIf="localesSeleccionados.length === 0" class="placeholder-text">Ningún local
-                            seleccionado.</span>
-                        <div *ngIf="localesSeleccionados.length > 0" class="locales-chips-container">
-                            <!-- CAMBIO: Llama al nuevo método del componente para obtener el nombre -->
-                            <span class="local-chip" *ngFor="let localId of localesSeleccionados">
-                                {{ getNombreLocalParaChip(localId) }}
-                            </span>
-                        </div>
-                        <button type="button" (click)="openSelectLocalesDialog()" class="select-locales-button">
-                            Seleccionar/Editar Locales
-                        </button>
-                    </div>
-                </div>
+        <div class="form-group">
+          <label>Locales Asignados:</label>
+          <div class="selected-locales-display">
+            <span *ngIf="localesSeleccionados.length === 0" class="placeholder-text">Ningún local seleccionado.</span>
+            <div *ngIf="localesSeleccionados.length > 0" class="locales-chips-container">
+              <span class="local-chip" *ngFor="let localId of localesSeleccionados">
+                {{ getNombreLocalParaChip(localId) }}
+              </span>
             </div>
-
-            <div class="form-actions">
-                <button (click)="guardarOActualizarProducto()">
-                    {{ isEditing ? 'Actualizar Producto' : 'Guardar Producto' }}
-                </button>
-                <button *ngIf="isEditing" (click)="resetForm()" class="cancel-button">Cancelar Edición</button>
-            </div>
+            <button type="button" (click)="openSelectLocalesDialog()" class="select-locales-button">
+              Seleccionar/Editar Locales
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="table-card">
-            <h2>Lista de Productos</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Locales</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let producto of productos" [class.selected]="producto === productoSeleccionado">
-                        <td>{{ producto.nombre }}</td>
-                        <td>{{ getCategoriaNombre(producto.id_categoria) }}</td>
-                        <!-- CAMBIO: Llama al nuevo método para la tabla -->
-                        <td>{{ getLocalesNombresParaTabla(producto.locales) }}</td>
-                        <td class="action-buttons">
-                            <button (click)="seleccionarProductoParaEditar(producto)"
-                                class="edit-button">Editar</button>
-                            <button (click)="eliminarProducto(producto)" class="delete-button">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+      <div class="form-actions">
+        <button (click)="crearProducto()">Guardar Producto</button>
+        <button (click)="resetForm()" class="cancel-button">Limpiar Formulario</button>
+      </div>
+    </div>
+
+    <!-- Sección de Búsqueda y Lista de Productos -->
+    <div class="table-card">
+      <h2>Lista de Productos</h2>
+      <div class="search-bar">
+        <input type="text" [(ngModel)]="searchTerm" (input)="applyProductFilter()" placeholder="Buscar producto por nombre..." class="search-input">
+        <button (click)="applyProductFilter()" class="search-button">Buscar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Locales</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of filteredProductos">
+            <td>{{ producto.nombre }}</td>
+            <td>{{ getCategoriaNombre(producto.id_categoria) }}</td>
+            <td>{{ getLocalesNombresParaTabla(producto.locales) }}</td>
+            <td class="action-buttons">
+              <!-- CAMBIO: Llama al nuevo método para abrir el modal de edición -->
+              <button (click)="openEditProductoDialog(producto)" class="edit-button">Editar</button>
+              <button (click)="eliminarProducto(producto)" class="delete-button">Eliminar</button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredProductos.length === 0">
+            <td colspan="4" class="no-results-message">No se encontraron productos que coincidan con la búsqueda.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
 </div>
