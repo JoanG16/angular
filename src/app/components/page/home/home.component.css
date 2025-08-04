@@ -348,114 +348,210 @@ color: var(--crema);
 /* --- TIKTOK SECTION --- */
 /* Configuración general para la sección de TikTok. */
 .tiktok {
-    padding: 1rem;
-    text-align: center;
-    background-color: #3e4077;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  padding: 1rem;
+  text-align: center;
+  background-color: #3e4077;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Contenedor de servicios dentro de TikTok (posiblemente un remanente o para futuros usos). */
 .tiktok .contenedor-servicios {
-    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
+  /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
        así que lo dejo sin reglas de CSS aquí. */
 }
 
 /* Estilo el título de la sección de TikTok. */
 .tiktok h1 {
-    color: white;
-    margin-bottom: 20px;
-    font-size: 2em;
+  color: white;
+  margin-bottom: 20px;
+  font-size: 2em;
 }
 
 /* Contenedor del carrusel de TikTok y sus botones. */
 .tiktok .carousel {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 900px;
-    overflow: hidden; /* ¡Importante para ocultar el scroll horizontal de los embeds! */
-    position: relative;
-    padding: 20px 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 900px; /* Mantener el max-width para el carrusel */
+  overflow: hidden; /* ¡Importante para ocultar el scroll horizontal de los embeds! */
+  position: relative;
+  padding: 20px 0;
 }
 
 /* Estilo los botones de navegación del carrusel de TikTok. */
 .tiktok .nav-button {
-    background-color: var(--crema);
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.5em;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+  background-color: var(--crema);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 
 /* Posiciono el botón de "anterior". */
 .tiktok .nav-button.prev {
-    left: 10px;
+  left: 10px;
 }
 
 /* Posiciono el botón de "siguiente". */
 .tiktok .nav-button.next {
-    right: 10px;
+  right: 10px;
+}
+
+/* Estilos para botones deshabilitados */
+.tiktok .nav-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* Efecto hover para los botones de navegación de TikTok. */
-.tiktok .nav-button:hover {
-    background-color: #8c7317;
-    transform: translateY(-50%) scale(1.05);
+.tiktok .nav-button:not(.disabled):hover {
+  background-color: #8c7317;
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* Contenedor de los videos que se desplazan en el carrusel de TikTok. */
 .tiktok .carousel-slide {
-    display: flex;
-    flex-grow: 1;
-    gap: 20px;
-    transition: transform 0.5s ease-in-out;
+  display: flex;
+  flex-grow: 1;
+  gap: 20px;
+  transition: transform 0.5s ease-in-out;
+  /* Asegurar que el carousel-slide tenga el ancho suficiente para contener todos los videos
+     y que el transform funcione correctamente */
+  width: calc(100% * var(--total-videos-tiktok) / var(--videos-per-page-tiktok));
+  /* Usaremos variables CSS para esto, definidas en JS si es necesario */
 }
 
 /* Estilo cada ítem de video en el carrusel de TikTok. */
 .tiktok .video-item {
-    flex-shrink: 0;
-    width: 32%;
-    max-width: 300px;
-    height: auto;
-    background-color: #000;
-    border-radius: 12px;
-    padding: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+  flex-shrink: 0;
+  /* Calcular el ancho dinámicamente para que quepan 'tiktokVideosPerPage' videos */
+  width: calc((100% / var(--videos-per-page-tiktok)) - (20px * (var(--videos-per-page-tiktok) - 1) / var(--videos-per-page-tiktok)));
+  /* (100% / N) - (gap * (N-1) / N) */
+  max-width: 300px; /* Mantener un max-width para evitar que sean demasiado grandes */
+  height: auto;
+  background-color: #000;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative; /* Para el spinner */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 /* Estilo específico para los iframes de TikTok dentro de los blockquotes. */
 .tiktok .video-item blockquote {
-    margin: 0;
-    padding: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-height: 400px;
-    max-height: 580px;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  max-height: 580px;
+  box-sizing: border-box;
 }
 
 /* Oculto la sección de texto que a veces añade la API de TikTok. */
 .tiktok .video-item blockquote > section {
-    display: none;
+  display: none;
 }
 
 /* Mensaje cuando no hay contenido disponible. */
 .tiktok .no-content-message {
-    /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
-       así que lo dejo sin reglas de CSS aquí. */
+  color: white;
+  font-size: 1.2em;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* --- NUEVOS ESTILOS PARA PLACEHOLDERS DE CARGA --- */
+.video-item-placeholder {
+  flex-shrink: 0;
+  /* Calcular el ancho dinámicamente, igual que video-item */
+  width: calc((100% / var(--videos-per-page-tiktok)) - (20px * (var(--videos-per-page-tiktok) - 1) / var(--videos-per-page-tiktok)));
+  max-width: 300px;
+  min-height: 400px; /* Asegurar que tenga la misma altura mínima que el video real */
+  max-height: 580px;
+  background-color: #2a2a2a; /* Un color oscuro para el placeholder */
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #aaa; /* Color de texto para "Cargando video..." */
+  font-size: 1.1em;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Estilos para el spinner */
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--crema); /* Color del spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDAD --- */
+@media (max-width: 1200px) {
+  .tiktok .video-item, .tiktok .video-item-placeholder {
+    /* 2 videos por página */
+    width: calc((100% / 2) - 10px); /* (100% / 2) - (20px * (2-1) / 2) = 50% - 10px */
+  }
+}
+
+@media (max-width: 768px) {
+  .tiktok .video-item, .tiktok .video-item-placeholder {
+    /* 1 video por página */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 350px; /* Limitar el ancho en móviles para que no sea demasiado grande */
+  }
+  .tiktok .carousel {
+    padding: 20px 0; /* Ajustar padding si es necesario */
+  }
+  .tiktok .nav-button {
+    padding: 8px 18px;
+    font-size: 1.2em;
+  }
+  .tiktok .nav-button.prev {
+    left: 5px;
+  }
+  .tiktok .nav-button.next {
+    right: 5px;
+  }
+}
+
+/* Variables CSS para el cálculo de ancho en carousel-slide y video-item */
+/* Estas variables se establecerán dinámicamente en TypeScript */
+:root {
+  --videos-per-page-tiktok: 3; /* Valor por defecto, se ajusta en TS */
+  --total-videos-tiktok: 1; /* Valor por defecto, se ajusta en TS */
 }
 
 
