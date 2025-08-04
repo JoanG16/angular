@@ -414,8 +414,8 @@ export class MapaContenedoresComponent implements OnInit, OnDestroy {
         if (isCurrentlyFiltered && !isThisContainerInCurrentFilterResults) {
           // Si hay filtros activos y este contenedor NO está en los resultados del filtro
           this.highlightedLayer.setStyle({
-            color: '#555555',
-            fillColor: '#333333',
+            color: '#262626ff',
+            fillColor: '#131313ff',
             fillOpacity: 0.1,
             weight: 1,
             interactive: false
