@@ -1,90 +1,56 @@
-// src/app/components/administrador/login/login.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common'; // Módulo necesario para directivas como *ngIf
+import { FormsModule } from '@angular/forms'; // Módulo necesario para [(ngModel)]
 import { AuthService } from '../../../services/administrador/auth.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
+  standalone: true, // Indica que este es un componente standalone
   imports: [
-    CommonModule,
-    FormsModule,
-    MatDialogModule,
-    RouterLink
+    CommonModule, // Agregado para usar *ngIf
+    FormsModule, // Agregado para usar [(ngModel)]
+    RouterLink // Agregado por si tienes enlaces en tu plantilla
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  username = '';
-  password = '';
-  errorMessage: string | null = null;
+export class LoginComponent implements OnInit {
+  credentials = { username: '', password: '' };
+  errorMessage: string | null = null; // Propiedad que el HTML espera
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private dialog: MatDialog
-  ) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void { }
 
   /**
-   * Maneja el envío del formulario de inicio de sesión.
-   * Ahora se suscribe al Observable del servicio.
+   * Maneja el formulario de inicio de sesión.
+   * Redirige al usuario según su rol.
    */
-  onLoginSubmit(): void { // Ya no es 'async'
-    this.errorMessage = null;
-
-    if (!this.username || !this.password) {
-      this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          title: 'Campos Requeridos',
-          message: 'Por favor, ingresa tu nombre de usuario y contraseña.',
-          confirmButtonText: 'Aceptar',
-          hideCancelButton: true
-        }
-      });
-      return;
-    }
-
-    console.log('Intentando iniciar sesión con:', this.username);
-
-    this.authService.login(this.username, this.password).subscribe({
-      next: (response) => {
-        console.log('Inicio de sesión exitoso:', response);
-        // Redirigir al panel de administración o a una página de inicio segura
+  onLoginSubmit() { // Método que el HTML espera
+    this.authService.login(this.credentials.username, this.credentials.password).pipe(
+      catchError((err: HttpErrorResponse) => {
+        this.errorMessage = err.error.message || 'Error de autenticación';
+        return throwError(() => new Error(this.errorMessage!));
+      })
+    ).subscribe(response => {
+      const userRole = this.authService.getUserRole();
+      if (userRole === 'admin') {
         this.router.navigate(['/inicio']);
-        console.log('Intentando navegar a /inicio');
-      },
-      error: (error) => {
-        console.error('Error durante el inicio de sesión (Observable):', error);
-        // El handleError del servicio ya lanza un error, aquí lo capturamos
-        let displayMessage = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
-        if (error instanceof Error) { // Si el error es el que lanzamos desde handleError
-          displayMessage = error.message;
-        } else if (error instanceof HttpErrorResponse) {
-          // Fallback si por alguna razón handleError no lo transformó
-          if (error.status === 401) {
-            displayMessage = 'Nombre de usuario o contraseña incorrectos.';
-          } else {
-            displayMessage = `Error en el servidor: ${error.status} - ${error.statusText || 'Error desconocido'}`;
-          }
+      } else if (userRole === 'local_owner') {
+        const localIdString = this.authService.getUserLocalId();
+        if (localIdString) {
+          const localId = Number(localIdString);
+          this.router.navigate(['/comerciantes/dashboard', localId]);
+        } else {
+          this.errorMessage = 'Usuario no tiene un local asignado.';
+          this.authService.logout();
         }
-
-        this.dialog.open(ConfirmDialogComponent, {
-          data: {
-            title: 'Error de Inicio de Sesión',
-            message: displayMessage,
-            confirmButtonText: 'Aceptar',
-            hideCancelButton: true
-          }
-        });
-      },
-      complete: () => {
-        console.log('Proceso de inicio de sesión completado.');
+      } else {
+        this.router.navigate(['/login']);
       }
     });
   }

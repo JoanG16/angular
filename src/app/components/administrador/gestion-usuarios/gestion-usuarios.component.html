@@ -1,0 +1,115 @@
+<!-- src/app/components/gestion-usuarios/gestion-usuarios.component.html -->
+<div class="main-container">
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>{{ isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}</h2>
+        <p>Completa los campos para {{ isEditMode ? 'actualizar' : 'crear' }} una cuenta.</p>
+      </div>
+
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+
+        <!-- Mensajes de estado -->
+        <div *ngIf="errorMessage" class="message error-message">
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="message success-message">
+          {{ successMessage }}
+        </div>
+
+        <!-- Spinner de carga -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="loader"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Nombre de Usuario</label>
+          <input type="text" id="username" formControlName="username" placeholder="Escribe el nombre de usuario">
+          <div *ngIf="userForm.get('username')?.invalid && (userForm.get('username')?.dirty || userForm.get('username')?.touched)" class="validation-message">
+            <span *ngIf="userForm.get('username')?.errors?.['required']">El nombre de usuario es obligatorio.</span>
+            <span *ngIf="userForm.get('username')?.errors?.['minlength']">Mínimo 4 caracteres.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Rol</label>
+          <select id="role" formControlName="role">
+            <option value="local_owner">Dueño de Local</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="userForm.get('role')?.value === 'local_owner'">
+          <label for="local">Asignar a Local</label>
+          <select id="local" formControlName="id_local">
+            <option [ngValue]="null" disabled>Selecciona un local</option>
+            <option *ngFor="let local of locales" [ngValue]="local.id_local">
+              {{ local.nombre_del_negocio }} ({{ local.codigo_local }})
+            </option>
+          </select>
+          <div *ngIf="userForm.get('id_local')?.invalid && (userForm.get('id_local')?.dirty || userForm.get('id_local')?.touched)" class="validation-message">
+            <span>Debes seleccionar un local para el dueño.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" formControlName="password" placeholder="Escribe la contraseña">
+          <div *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.dirty || userForm.get('password')?.touched)" class="validation-message">
+            <span *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</span>
+            <span *ngIf="userForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña</label>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirma la contraseña">
+          <div *ngIf="userForm.get('confirmPassword')?.invalid && (userForm.get('confirmPassword')?.dirty || userForm.get('confirmPassword')?.touched)" class="validation-message">
+            <span *ngIf="userForm.get('confirmPassword')?.errors?.['required']">La confirmación es obligatoria.</span>
+          </div>
+          <div *ngIf="userForm.get('password')?.value !== userForm.get('confirmPassword')?.value && userForm.get('confirmPassword')?.dirty" class="validation-message">
+            <span>Las contraseñas no coinciden.</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="userForm.invalid || isLoading">{{ isEditMode ? 'Actualizar Usuario' : 'Crear Usuario' }}</button>
+          <button *ngIf="isEditMode" type="button" class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <h3>Lista de Usuarios</h3>
+    <div *ngIf="users.length === 0 && !isLoading" class="no-content-message">
+      No se encontraron usuarios.
+    </div>
+    <div *ngIf="isLoading" class="loading-spinner-table">
+        <div class="loader"></div>
+    </div>
+    <table *ngIf="users.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre de Usuario</th>
+          <th>Rol</th>
+          <th>Local Asignado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id_user }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ getLocalName(user.id_local) }}</td>
+          <td>
+            <button class="btn-edit" (click)="editUser(user)">Editar</button>
+            <button class="btn-delete" (click)="deleteUser(user.id_user)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

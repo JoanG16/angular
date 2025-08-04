@@ -1,0 +1,115 @@
+<!-- src/app/components/administrador/comerciantes/comerciantes.component.html -->
+<div class="crud-container">
+  <!-- Sidebar, con el nuevo diseño -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="assets/icon/logo.jpg" alt="Logo" />
+    </div>
+    <nav>
+      <ul>
+        <!-- Enlace activo a su propio dashboard -->
+        <li>
+          <a [routerLink]="['/comerciantes/dashboard', localId]" class="active">
+            🏠 Mi Local
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <nav class="bottom-nav">
+      <div class="user-profile">
+        <!-- Mostramos el nombre de usuario sin que sea un enlace -->
+        <p class="user-name">👤 Hola {{ authService.getUsername() || 'Comerciante' }}</p>
+      </div>
+      <ul>
+        <li>
+          <a (click)="logout()" cursor="pointer">
+            🚪 Cerrar Sesión
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal con los detalles del local (el resto del código HTML se mantiene igual) -->
+  <main class="content-area">
+    <!-- El resto de tu código HTML aquí... -->
+    <ng-container *ngIf="isLoading" class="loading-state">
+      <div class="loader"></div>
+      <p>Cargando información del local...</p>
+    </ng-container>
+
+    <ng-container *ngIf="localData && !isLoading">
+      <div class="local-detail-card">
+        <div class="local-header">
+          <h1 class="local-title">{{ localData.nombre_del_negocio }}</h1>
+          <p class="local-code">Código Local: {{ localData.codigo_local }}</p>
+        </div>
+
+        <div class="image-gallery">
+          <div class="main-image-container">
+            <img
+              [src]="localData.imagen_urls && localData.imagen_urls.length > 0 ? localData.imagen_urls[currentImageIndex] : 'https://placehold.co/600x400/ADD8E6/000000?text=No+Image'"
+              alt="Imagen de {{ localData.nombre_del_negocio }}"
+              class="main-image"
+              (error)="onImageError($event)"
+            />
+            <button class="nav-button prev" (click)="prevImage()" *ngIf="localData.imagen_urls && localData.imagen_urls.length > 1">&#10094;</button>
+            <button class="nav-button next" (click)="nextImage()" *ngIf="localData.imagen_urls && localData.imagen_urls.length > 1">&#10095;</button>
+          </div>
+          <div class="thumbnail-gallery" *ngIf="localData.imagen_urls && localData.imagen_urls.length > 1">
+            <img
+              *ngFor="let imageUrl of localData.imagen_urls; let i = index"
+              [src]="imageUrl"
+              alt="Miniatura {{i+1}}"
+              class="thumbnail-image"
+              [class.active]="i === currentImageIndex"
+              (click)="goToImage(i)"
+              (error)="onImageError($event)"
+            />
+          </div>
+        </div>
+
+        <div class="local-info-grid">
+          <div class="info-item">
+            <span class="info-label">Teléfono:</span>
+            <span class="info-value">{{ localData.telefono || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Contenedor N°:</span>
+            <span class="info-value">{{ localData.codigo_local }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Bloque:</span>
+            <span class="info-value">{{ localData.nombre_bloque || 'N/A' }}</span>
+          </div>
+        </div>
+
+        <div class="local-description-section">
+          <h3 class="section-title">Acerca de mi local:</h3>
+          <p class="description-text">{{ localData.descripcion || 'No hay descripción disponible.' }}</p>
+        </div>
+
+        <div class="social-links-section" *ngIf="localData.facebook || localData.instagram || localData.tiktok">
+          <h3 class="section-title">Síguenos en redes:</h3>
+          <div class="social-links-container">
+            <a *ngIf="localData.facebook" [href]="getSocialLink('facebook', localData.facebook)" target="_blank" class="social-link facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a *ngIf="localData.instagram" [href]="getSocialLink('instagram', localData.instagram)" target="_blank" class="social-link instagram">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a *ngIf="localData.tiktok" [href]="getSocialLink('tiktok', localData.tiktok)" target="_blank" class="social-link tiktok">
+              <i class="fab fa-tiktok"></i> TikTok
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!localData && !isLoading">
+      <div class="no-local-found">
+        <p>No se encontraron detalles para su local.</p>
+      </div>
+    </ng-container>
+  </main>
+</div>

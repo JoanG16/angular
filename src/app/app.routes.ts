@@ -12,6 +12,9 @@ import { ProductoCrudComponent } from './components/administrador/producto-crud/
 import { LoginComponent } from './components/administrador/login/login.component'; // Asegúrate de que esta ruta sea correcta
 import {LocalComponent} from './components/page/locales/locales.component'
 import { SobreNosotrosComponent } from './components/page/sobre-nosotros/sobre-nosotros.component';
+import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
+import { ComerciantesComponent } from './components/administrador/comerciantes/comerciantes.component'; // ¡NUEVO COMPONENTE!
+
 // Importar el guardia de autenticación
 import { authGuardFn } from './guards/auth.guard';
 
@@ -23,6 +26,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 {path: 'local', component: LocalComponent},
 {path: 'sobre-nosotros', component: SobreNosotrosComponent},
+{path: 'gestion-usuarios', component: GestionUsuariosComponent},
   // Rutas protegidas (requieren autenticación)
   // Utiliza `canActivate` con el guardia de autenticación para estas rutas
   { path: 'plano_contenedores', component: PlanoCoordenadasComponent, canActivate: [authGuardFn] },
@@ -31,6 +35,11 @@ export const routes: Routes = [
   { path: 'inicio', component: InicioComponent, canActivate: [authGuardFn] },
   { path: 'producto', component: ProductoCrudComponent, canActivate: [authGuardFn] },
   { path: 'oferta', component: OfertasComponent, canActivate: [authGuardFn] },
+{ 
+    path: 'comerciantes/dashboard/:id', 
+    component: ComerciantesComponent, 
+    canActivate: [authGuardFn] 
+  },
 
   // Ruta comodín para cualquier otra ruta no definida
   // Redirige a la página de inicio. Puedes cambiarlo a '/login' si prefieres.

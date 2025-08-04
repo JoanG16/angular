@@ -1,10 +1,10 @@
 // src/app/components/page/home/home.component.ts
-import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core'; // Añadir ChangeDetectorRef
+import { Component, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy, HostListener } from '@angular/core'; // Añadir HostListener
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../../../safe-url.pipe';
 import { Router } from '@angular/router';
 
-// Importar el servicio de ofertas y la interfaz
+// NUEVO: Importar el servicio de ofertas y la interfaz
 import { OfertaService } from '../../../services/administrador/ofertas.service';
 import { Oferta } from '../../../interfaces/oferta.interface';
 
@@ -28,26 +28,19 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   tiktokVideosCargados: Oferta[] = [];
   youtubeUrlsCargados: Oferta[] = [];
 
-  tiktokVideos: string[] = [];
-  youtubeUrls: string[] = [];
-  promociones: { promocion: string }[] = [];
+  tiktokVideos: string[] = []; // Se poblará desde tiktokVideosCargados
+  youtubeUrls: string[] = []; // Se poblará desde youtubeUrlsCargados
+  promociones: { promocion: string }[] = []; // Se poblará desde promocionesCargadas
 
-  currentSlideIndex: number = 0; // Para el carrusel de TikTok
+  // Renombra currentTiktokIndex a currentSlideIndex para que coincida con el HTML
+  currentSlideIndex: number = 0; // Este es para el carrusel de TikTok
   tiktokVideosPerPage: number = 3; // Valor inicial, ajustado por CSS/JS
 
-  currentIndex: number = 0; // Para el carrusel de YouTube
+  currentIndex: number = 0; // Este es para el carrusel de YouTube
   videosPerPage: number = 2; // Valor inicial, ajustado por CSS/JS
 
   comentarioActual = 0;
   private intervalo: any;
-
-  // Estado de carga para los videos de TikTok
-  tiktokVideosLoading: boolean = true;
-  // Bandera para saber si el script de TikTok ya fue añadido al DOM
-  private tiktokEmbedScriptAdded: boolean = false;
-  // Mensaje de error para TikTok
-  tiktokErrorMessage: string | null = null;
-
 
   comentarios = [
     { texto: 'Es un lugar increíble para hacer las compras diarias, todo está bien organizado.', autor: 'María Fernanda Gómez' },
@@ -59,8 +52,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private ofertaService: OfertaService,
-    private cdr: ChangeDetectorRef // Inyectar ChangeDetectorRef
+    private ofertaService: OfertaService
   ) { }
 
   ngOnInit(): void {
@@ -72,60 +64,55 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Solución NG0100: Envolver en setTimeout para el siguiente ciclo de detección de cambios
+  // Ajustar videosPerPage en función del tamaño de la pantalla
+  this.adjustCarouselSettings();
+  window.addEventListener('resize', this.adjustCarouselSettings.bind(this));
+
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries, observerInstance) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observerInstance.unobserve(entry.target);
+      }
+    });
+  }, options);
+
+  const animatedElements = document.querySelectorAll('.animated');
+  animatedElements.forEach(el => observer.observe(el));
+
+  // ✅ Forzar reproducción automática del video una vez montado el DOM
+  const video = document.getElementById('header-video') as HTMLVideoElement;
+  if (video) {
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+
+    // Esperar al siguiente tick del DOM para asegurar carga completa
     setTimeout(() => {
-      this.adjustCarouselSettings();
-      this.cdr.detectChanges(); // Forzar detección de cambios después de ajustar
-    }, 0);
-    
-    window.addEventListener('resize', this.adjustCarouselSettings.bind(this));
-
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries, observerInstance) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observerInstance.unobserve(entry.target);
-        }
+      video.play().then(() => {
+        console.log('Autoplay ok');
+      }).catch((error) => {
+        console.warn('Autoplay bloqueado por el navegador:', error);
       });
-    }, options);
-
-    const animatedElements = document.querySelectorAll('.animated');
-    animatedElements.forEach(el => observer.observe(el));
-
-    const video = document.getElementById('header-video') as HTMLVideoElement;
-    if (video) {
-      video.muted = true;
-      video.autoplay = true;
-      video.playsInline = true;
-
-      setTimeout(() => {
-        video.play().then(() => {
-          console.log('Autoplay ok');
-        }).catch((error) => {
-          console.warn('Autoplay bloqueado por el navegador:', error);
-        });
-      }, 0);
-    }
+    }, 0);
   }
+}
 
 
   ngOnDestroy(): void {
     if (this.intervalo) {
       clearInterval(this.intervalo);
     }
-    window.removeEventListener('resize', this.adjustCarouselSettings.bind(this));
+    window.removeEventListener('resize', this.adjustCarouselSettings.bind(this)); // Cambiado aquí también
   }
 
   cargarOfertas(): void {
-    this.tiktokVideosLoading = true;
-    this.tiktokErrorMessage = null; // Limpiar cualquier mensaje de error previo
-
     this.ofertaService.getAllOfertas().subscribe({
       next: (ofertas: Oferta[]) => {
         this.promocionesCargadas = ofertas.filter(o => o.tipo_contenido === 'promocion' && o.activo);
@@ -147,15 +134,10 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
         console.log('URLs de YouTube cargadas para incrustar:', this.youtubeUrls);
         console.log('URLs de TikTok cargadas para incrustar:', this.tiktokVideos);
 
-        this.currentSlideIndex = 0;
-        this.currentIndex = 0;
-        
-        // Solución NG0100: Envolver en setTimeout para el siguiente ciclo de detección de cambios
-        setTimeout(() => {
-          this.adjustCarouselSettings();
-          this.cdr.detectChanges(); // Forzar detección de cambios después de ajustar
-        }, 0);
-
+        // Reiniciar índices de carrusel después de cargar y ajustar vistas
+        this.currentSlideIndex = 0; // Para TikTok
+        this.currentIndex = 0; // Para YouTube
+        this.adjustCarouselSettings(); // Ajustar configuración de carrusel
 
         console.log('Ofertas cargadas y distribuidas:', {
           promociones: this.promociones,
@@ -163,90 +145,82 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
           youtubeUrls: this.youtubeUrls
         });
 
-        if (this.tiktokVideos.length > 0) {
-          this.loadTikTokEmbeds();
-        } else {
-          this.tiktokVideosLoading = false; // Si no hay videos, ocultar spinner inmediatamente
-        }
+        // Cargar y procesar los embeds de TikTok después de que los datos estén disponibles
+        this.loadTikTokEmbeds();
       },
       error: (err) => {
         console.error('Error al cargar las ofertas:', err);
-        this.tiktokVideosLoading = false;
-        this.tiktokErrorMessage = 'Error al cargar los videos de TikTok. Por favor, inténtalo de nuevo más tarde.';
       }
     });
   }
 
   /**
-   * Carga el script de TikTok y le indica que procese los embeds,
-   * esperando a que la función `window.tiktok.embed.load` esté disponible.
+   * Carga el script de TikTok y le indica que procese los embeds.
+   * Se llama después de que los videos de TikTok son cargados.
    */
   loadTikTokEmbeds(): void {
-    if (this.tiktokVideos.length === 0) {
-      this.tiktokVideosLoading = false;
-      return; // No hay videos para cargar
-    }
-
-    if (!this.tiktokEmbedScriptAdded) {
+    // Solo cargar el script si hay videos de TikTok y no se ha cargado ya
+    if (this.tiktokVideos.length > 0 && !document.getElementById('tiktok-embed-script')) {
       const script = document.createElement('script');
       script.src = 'https://www.tiktok.com/embed.js';
       script.async = true;
-      script.id = 'tiktok-embed-script';
+      script.id = 'tiktok-embed-script'; // Añadir un ID para evitar recargas
+      script.onload = () => {
+        // Asegurarse de que el objeto tiktok.embed esté disponible
+        if (window.tiktok && window.tiktok.embed && typeof window.tiktok.embed.load === 'function') {
+          console.log('TikTok embed script loaded. Attempting to load embeds.');
+          window.tiktok.embed.load(); // Le dice a TikTok que busque nuevos embeds
+        } else {
+          console.warn('window.tiktok.embed.load is not available yet.');
+        }
+      };
       script.onerror = (error) => {
         console.error('Error loading TikTok embed script:', error);
-        this.tiktokVideosLoading = false;
-        this.tiktokErrorMessage = 'No se pudo cargar el script de TikTok. Verifica tu conexión a internet.';
-        this.cdr.detectChanges(); // Forzar detección de cambios para mostrar el error
       };
       document.body.appendChild(script);
-      this.tiktokEmbedScriptAdded = true;
-    }
-
-    let attempts = 0;
-    const maxAttempts = 40; // Aumentar a 40 intentos (40 * 500ms = 20 segundos)
-    const intervalTime = 500; // Cada 500ms
-
-    const checkTikTokEmbed = setInterval(() => {
-      attempts++;
+    } else if (this.tiktokVideos.length > 0 && document.getElementById('tiktok-embed-script')) {
+      // Si el script ya está cargado, solo intentar recargar los embeds
       if (window.tiktok && window.tiktok.embed && typeof window.tiktok.embed.load === 'function') {
-        clearInterval(checkTikTokEmbed);
-        console.log('TikTok embed script and function are ready. Loading embeds.');
+        console.log('TikTok embed script already loaded. Reloading embeds.');
         window.tiktok.embed.load();
-        // Dar un tiempo más prudente para que los iframes comiencen a renderizarse
-        setTimeout(() => {
-          this.tiktokVideosLoading = false;
-          this.cdr.detectChanges(); // Forzar detección de cambios para ocultar el spinner
-        }, 2500); // Aumentado a 2.5 segundos
-      } else if (attempts >= maxAttempts) {
-        clearInterval(checkTikTokEmbed);
-        console.warn('TikTok embed.load did not become available after multiple attempts.');
-        this.tiktokVideosLoading = false;
-        this.tiktokErrorMessage = 'Los videos de TikTok tardan demasiado en cargar o no están disponibles.';
-        this.cdr.detectChanges(); // Forzar detección de cambios para mostrar el error
-      } else {
-        console.log(`Attempt ${attempts} to load TikTok embeds...`);
       }
-    }, intervalTime);
+    }
   }
 
 
+  // Métodos de navegación para TikTok
+  // Ya no necesitas visibleTiktokVideos si el transform se encarga de todo
+  // get visibleTiktokVideos(): string[] {
+  //   const startIndex = this.currentSlideIndex;
+  //   const endIndex = startIndex + this.tiktokVideosPerPage;
+  //   return this.tiktokVideos.slice(startIndex, endIndex);
+  // }
+
   nextTiktokVideo(): void {
+    // Asegúrate de que el índice no supere el número total de videos menos los videos por página
     if (this.currentSlideIndex < this.tiktokVideos.length - this.tiktokVideosPerPage) {
       this.currentSlideIndex++;
+      console.log('nextTiktokVideo: currentSlideIndex =', this.currentSlideIndex);
     } else {
+      // Si llegamos al final, volvemos al principio
       this.currentSlideIndex = 0;
+      console.log('nextTiktokVideo: Reiniciado a 0');
     }
   }
 
   prevTiktokVideo(): void {
     if (this.currentSlideIndex > 0) {
       this.currentSlideIndex--;
+      console.log('prevTiktokVideo: currentSlideIndex =', this.currentSlideIndex);
     } else {
+      // Si estamos en el principio, vamos al final (o al último conjunto visible)
       this.currentSlideIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
+      console.log('prevTiktokVideo: Reiniciado al final (o último conjunto visible) =', this.currentSlideIndex);
     }
   }
 
 
+  // Métodos de navegación para YouTube
   get visibleVideos(): string[] {
     return this.youtubeUrls.slice(this.currentIndex, this.currentIndex + this.videosPerPage);
   }
@@ -267,40 +241,52 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  // Renombrada la función para ser más genérica, ya que ajusta settings para ambos carruseles
   adjustCarouselSettings(): void {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 768) { // Mobile and small tablets
       this.tiktokVideosPerPage = 1;
       this.videosPerPage = 1;
-    } else if (window.innerWidth <= 1200) {
+    } else if (window.innerWidth <= 1200) { // Medium screens (large tablets, small laptops)
       this.tiktokVideosPerPage = 2;
       this.videosPerPage = 2;
-    } else {
+    } else { // Desktop
       this.tiktokVideosPerPage = 3;
       this.videosPerPage = 2;
     }
-
+    // Asegurar que los índices actuales no excedan los límites después del ajuste
     if (this.currentSlideIndex + this.tiktokVideosPerPage > this.tiktokVideos.length) {
       this.currentSlideIndex = Math.max(0, this.tiktokVideos.length - this.tiktokVideosPerPage);
     }
     if (this.currentIndex + this.videosPerPage > this.youtubeUrls.length) {
       this.currentIndex = Math.max(0, this.youtubeUrls.length - this.videosPerPage);
     }
-
-    // Actualizar las variables CSS
-    document.documentElement.style.setProperty('--videos-per-page-tiktok', this.tiktokVideosPerPage.toString());
-    document.documentElement.style.setProperty('--total-videos-tiktok', this.tiktokVideos.length.toString());
   }
 
+  /**
+   * Extrae el ID numérico de un URL de TikTok.
+   * Asume URLs como:
+   * - https://www.tiktok.com/@username/video/1234567890123456789
+   * - https://vm.tiktok.com/ZM839dG/ (Para estas, el ID no es numérico, TikTok las maneja por el cite)
+   * Devolverá el ID numérico si lo encuentra, de lo contrario, una cadena vacía.
+   */
   getVideoId(url: string): string {
+    // Intenta extraer el ID numérico de URLs largas
     const longUrlMatch = url.match(/\/video\/(\d+)/);
     if (longUrlMatch && longUrlMatch[1]) {
       return longUrlMatch[1];
     }
-    return '';
+
+    // Para URLs cortas como vm.tiktok.com, TikTok embed script a menudo solo necesita el 'cite'
+    // No extraemos un 'data-video-id' numérico en este caso, el script lo resolverá.
+    // Si necesitas un ID único para cada video en tu lógica interna, podrías generar uno.
+    return ''; // Devuelve vacío si no es una URL con ID numérico explícito
   }
 
+  // Método irAPagina actualizado para aceptar un parámetro de categoría
   irAPagina(path: string, category: string | null = null): void {
     const navigationExtras = category ? { queryParams: { category: category } } : {};
     this.router.navigate([path], navigationExtras);
   }
+
+  
 }

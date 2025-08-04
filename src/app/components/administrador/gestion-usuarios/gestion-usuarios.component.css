@@ -1,0 +1,273 @@
+/* src/app/components/gestion-usuarios/gestion-usuarios.component.css */
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f0f2f5;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-section {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.form-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  box-sizing: border-box;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+  font-weight: 700;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.validation-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+button[type="submit"] {
+  padding: 1rem 2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+}
+
+/* Tabla de usuarios */
+.table-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.table-section h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+thead th {
+  background-color: #007bff;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.btn-edit, .btn-delete {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.loading-spinner-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-content-message {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem;
+  }
+
+  .table-section {
+    padding: 1rem;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

@@ -74,59 +74,31 @@
 
 
 
-  <!-- src/app/components/page/home/home.component.html -->
-
-<!-- ... otras secciones de tu HTML ... -->
-
-<section class="tiktok animated fade-in-left">
-  <div class="contenedor-servicios">
-    <div class="texto-servicios animated fade-in-up">
-      <h1>Lo Mejor de TikTok, ¡Justo Aquí!</h1>
-    </div>
-
-    <!-- Sección de carga para TikTok -->
-    <div class="carousel" *ngIf="tiktokVideosLoading">
-      <button class="nav-button prev disabled" disabled>&#10094;</button>
-      <div class="carousel-slide">
-        <ng-container *ngFor="let i of [].constructor(tiktokVideosPerPage)">
-          <div class="video-item-placeholder">
-            <div class="spinner"></div>
-            <p>Cargando video...</p>
-          </div>
-        </ng-container>
+  <section class="tiktok animated fade-in-left">
+     <div class="contenedor-servicios">
+      <div class="texto-servicios animated fade-in-up">
+              <h1>Lo Mejor de TikTok, ¡Justo Aquí!</h1>
       </div>
-      <button class="nav-button next disabled" disabled>&#10095;</button>
-    </div>
-
-    <!-- Mensaje de error de TikTok -->
-    <div class="no-content-message" *ngIf="!tiktokVideosLoading && tiktokErrorMessage">
-      <p>{{ tiktokErrorMessage }}</p>
-      <p>Por favor, intenta recargar la página o verifica tu conexión a internet.</p>
-    </div>
-
-    <!-- Sección de TikTok real, visible solo cuando no está cargando y hay videos -->
-    <div class="carousel" *ngIf="!tiktokVideosLoading && tiktokVideos.length > 0">
-      <button class="nav-button prev" (click)="prevTiktokVideo()">&#10094;</button>
-      <div class="carousel-slide" [style.transform]="'translateX(-' + currentSlideIndex * (100 / tiktokVideosPerPage) + '%)'">
-        <div class="video-item" *ngFor="let video of tiktokVideos">
-          <blockquote class="tiktok-embed" [attr.cite]="video" [attr.data-video-id]="getVideoId(video)">
-            <section>
-              <p><a target="_blank" [attr.title]="'video'" [attr.href]="video"></a></p>
-            </section>
-          </blockquote>
-        </div>
-      </div>
-      <button class="nav-button next" (click)="nextTiktokVideo()">&#10095;</button>
-    </div>
-
-    <!-- Mensaje de no contenido, visible solo cuando no está cargando y no hay videos Y NO HAY MENSAJE DE ERROR -->
-    <div class="no-content-message" *ngIf="!tiktokVideosLoading && tiktokVideos.length === 0 && !tiktokErrorMessage">
-      <p>No hay videos de TikTok activos en este momento.</p>
-    </div>
+       <div class="carousel" *ngIf="tiktokVideos.length > 0">
+        <button class="nav-button prev" (click)="prevTiktokVideo()">&#10094;</button>
+       <div class="carousel-slide" [style.transform]="'translateX(-' + currentSlideIndex * 100 + '%)'">
+  <div class="video-item" *ngFor="let video of tiktokVideos">
+    <blockquote class="tiktok-embed"
+                [attr.cite]="video"
+                [attr.data-video-id]="getVideoId(video)">
+      <section>
+        <p><a target="_blank" [attr.title]="'video'" [attr.href]="video"></a></p>
+      </section>
+    </blockquote>
   </div>
-</section>
-
-<!-- ... otras secciones de tu HTML ... -->
+</div>
+        <button class="nav-button next" (click)="nextTiktokVideo()">&#10095;</button>
+      </div>
+      <div class="no-content-message" *ngIf="tiktokVideos.length === 0">
+        <p>No hay videos de TikTok activos en este momento.</p>
+      </div>
+    </div>
+    </section>
 
   
   <!-- NUEVA SECCIÓN: SERVICIOS -->

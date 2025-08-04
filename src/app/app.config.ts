@@ -6,7 +6,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthService } from './services/administrador/auth.service'; // Asegúrate de que esta importación sea correcta
 import { environment } from '../environments/environment';
-
+import { FormsModule } from '@angular/forms'; 
 // Importar todos los servicios que necesitan ser provistos (si no tienen providedIn: 'root')
 import { ContenedoresService } from './services/administrador/contenedores.service';
 import { LocalesService } from './services/administrador/locales.service';
@@ -52,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     ProductoService,
     SociosService,
     OfertaService,
+    FormsModule,
     provideAnimationsAsync(),
     {
       provide: HTTP_INTERCEPTORS,
