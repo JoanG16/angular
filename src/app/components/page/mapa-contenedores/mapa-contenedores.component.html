@@ -48,6 +48,13 @@
         <span>Cargando datos del mapa...</span>
       </div>
 
+      <!-- Nuevo: Display de filtros activos -->
+      <div *ngIf="searchTerm || selectedCategory" class="active-filters-display">
+        <h4>Filtros Activos:</h4>
+        <p *ngIf="searchTerm">Búsqueda: <strong>"{{ searchTerm }}"</strong></p>
+        <p *ngIf="selectedCategory">Categoría: <strong>{{ selectedCategory }}</strong></p>
+      </div>
+
       <!-- Panel de información del contenedor seleccionado -->
       <div class="info-panel" [class.show]="contenedorSeleccionado" [@panelAnimation]="contenedorSeleccionado ? 'visible' : 'hidden'">
         <h3 class="panel-title">Información del Contenedor</h3>
@@ -89,7 +96,7 @@
     <!-- Contenedor del mapa -->
     <div class="map-area">
       <!-- Leyenda de colores de bloques -->
-      <!-- <div class="block-legend">
+      <div class="block-legend">
         <h4 class="legend-title">Bloques por Color</h4>
         <div class="legend-items">
           <div *ngFor="let legend of blockLegends" class="legend-item">
@@ -97,7 +104,7 @@
             <span class="legend-label">Bloque {{ legend.bloque }}</span>
           </div>
         </div>
-      </div> -->
+      </div>
       <div id="map"></div>
     </div>
   </div>
