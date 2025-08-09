@@ -7,6 +7,7 @@ import { User, UserResponse, SingleUserResponse } from '../../../interfaces/user
 import { Local, LocalResponse } from '../../../interfaces/locales.interface';
 import { UserService } from '../../../services/administrador/user.service';
 import { LocalesService } from '../../../services/administrador/locales.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -28,6 +29,7 @@ export class GestionUsuariosComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private router: Router,
     private localesService: LocalesService
   ) {
     this.userForm = this.fb.group({
@@ -184,4 +186,10 @@ export class GestionUsuariosComponent implements OnInit {
     const local = this.locales.find(l => l.id_local === id_local);
     return local ? local.nombre_del_negocio : 'N/A';
   }
+
+   irAPagina(titulo: string): void {
+    this.router.navigate([titulo])
+
+  }
+
 }
