@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
+import { SidebarComponent } from '../sidebar/sidebar.component';
+
 import { SociosService } from '../../../services/administrador/socios.service';
 import { Socio } from '../../../interfaces/socio.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component'; // Asegúrate de la ruta
@@ -17,6 +19,7 @@ import { Router } from '@angular/router';
     CommonModule,
     HttpClientModule,
     FormsModule,
+    SidebarComponent,
     MatDialogModule
   ],
   templateUrl: './socios.component.html',

@@ -31,7 +31,7 @@ html, body {
   padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   border-radius: 0 20px 20px 0;
   box-shadow: var(--sombra-media);
   overflow-y: auto; /* Permite scroll si el contenido del sidebar es muy largo */
@@ -50,7 +50,7 @@ html, body {
 .sidebar nav ul {
   list-style: none;
   padding: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .sidebar nav ul li a {
@@ -59,7 +59,7 @@ html, body {
   display: block;
   padding: 0.8rem 1rem;
   border-radius: 8px;
-  margin-bottom: 0.6rem;
+  margin-bottom: 1rem;
   transition: background 0.3s ease, transform 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   font-weight: 500;
@@ -365,7 +365,7 @@ tbody tr.selected {
     height: auto;
     border-radius: 0;
   }
-  
+
   .content-area {
     margin-left: 0; /* Remueve el margen para que ocupe todo el ancho */
     padding: 1rem;

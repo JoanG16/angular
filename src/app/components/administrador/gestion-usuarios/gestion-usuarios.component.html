@@ -12,12 +12,12 @@
                 <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
                 <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
                 <li><a (click)="irAPagina('producto')">📦 Productos</a></li>
-                <li><a (click)="irAPagina('usuarios')" class="active">👤 Usuarios</a></li>
+                <li><a (click)="irAPagina('gestion-usuarios')" class="active">👤 Usuarios</a></li>
             </ul>
         </nav>
         <nav class="bottom-nav">
             <ul>
-                <li><a href="#config">⚙️ Configuración</a></li>
+
             </ul>
         </nav>
     </aside>
@@ -41,7 +41,7 @@
                 <div *ngIf="isLoading" class="loading-spinner">
                     <div class="loader"></div>
                 </div>
-                
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="username">Nombre de Usuario</label>

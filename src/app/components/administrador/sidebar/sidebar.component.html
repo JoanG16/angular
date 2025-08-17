@@ -1,0 +1,30 @@
+<div class="crud-container">
+  <!-- Botón para mostrar/ocultar el menú en móviles -->
+  <button class="menu-toggle-button" (click)="toggleMenu()">
+    <span *ngIf="!menuOpen">☰</span>
+    <span *ngIf="menuOpen">✖</span>
+  </button>
+
+  <!-- Overlay del menú para móviles -->
+  <div class="menu-overlay" [ngClass]="{'show': menuOpen}" (click)="toggleMenu()"></div>
+
+  <!-- Sidebar (Menú Lateral) -->
+  <aside class="sidebar" [ngClass]="{'open': menuOpen}">
+    <div class="logo">
+      <!-- Ruta al logo. Asegúrate de que la ruta sea correcta. -->
+      <img src="assets/icon/logo.jpg" alt="Logo" />
+    </div>
+    <nav>
+      <ul>
+        <!-- Usamos [ngClass] para aplicar la clase 'active' dinámicamente -->
+        <li><a (click)="irAPagina('inicio')" [ngClass]="{'active': activePage === 'inicio'}">🏠 Inicio</a></li>
+        <li><a (click)="irAPagina('locales')" [ngClass]="{'active': activePage === 'locales'}">📍 Locales</a></li>
+        <li><a (click)="irAPagina('socios')" [ngClass]="{'active': activePage === 'socios'}">🧑‍🤝‍🧑 Socios</a></li>
+        <li><a (click)="irAPagina('oferta')" [ngClass]="{'active': activePage === 'oferta'}">🏷 Ofertas</a></li>
+        <li><a (click)="irAPagina('plano_contenedores')" [ngClass]="{'active': activePage === 'plano_contenedores'}">🚛 Contenedores</a></li>
+        <li><a (click)="irAPagina('producto')" [ngClass]="{'active': activePage === 'producto'}">📦 Productos</a></li>
+        <li><a (click)="irAPagina('gestion-usuarios')" [ngClass]="{'active': activePage === 'gestion-usuarios'}">👤 Usuarios</a></li>
+      </ul>
+    </nav>
+  </aside>
+</div>
