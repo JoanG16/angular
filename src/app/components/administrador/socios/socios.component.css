@@ -14,19 +14,18 @@ html, body {
 }
 
 .socios-crud-container {
-    /* El contenedor ahora solo gestiona el color de fondo y el mínimo de altura */
     min-height: 100vh;
     background-color: var(--gris-claro);
-    overflow-x: hidden; /* Evita el scroll horizontal en móviles */
+    overflow-x: hidden;
 }
 
-/* Estilos para el sidebar fijo en todas las pantallas */
+/* Estilos para el sidebar fijo por defecto (escritorio) */
 .sidebar {
-    position: fixed; /* Posición fija para que no se mueva con el scroll */
+    position: fixed;
     top: 0;
-    left: 0;
+    left: 0; /* Posición por defecto para escritorios */
     width: 250px;
-    height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+    height: 100vh;
     background: var(--azul);
     padding: 1.5rem 1rem;
     display: flex;
@@ -36,7 +35,7 @@ html, body {
     box-shadow: var(--sombra-media);
     overflow-y: auto;
     z-index: 998;
-    transition: left 0.3s ease-in-out; /* Transición para el efecto de deslizar */
+    transition: left 0.3s ease-in-out;
 }
 
 .sidebar .logo img {
@@ -90,7 +89,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-left: 250px; /* Deja espacio para el sidebar fijo */
+    margin-left: 280px; /* Deja espacio para el sidebar fijo en escritorio */
 }
 
 /* Estilos de la tabla y la tarjeta de socios */
@@ -342,14 +341,14 @@ tbody tr:hover {
     position: fixed;
     top: 1rem;
     left: 1rem;
-    z-index: 1001; /* Asegura que esté encima del overlay */
+    z-index: 1001;
     background-color: var(--azul);
     color: white;
     border: none;
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    display: none; /* Oculto por defecto, visible en móviles */
+    display: none;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
@@ -382,25 +381,26 @@ tbody tr:hover {
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    /* En pantallas pequeñas, el sidebar está fuera de la pantalla por defecto */
+    /* Oculta el sidebar por defecto en pantallas pequeñas */
     .sidebar {
         left: -350px;
         border-radius: 0;
     }
 
-    /* Cuando el menú se abre, se desliza a su posición */
+    /* Muestra el sidebar cuando tiene la clase 'open' */
     .sidebar.open {
         left: 0;
     }
-    
-    .content-area {
-        /* En móviles, no necesitamos el margen para el sidebar */
-        margin-left: 0;
-        padding: 1rem;
+
+    /* Oculta el botón de menú en pantallas grandes y lo muestra en pequeñas */
+    .menu-toggle-button {
+        display: flex;
     }
 
-    .menu-toggle-button {
-        display: flex; /* Muestra el botón de menú para abrir el sidebar */
+    /* El área de contenido ocupa todo el ancho en móviles */
+    .content-area {
+        margin-left: 0;
+        padding: 1rem;
     }
 }
 
