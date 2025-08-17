@@ -2,218 +2,216 @@
 
 /* Variables (if not already defined) */
 :root {
-    --azul: #32346B;
-    --crema: #a5891b;
-    --gris-claro: #f8f8f8;
-    --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --sombra-media: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --azul: #32346B;
+  --crema: #a5891b;
+  --gris-claro: #f8f8f8;
+  --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --sombra-media: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* AÑADIDO: Asegura que el body y el html ocupen el 100% de la altura de la ventana */
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 .crud-container {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    min-height: 100vh;
-    background-color: var(--gris-claro);
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--gris-claro);
 }
 
 .sidebar {
-    background: var(--azul);
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 0 20px 20px 0;
-    box-shadow: var(--sombra-media);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+  width: 250px; /* Ancho fijo para el sidebar */
+  background: var(--azul);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0 20px 20px 0;
+  box-shadow: var(--sombra-media);
+  overflow-y: auto; /* Permite scroll si el contenido del sidebar es muy largo */
 }
 
 .sidebar .logo img {
-    width: 100%;
-    max-width: 180px;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  width: 100%;
+  max-width: 180px;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .sidebar nav ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
 }
 
 .sidebar nav ul li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 0.6rem;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .sidebar nav ul li a:hover {
-    background: var(--crema);
-    transform: translateX(5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background: var(--crema);
+  transform: translateX(5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar nav ul li a.active {
-    background: var(--crema);
-    color: var(--azul);
-    font-weight: 700;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background: var(--crema);
+  color: var(--azul);
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .content-area {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  margin-left: 250px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-grow: 1;
 }
 
 .form-card,
 .table-card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: var(--sombra-suave);
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--sombra-suave);
 }
 
 h2 {
-    color: var(--azul);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    text-align: center;
+  color: var(--azul);
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
 }
 
 .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-    margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 0.4rem;
-    font-size: 0.95rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
 }
 
 input[type="text"],
 input[type="number"],
 select,
 textarea {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: var(--azul);
-    box-shadow: 0 0 0 3px rgba(50, 52, 107, 0.2);
-    outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(50, 52, 107, 0.2);
+  outline: none;
 }
 
 textarea {
-    resize: vertical;
-    min-height: 80px;
+  resize: vertical;
+  min-height: 80px;
 }
 
 .full-width {
-    grid-column: 1 / -1;
-    /* Make this group span all columns */
+  grid-column: 1 / -1;
 }
 
-/* --- Estilos para la visualización y botón de selección de locales --- */
 .selected-locales-display {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 0.75rem;
-    min-height: 50px;
-    /* Suficiente altura para el contenido */
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    /* Alinea items al centro si hay poco contenido */
-    gap: 8px;
-    /* Espacio entre los chips de locales */
-    background-color: #fcfcfc;
-    position: relative;
-    /* Para posicionar el botón si es necesario */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.75rem;
+  min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background-color: #fcfcfc;
+  position: relative;
 }
 
 .placeholder-text {
-    color: #888;
-    font-style: italic;
+  color: #888;
+  font-style: italic;
 }
 
 .locales-chips-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .local-chip {
-    background-color: #e0e0e0;
-    color: #333;
-    padding: 6px 10px;
-    border-radius: 20px;
-    /* Bordes más redondeados para parecer un "chip" */
-    font-size: 0.85rem;
-    white-space: nowrap;
-    /* Evita que el texto se rompa */
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .select-locales-button {
-    background-color: var(--crema);
-    /* Color de acento para el botón */
-    color: var(--azul);
-    padding: 8px 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-    /* Espacio arriba del botón */
-    align-self: flex-start;
-    /* Alinea a la izquierda en su contenedor flex */
-    /* Para pantallas más pequeñas, podría necesitar width: 100%; */
+  background-color: var(--crema);
+  color: var(--azul);
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  align-self: flex-start;
 }
 
 .select-locales-button:hover {
-    background-color: #c9a42f;
-    /* Tono más oscuro al pasar el ratón */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #c9a42f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* --- Fin de estilos para selección de locales --- */
 /* Search Bar */
 .search-bar {
   display: flex;
   gap: 10px;
   margin-bottom: 25px;
-  
-width: 36%;
+  width: 36%;
 }
 
 .search-input {
@@ -225,7 +223,6 @@ width: 36%;
   color: var(--text-main);
   background-color: var(--text-light);
   transition: border-color var(--transition-speed-normal), box-shadow var(--transition-speed-normal);
-  
 }
 
 .search-input:focus {
@@ -236,14 +233,13 @@ width: 36%;
 
 .search-button {
   padding: 12px 20px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
+  background-color: var(--crema);
+  color: var(--azul);
   border: none;
   border-radius: 8px;
   font-size: 1em;
   font-weight: 600;
   cursor: pointer;
-   background-color: var(--crema);
   box-shadow: var(--shadow-sm);
 }
 
@@ -254,223 +250,224 @@ width: 36%;
 }
 
 .form-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .form-actions button {
-    background-color: var(--azul);
-    color: white;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--sombra-media);
+  background-color: var(--azul);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--sombra-media);
 }
 
 .form-actions button:hover {
-    background-color: #2c2e5e;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background-color: #2c2e5e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .form-actions .cancel-button {
-    background-color: #6c757d;
+  background-color: #6c757d;
 }
 
 .form-actions .cancel-button:hover {
-    background-color: #5a6268;
+  background-color: #5a6268;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
 }
 
 th,
 td {
-    padding: 0.9rem 1.2rem;
-    border: 1px solid #e0e0e0;
-    text-align: left;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #e0e0e0;
+  text-align: left;
 }
 
 th {
-    background-color: #f5f5f5;
-    color: var(--azul);
-    font-weight: 600;
-    text-transform: uppercase;
+  background-color: #f5f5f5;
+  color: var(--azul);
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 tbody tr:hover {
-    background-color: #eef;
-    cursor: pointer;
+  background-color: #eef;
+  cursor: pointer;
 }
 
 tbody tr.selected {
-    background-color: #dbeafe !important;
-    /* Tailwind's blue-100 */
-    border-left: 4px solid var(--azul);
+  background-color: #dbeafe !important;
+  border-left: 4px solid var(--azul);
 }
 
 .action-buttons button {
-    padding: 0.6rem 1rem;
-    margin-right: 0.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.6rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .action-buttons button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .edit-button {
-    background-color: #ffc107;
-    /* Amarillo de Bootstrap */
-    color: #333;
+  background-color: #ffc107;
+  color: #333;
 }
 
 .edit-button:hover {
-    background-color: #e0a800;
+  background-color: #e0a800;
 }
 
 .delete-button {
-    background-color: #dc3545;
-    /* Rojo de Bootstrap */
-    color: white;
+  background-color: #dc3545;
+  color: white;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+  background-color: #c82333;
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    .crud-container {
-        grid-template-columns: 1fr;
-        /* Stack sidebar and content */
-    }
+  .crud-container {
+    flex-direction: column; /* Apila sidebar y content */
+  }
 
-    .sidebar {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        border-radius: 0;
-        padding: 0.75rem 0.5rem;
-    }
+  .sidebar {
+    position: relative; /* En móvil, el sidebar vuelve a ser relativo */
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+  
+  .content-area {
+    margin-left: 0; /* Remueve el margen para que ocupe todo el ancho */
+    padding: 1rem;
+  }
 
-    .sidebar .logo {
-        flex-basis: 100%;
-        /* Logo takes full width */
-        text-align: center;
-    }
+  .sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    border-radius: 0;
+    padding: 0.75rem 0.5rem;
+  }
 
-    .sidebar .logo img {
-        max-width: 120px;
-        margin-bottom: 1rem;
-    }
+  .sidebar .logo {
+    flex-basis: 100%;
+    text-align: center;
+  }
 
-    .sidebar nav ul {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
+  .sidebar .logo img {
+    max-width: 120px;
+    margin-bottom: 1rem;
+  }
 
-    .sidebar nav ul li {
-        flex-grow: 1;
-        max-width: 150px;
-        /* Limit width in horizontal mode */
-    }
+  .sidebar nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 
-    .sidebar nav ul li a {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
-        margin-bottom: 5px;
-        text-align: center;
-        justify-content: center;
-    }
+  .sidebar nav ul li {
+    flex-grow: 1;
+    max-width: 150px;
+  }
 
-    .sidebar .bottom-nav {
-        margin-top: 0.5rem;
-    }
+  .sidebar nav ul li a {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    text-align: center;
+    justify-content: center;
+  }
 
-    .content-area {
-        padding: 1rem;
-    }
+  .sidebar .bottom-nav {
+    margin-top: 0.5rem;
+  }
 
-    .form-grid {
-        grid-template-columns: 1fr;
-        /* Stack form groups vertically */
-    }
+  .content-area {
+    padding: 1rem;
+  }
 
-    .full-width {
-        grid-column: auto;
-    }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 
-    table {
-        font-size: 0.85rem;
-    }
+  .full-width {
+    grid-column: auto;
+  }
 
-    th,
-    td {
-        padding: 0.7rem 0.8rem;
-    }
+  table {
+    font-size: 0.85rem;
+  }
 
-    .action-buttons button {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.8rem;
-        margin-right: 0.2rem;
-    }
+  th,
+  td {
+    padding: 0.7rem 0.8rem;
+  }
 
-    .select-locales-button {
-        width: 100%;
-        /* Botón de selección de locales a ancho completo en móviles */
-    }
+  .action-buttons button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    margin-right: 0.2rem;
+  }
+
+  .select-locales-button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {
-    .sidebar nav ul li {
-        max-width: unset;
-        /* Allow full width again if stacked */
-    }
+  .sidebar nav ul li {
+    max-width: unset;
+  }
 
-    .sidebar nav ul {
-        flex-direction: column;
-        /* Stack nav items in smaller mobile */
-        align-items: center;
-    }
+  .sidebar nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .form-actions {
-        flex-direction: column;
-        /* Stack action buttons */
-        gap: 0.8rem;
-    }
+  .form-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 
-    .form-actions button {
-        width: 100%;
-        padding: 0.7rem 1.5rem;
-        font-size: 1rem;
-    }
+  .form-actions button {
+    width: 100%;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
 
-    h2 {
-        font-size: 1.5rem;
-    }
+  h2 {
+    font-size: 1.5rem;
+  }
 }
