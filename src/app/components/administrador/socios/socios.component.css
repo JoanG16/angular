@@ -14,16 +14,19 @@ html, body {
 }
 
 .socios-crud-container {
-    display: flex;
+    /* El contenedor ahora solo gestiona el color de fondo y el mínimo de altura */
     min-height: 100vh;
     background-color: var(--gris-claro);
-    /* Permite el scroll vertical si el contenido es demasiado largo */
-    overflow-y: auto;
+    overflow-x: hidden; /* Evita el scroll horizontal en móviles */
 }
 
-/* Estilos para el sidebar fijo */
+/* Estilos para el sidebar fijo en todas las pantallas */
 .sidebar {
+    position: fixed; /* Posición fija para que no se mueva con el scroll */
+    top: 0;
+    left: 0;
     width: 250px;
+    height: 100vh; /* Ocupa el 100% de la altura de la ventana */
     background: var(--azul);
     padding: 1.5rem 1rem;
     display: flex;
@@ -32,7 +35,8 @@ html, body {
     border-radius: 0 20px 20px 0;
     box-shadow: var(--sombra-media);
     overflow-y: auto;
-    flex-shrink: 0; /* Evita que el sidebar se encoja */
+    z-index: 998;
+    transition: left 0.3s ease-in-out; /* Transición para el efecto de deslizar */
 }
 
 .sidebar .logo img {
@@ -86,6 +90,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    margin-left: 250px; /* Deja espacio para el sidebar fijo */
 }
 
 /* Estilos de la tabla y la tarjeta de socios */
@@ -377,32 +382,25 @@ tbody tr:hover {
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    .socios-crud-container {
-        flex-direction: column;
-    }
-
+    /* En pantallas pequeñas, el sidebar está fuera de la pantalla por defecto */
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: -350px; /* Oculto por defecto */
-        height: 100vh;
-        width: 250px;
-        z-index: 1000;
-        transition: left 0.3s ease-in-out;
+        left: -250px;
         border-radius: 0;
     }
 
+    /* Cuando el menú se abre, se desliza a su posición */
     .sidebar.open {
         left: 0;
     }
     
-    .menu-toggle-button {
-        display: flex; /* Muestra el botón de menú */
-    }
-
     .content-area {
+        /* En móviles, no necesitamos el margen para el sidebar */
         margin-left: 0;
         padding: 1rem;
+    }
+
+    .menu-toggle-button {
+        display: flex; /* Muestra el botón de menú para abrir el sidebar */
     }
 }
 
