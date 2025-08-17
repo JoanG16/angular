@@ -38,6 +38,11 @@ export class SociosComponent implements OnInit {
     creado_en: new Date()
   };
 
+  menuOpen: boolean = false;
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
   // PROPIEDAD PARA EL FILTRO DE BÚSQUEDA
   filterNombreSocio: string = ''; // Para el input de búsqueda por nombre
 
