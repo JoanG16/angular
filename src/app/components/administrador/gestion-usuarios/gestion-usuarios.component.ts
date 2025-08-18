@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { User, UserResponse, SingleUserResponse } from '../../../interfaces/user.interface';
-import { Local, LocalResponse } from '../../../interfaces/locales.interface';
+import { Local } from '../../../interfaces/locales.interface';
 import { UserService } from '../../../services/administrador/user.service';
 import { LocalesService } from '../../../services/administrador/locales.service';
 import { Router } from '@angular/router';
@@ -35,6 +35,7 @@ export class GestionUsuariosComponent implements OnInit {
     this.userForm = this.fb.group({
       id_user: [null],
       username: ['', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
       role: ['local_owner', [Validators.required]],
@@ -67,7 +68,6 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   getLocales(): void {
-    // La corrección está aquí: la respuesta es directamente un array de 'Local'
     this.localesService.getAllLocales().subscribe({
       next: (response: Local[]) => {
         this.locales = response;
@@ -102,7 +102,7 @@ export class GestionUsuariosComponent implements OnInit {
     }
 
     const { password, confirmPassword } = this.userForm.value;
-    if (password !== confirmPassword) {
+    if (this.userForm.get('password')?.enabled && password !== confirmPassword) {
       this.errorMessage = 'Las contraseñas no coinciden.';
       this.isLoading = false;
       return;
@@ -111,7 +111,11 @@ export class GestionUsuariosComponent implements OnInit {
     const userData = { ...this.userForm.value };
     delete userData.confirmPassword;
 
+    // Si estamos editando, borramos la contraseña si no se ha cambiado
     if (this.isEditMode) {
+      if (!userData.password) {
+        delete userData.password;
+      }
       this.userService.updateUser(userData.id_user, userData).subscribe({
         next: (response: SingleUserResponse) => {
           this.handleSuccessResponse(`Usuario "${response.data.username}" actualizado exitosamente.`);
@@ -129,7 +133,19 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   // --- MÉTODOS DE ELIMINACIÓN (DELETE) ---
-  deleteUser(id: number): void {
+  /**
+   * Elimina un usuario si el ID es válido.
+   * @param id El ID del usuario, que puede ser opcional.
+   */
+  deleteUser(id: number | undefined): void {
+    // CORRECCIÓN: Verificamos si el ID es válido antes de proceder.
+    if (id === undefined) {
+      console.error('No se puede eliminar un usuario con un ID indefinido.');
+      this.errorMessage = 'Error: ID de usuario no válido.';
+      return;
+    }
+
+    // Reemplazar alert() por un diálogo de confirmación personalizado si se desea
     if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
       this.isLoading = true;
       this.userService.deleteUser(id).subscribe({
@@ -149,6 +165,7 @@ export class GestionUsuariosComponent implements OnInit {
     this.userForm.patchValue({
       id_user: user.id_user,
       username: user.username,
+      email: user.email,
       role: user.role,
       id_local: user.id_local || null
     });
@@ -187,9 +204,7 @@ export class GestionUsuariosComponent implements OnInit {
     return local ? local.nombre_del_negocio : 'N/A';
   }
 
-   irAPagina(titulo: string): void {
+  irAPagina(titulo: string): void {
     this.router.navigate([titulo])
-
   }
-
 }

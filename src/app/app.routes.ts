@@ -13,7 +13,9 @@ import { LoginComponent } from './components/administrador/login/login.component
 import {LocalComponent} from './components/page/locales/locales.component'
 import { SobreNosotrosComponent } from './components/page/sobre-nosotros/sobre-nosotros.component';
 import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
-import { ComerciantesComponent } from './components/administrador/comerciantes/comerciantes.component'; // ¡NUEVO COMPONENTE!
+import { ResetPasswordComponent } from './components/administrador/reset-password/reset-password.component';
+import { ComerciantesComponent } from './components/administrador/comerciantes/comerciantes.component';
+import { ForgotPasswordComponent } from './components/administrador/forgot-password/forgot-password.component';// ¡NUEVO COMPONENTE!
 
 // Importar el guardia de autenticación
 import { authGuardFn } from './guards/auth.guard';
@@ -27,6 +29,8 @@ export const routes: Routes = [
 {path: 'local', component: LocalComponent},
 {path: 'sobre-nosotros', component: SobreNosotrosComponent},
 {path: 'gestion-usuarios', component: GestionUsuariosComponent},
+{path: 'reset-password/token/:token', component: ResetPasswordComponent},
+{path: 'forgot-password', component: ForgotPasswordComponent},
   // Rutas protegidas (requieren autenticación)
   // Utiliza `canActivate` con el guardia de autenticación para estas rutas
   { path: 'plano_contenedores', component: PlanoCoordenadasComponent, canActivate: [authGuardFn] },
@@ -35,10 +39,10 @@ export const routes: Routes = [
   { path: 'inicio', component: InicioComponent, canActivate: [authGuardFn] },
   { path: 'producto', component: ProductoCrudComponent, canActivate: [authGuardFn] },
   { path: 'oferta', component: OfertasComponent, canActivate: [authGuardFn] },
-{ 
-    path: 'comerciantes/dashboard/:id', 
-    component: ComerciantesComponent, 
-    canActivate: [authGuardFn] 
+{
+    path: 'comerciantes/dashboard/:id',
+    component: ComerciantesComponent,
+    canActivate: [authGuardFn]
   },
 
   // Ruta comodín para cualquier otra ruta no definida

@@ -52,6 +52,16 @@
                         </div>
                     </div>
 
+                    <!-- NUEVO CAMPO: Correo Electrónico -->
+                    <div class="form-group">
+                      <label for="email">Correo Electrónico</label>
+                      <input id="email" type="email" formControlName="email" placeholder="Escribe el correo electrónico">
+                      <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="validation-message">
+                        <span *ngIf="userForm.get('email')?.errors?.['required']">El correo es obligatorio.</span>
+                        <span *ngIf="userForm.get('email')?.errors?.['email']">Debe ser un correo válido.</span>
+                      </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="role">Rol</label>
                         <select id="role" formControlName="role">
@@ -117,6 +127,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre de Usuario</th>
+                        <th>Correo</th> <!-- NUEVA COLUMNA -->
                         <th>Rol</th>
                         <th>Local Asignado</th>
                         <th>Acciones</th>
@@ -126,6 +137,7 @@
                     <tr *ngFor="let user of users">
                         <td>{{ user.id_user }}</td>
                         <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td> <!-- NUEVO CAMPO -->
                         <td>{{ user.role }}</td>
                         <td>{{ getLocalName(user.id_local) }}</td>
                         <td class="action-buttons">

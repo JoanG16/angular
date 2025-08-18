@@ -19,6 +19,19 @@ interface LoginResponse {
   };
 }
 
+// Interfaces para los nuevos endpoints
+interface PasswordResetRequestResponse {
+  statusCode: number;
+  status: string;
+  message: string;
+}
+
+interface PasswordResetResponse {
+  statusCode: number;
+  status: string;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -41,13 +54,13 @@ export class AuthService {
         localStorage.setItem('auth_token', response.data.token);
         localStorage.setItem('user_role', response.data.user.role);
         localStorage.setItem('user_name', response.data.user.username);
-        
+
         if (response.data.user.id_local) {
           localStorage.setItem('local_id', response.data.user.id_local.toString());
         } else {
           localStorage.removeItem('local_id');
         }
-        
+
         this.isAuthenticatedSubject.next(true);
       })
     );
@@ -97,5 +110,22 @@ export class AuthService {
    */
   private checkToken(): boolean {
     return !!this.getToken();
+  }
+
+  /**
+   * Envía una solicitud de recuperación de contraseña al backend.
+   * @param email El correo electrónico del usuario.
+   */
+  requestPasswordReset(email: string): Observable<PasswordResetRequestResponse> {
+    return this.http.post<PasswordResetRequestResponse>(`${this.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  /**
+   * Envía el token y la nueva contraseña para restablecerla.
+   * @param token El token de recuperación.
+   * @param newPassword La nueva contraseña.
+   */
+  resetPassword(token: string, newPassword: string): Observable<PasswordResetResponse> {
+    return this.http.post<PasswordResetResponse>(`${this.apiUrl}/auth/reset-password/${token}`, { password: newPassword });
   }
 }
