@@ -37,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/angular/",
               "budgets": [
                 {
                   "type": "initial",
@@ -50,7 +51,6 @@
                 }
               ],
               "outputHashing": "all"
-              
             },
             "development": {
               "optimization": false,
@@ -63,8 +63,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "host": "0.0.0.0" 
-            
+            "host": "0.0.0.0"
           },
           "configurations": {
             "production": {
