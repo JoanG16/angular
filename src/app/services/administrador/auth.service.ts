@@ -1,5 +1,5 @@
+// src/services/administrador/auth.service.ts
 
-// src/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -13,11 +13,12 @@ interface UserData {
   id_local?: number | null;
 }
 
+// ➡️ Interfaz corregida para coincidir con la respuesta del backend
 interface LoginResponse {
-  data: {
-    token: string;
-    user: UserData;
-  };
+  status: string;
+  message: string;
+  token: string;
+  user: UserData;
 }
 
 interface PasswordResetRequestResponse {
@@ -47,12 +48,13 @@ export class AuthService {
     const credentials = { username, password };
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
-        localStorage.setItem('auth_token', response.data.token);
-        localStorage.setItem('user_role', response.data.user.role);
-        localStorage.setItem('user_name', response.data.user.username);
+        // ➡️ Lógica corregida para acceder a las propiedades directamente
+        localStorage.setItem('auth_token', response.token);
+        localStorage.setItem('user_role', response.user.role);
+        localStorage.setItem('user_name', response.user.username);
 
-        if (response.data.user.id_local) {
-          localStorage.setItem('local_id', response.data.user.id_local.toString());
+        if (response.user.id_local) {
+          localStorage.setItem('local_id', response.user.id_local.toString());
         } else {
           localStorage.removeItem('local_id');
         }
@@ -95,10 +97,6 @@ export class AuthService {
   }
 
   resetPassword(token: string, newPassword: string): Observable<PasswordResetResponse> {
-
-
-    // CORRECCIÓN: Usar 'newPassword' como clave para que coincida con el backend
-
     return this.http.post<PasswordResetResponse>(`${this.apiUrl}/auth/reset-password/${token}`, { newPassword: newPassword });
   }
 }
