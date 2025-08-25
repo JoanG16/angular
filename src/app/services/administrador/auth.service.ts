@@ -126,6 +126,7 @@ export class AuthService {
    * @param newPassword La nueva contraseña.
    */
   resetPassword(token: string, newPassword: string): Observable<PasswordResetResponse> {
-    return this.http.post<PasswordResetResponse>(`${this.apiUrl}/auth/reset-password/${token}`, { password: newPassword });
+    // CORRECCIÓN: Usar 'newPassword' como clave para que coincida con el backend
+    return this.http.post<PasswordResetResponse>(`${this.apiUrl}/auth/reset-password/${token}`, { newPassword: newPassword });
   }
 }
