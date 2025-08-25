@@ -51,6 +51,7 @@
                 }
               ],
               "outputHashing": "all"
+
             },
             "development": {
               "optimization": false,
@@ -64,6 +65,7 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "host": "0.0.0.0"
+
           },
           "configurations": {
             "production": {
