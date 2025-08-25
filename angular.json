@@ -37,7 +37,6 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/browser/",
               "budgets": [
                 {
                   "type": "initial",
@@ -50,6 +49,7 @@
                   "maximumError": "17kB"
                 }
               ],
+                "baseHref": "/browser/",
               "outputHashing": "all"
 
             },
