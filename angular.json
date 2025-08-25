@@ -37,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/browser/",
               "budgets": [
                 {
                   "type": "initial",
