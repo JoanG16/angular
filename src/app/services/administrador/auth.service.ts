@@ -95,6 +95,10 @@ export class AuthService {
   }
 
   resetPassword(token: string, newPassword: string): Observable<PasswordResetResponse> {
+
+
+    // CORRECCIÓN: Usar 'newPassword' como clave para que coincida con el backend
+
     return this.http.post<PasswordResetResponse>(`${this.apiUrl}/auth/reset-password/${token}`, { newPassword: newPassword });
   }
 }

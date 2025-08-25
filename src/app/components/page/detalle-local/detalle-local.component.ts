@@ -121,6 +121,38 @@ export class DetalleLocalComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Determina el acceso sugerido al local en función de su bloque.
+   * Ahora devuelve un string con <br> para que se interprete como un salto de línea en el HTML.
+   * @param bloque El nombre del bloque asociado al local.
+   * @returns Una cadena de texto con la información del acceso y saltos de línea HTML.
+   */
+  getAccesoPorBloque(bloque: string | undefined): string {
+    if (!bloque) {
+      return 'Información de acceso no disponible.';
+    }
+
+    const bloqueLowerCase = bloque.toLowerCase();
+    let accesos: string[] = [];
+
+    if (['b', 'c', 'd'].includes(bloqueLowerCase)) {
+      accesos.push('Acceso por la Avenida de la Cultura.');
+    }
+    if (['c', 'e', 'f'].includes(bloqueLowerCase)) {
+      accesos.push('Acceso por la Calle C.5 y la Avenida 15.');
+    }
+    if (['a', 'h', 'g'].includes(bloqueLowerCase)) {
+      accesos.push('Acceso ubicado entre la zona de contenedores y el área de canastas del mercado.');
+    }
+
+    // Une los mensajes con un salto de línea HTML si hay más de uno.
+    if (accesos.length > 0) {
+      return accesos.join('<br>');
+    }
+
+    return 'Información de acceso no disponible.';
+  }
+
   prevImage(): void {
     if (this.local && this.local.imagen_urls && this.local.imagen_urls.length > 0) {
       this.currentImageIndex = (this.currentImageIndex - 1 + this.local.imagen_urls.length) % this.local.imagen_urls.length;
