@@ -43,7 +43,11 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Local</button>
+            <div class="d-flex justify-content-between mb-3">
+                <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Local</button>
+                <button class="btn btn-excel" (click)="downloadExcelReport()">Descargar Reporte Excel</button>
+            </div>
+
 
             <div *ngIf="locales.length > 0; else noLocales">
                 <table>
@@ -60,7 +64,7 @@
                             <th>Teléfono</th>
                             <th>Descripción</th>
                             <th>Imágenes</th>
-                            <th>Estado</th> <!-- NUEVO: Encabezado para el estado -->
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -79,11 +83,10 @@
                             <td>
                                 <div class="local-images-gallery">
                                     <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
-                                         class="local-image-thumbnail">
+                                             class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
                                 </div>
                             </td>
-                            <!-- NUEVO: Celda para el estado del local -->
                             <td>
                                 <span [ngClass]="{'badge-activo': local.activo, 'badge-inactivo': !local.activo}">
                                     {{ local.activo ? 'Activo' : 'Inactivo' }}
@@ -92,7 +95,6 @@
                             <td class="acciones">
                                 <button class="btn-accion btn-editar"
                                     (click)="abrirFormularioEditar(local)">Editar</button>
-                                <!-- NUEVO BOTÓN para Activar/Desactivar -->
                                 <button class="btn-accion"
                                     [ngClass]="local.activo ? 'btn-desactivar' : 'btn-activar'"
                                     (click)="toggleActivoStatus(local)">
@@ -184,7 +186,6 @@
                         <textarea id="descripcion" [(ngModel)]="nuevoLocal.descripcion" name="descripcion"></textarea>
                     </div>
 
-                    <!-- NUEVO: Switch para activar/desactivar el local -->
                     <div class="form-group">
                         <label for="activo">Estado:</label>
                         <div class="toggle-switch">

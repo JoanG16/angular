@@ -347,7 +347,48 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  // --- NUEVO MÉTODO: Activar/Desactivar local ---
+  // --- NUEVO MÉTODO para descargar el reporte de Excel ---
+  downloadExcelReport(): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirmar Descarga',
+        message: '¿Estás seguro de que quieres descargar el reporte de locales en formato Excel?',
+        confirmButtonText: 'Sí, descargar',
+        cancelButtonText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.localesService.downloadLocalesExcel().subscribe({
+          next: (response: Blob) => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'reporte-locales.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('Error al descargar el reporte de Excel:', err);
+            this.dialog.open(ConfirmDialogComponent, {
+              data: {
+                title: 'Error de Descarga',
+                message: 'No se pudo generar o descargar el reporte de Excel. Por favor, inténtalo de nuevo más tarde.',
+                confirmButtonText: 'Aceptar',
+                hideCancelButton: true
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // --- CORREGIDO: Activar/Desactivar local llamando a las rutas correctas del backend ---
   toggleActivoStatus(local: Local): void {
     const nuevoEstado = !local.activo;
     const mensaje = nuevoEstado ? `activar` : `desactivar`;
@@ -363,7 +404,14 @@ export class LocalesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.localesService.updateLocalStatus(local.id_local, nuevoEstado).subscribe({
+        let operation$: Observable<any>;
+        if (nuevoEstado) {
+          operation$ = this.localesService.activateLocal(local.id_local);
+        } else {
+          operation$ = this.localesService.deleteLocal(local.id_local);
+        }
+
+        operation$.subscribe({
           next: () => {
             this.dialog.open(ConfirmDialogComponent, {
               data: {
