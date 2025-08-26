@@ -84,12 +84,9 @@ export class LocalesComponent implements OnInit {
   }
 
 getLocalesData(): void {
-  // Llama a la función getLocales() para obtener el Observable
-  this.localesService.getLocales().subscribe({
-    // El 'data' que recibes es de tipo LocalResponse.
-    next: (response: LocalResponse) => {
-      // Accedes a la propiedad 'data' para obtener el array de locales.
-      this.allLocales = response.data;
+  this.localesService.getAllLocales().subscribe({
+    next: (data: Local[]) => { // Nota el cambio a `data: Local[]`
+      this.allLocales = data;
       this.applyFilters();
     },
     error: (err: HttpErrorResponse) => {
