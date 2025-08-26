@@ -11,13 +11,11 @@
                 <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
                 <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
                 <li><a (click)="irAPagina('producto')">📦 Productos</a></li>
-
             </ul>
         </nav>
         <nav>
             <ul>
                 <li><a (click)="irAPagina('gestion-usuarios')">👤 Usuarios</a></li>
-
             </ul>
         </nav>
     </aside>
@@ -25,6 +23,9 @@
     <main>
         <div class="locales-table-container">
             <h2>Listado de Locales</h2>
+            <button class="btn btn-primary mb-3" (click)="downloadExcelReport()">
+                <i class="fas fa-file-excel"></i> Descargar Reporte Excel
+            </button>
             <div class="filter-section mb-4 p-3 border rounded">
                 <h4>Filtros de Búsqueda</h4>
                 <div class="row">
@@ -51,35 +52,31 @@
                 <table>
                     <thead>
                         <tr>
-
                             <th>Nombre del Negocio</th>
                             <th>Nombre del Dueño</th>
                             <th>Código Local</th>
-                            <th>Facebook</th>
-                            <th>Instagram</th>
-                            <th>TikTok</th>
-                            <th>Teléfono</th>
+                            <th>RUC</th> <th>Correo</th> <th>Teléfono</th>
                             <th>N° Contenedor</th>
-                            <th>Descripción</th>
+                            <th>Activo</th> <th>Descripción</th>
                             <th>Imágenes</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let local of locales">
-
                             <td>{{ local.nombre_del_negocio }}</td>
                             <td>{{ local.nombre_del_dueno }}</td>
                             <td>{{ local.codigo_local }}</td>
-                            <td>{{ local.facebook || 'N/A' }}</td>
-                            <td>{{ local.instagram || 'N/A' }}</td>
-                            <td>{{ local.tiktok || 'N/A' }}</td>
-                            <td>{{ local.telefono || 'N/A' }}</td>
+                            <td>{{ local.ruc || 'N/A' }}</td> <td>{{ local.correo || 'N/A' }}</td> <td>{{ local.telefono || 'N/A' }}</td>
                             <td>{{ local.id_contenedor }}</td>
+                            <td>
+                                <span [ngClass]="{'badge bg-success': local.activo, 'badge bg-danger': !local.activo}">
+                                    {{ local.activo ? 'Sí' : 'No' }}
+                                </span>
+                            </td>
                             <td>{{ local.descripcion || 'N/A' }}</td>
                             <td>
                                 <div class="local-images-gallery">
-                                    <!-- Usar getImageUrl para las imágenes existentes -->
                                     <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
                                         class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
@@ -88,8 +85,10 @@
                             <td class="acciones">
                                 <button class="btn-accion btn-editar"
                                     (click)="abrirFormularioEditar(local)">Editar</button>
-                                <button class="btn-accion btn-eliminar"
-                                    (click)="eliminarLocal(local.id_local, local.nombre_del_negocio)">Eliminar</button>
+                                <button *ngIf="local.activo" class="btn-accion btn-eliminar"
+                                    (click)="eliminarLocal(local.id_local!, local.nombre_del_negocio)">Desactivar</button>
+                                <button *ngIf="!local.activo" class="btn-accion btn-activar"
+                                    (click)="activarLocal(local.id_local!, local.nombre_del_negocio)">Activar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -119,6 +118,15 @@
                         <input id="codigoLocal" type="text" [(ngModel)]="nuevoLocal.codigo_local" name="codigo_local"
                             required>
                     </div>
+                    <div class="form-group">
+                        <label for="ruc">RUC:</label>
+                        <input id="ruc" type="text" [(ngModel)]="nuevoLocal.ruc" name="ruc">
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico:</label>
+                        <input id="correo" type="email" [(ngModel)]="nuevoLocal.correo" name="correo">
+                    </div>
+
                     <div class="form-group">
                         <label for="facebook">Facebook:</label>
                         <input id="facebook" type="url" [(ngModel)]="nuevoLocal.facebook" name="facebook">
@@ -161,7 +169,6 @@
                         </select>
                     </div>
 
-                    <!-- NUEVO CAMPO: Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <textarea id="descripcion" [(ngModel)]="nuevoLocal.descripcion" name="descripcion"></textarea>
@@ -173,7 +180,6 @@
                             name="imagenLocal">
                         <div *ngIf="nuevoLocal.imagen_urls && nuevoLocal.imagen_urls.length > 0" class="images-preview-gallery">
                             <div class="image-preview-item" *ngFor="let imageUrl of nuevoLocal.imagen_urls; let i = index">
-                                <!-- Para previsualización en el formulario, usa getImageUrl también -->
                                 <img [src]="getImageUrl(imageUrl)" alt="Previsualización de imagen" class="image-preview">
                                 <button type="button" class="clear-image-btn" (click)="removeImage(i)">
                                     &times;

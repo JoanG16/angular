@@ -44,9 +44,9 @@ export class LocalesComponent implements OnInit {
     instagram: '',
     tiktok: '',
     telefono: '',
-    ruc: '', // Propiedad agregada
-    correo: '', // Propiedad agregada
-    activo: false, // Propiedad agregada
+    ruc: '', // <-- Propiedad agregada
+    correo: '', // <-- Propiedad agregada
+    activo: false, // <-- Propiedad agregada
     id_contenedor: 0,
     creado_en: new Date().toISOString(),
     selectedBloque: null,
@@ -153,9 +153,9 @@ export class LocalesComponent implements OnInit {
       instagram: '',
       tiktok: '',
       telefono: '',
-      ruc: '', // Propiedad agregada
-      correo: '', // Propiedad agregada
-      activo: true, // Propiedad agregada (o false, según tu lógica)
+      ruc: '', // <-- Propiedad agregada
+      correo: '', // <-- Propiedad agregada
+      activo: true, // <-- Propiedad agregada (un nuevo local debería estar activo por defecto)
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
@@ -202,9 +202,9 @@ export class LocalesComponent implements OnInit {
       instagram: '',
       tiktok: '',
       telefono: '',
-      ruc: '', // Propiedad agregada
-      correo: '', // Propiedad agregada
-      activo: false, // Propiedad agregada (o true, según tu lógica)
+      ruc: '', // <-- Propiedad agregada
+      correo: '', // <-- Propiedad agregada
+      activo: false, // <-- Propiedad agregada
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
@@ -366,12 +366,13 @@ export class LocalesComponent implements OnInit {
     this.locales = filtered;
   }
 
+  // MODIFICADO: Ahora el botón de "eliminar" desactiva el local
   eliminarLocal(id: number, nombre: string): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: 'Confirmar Eliminación',
-        message: `¿Estás seguro de que quieres eliminar el local "${nombre}"? Esta acción es irreversible.`,
-        confirmButtonText: 'Eliminar',
+        title: 'Confirmar Desactivación',
+        message: `¿Estás seguro de que quieres desactivar el local "${nombre}"?`,
+        confirmButtonText: 'Desactivar',
         cancelButtonText: 'Cancelar',
         isDanger: true
       }
@@ -384,7 +385,7 @@ export class LocalesComponent implements OnInit {
             this.dialog.open(ConfirmDialogComponent, {
               data: {
                 title: 'Éxito',
-                message: 'Local eliminado correctamente.',
+                message: 'Local desactivado correctamente.',
                 confirmButtonText: 'Aceptar',
                 hideCancelButton: true
               }
@@ -392,15 +393,84 @@ export class LocalesComponent implements OnInit {
             this.getLocalesData();
           },
           error: (err: HttpErrorResponse) => {
-            console.error('Error al eliminar local:', err);
+            console.error('Error al desactivar local:', err);
             this.dialog.open(ConfirmDialogComponent, {
               data: {
                 title: 'Error',
-                message: 'Error al eliminar local. Por favor, intenta de nuevo. Detalle: ' + err.message,
+                message: 'Error al desactivar local. Por favor, intenta de nuevo. Detalle: ' + err.message,
                 confirmButtonText: 'Aceptar',
                 hideCancelButton: true
               }
             });
+          }
+        });
+      }
+    });
+  }
+
+  // NUEVO: Método para activar un local
+  activarLocal(id: number, nombre: string): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirmar Activación',
+        message: `¿Estás seguro de que quieres activar el local "${nombre}"?`,
+        confirmButtonText: 'Activar',
+        cancelButtonText: 'Cancelar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.localesService.activateLocal(id).subscribe({
+          next: () => {
+            this.dialog.open(ConfirmDialogComponent, {
+              data: {
+                title: 'Éxito',
+                message: 'Local activado correctamente.',
+                confirmButtonText: 'Aceptar',
+                hideCancelButton: true
+              }
+            });
+            this.getLocalesData();
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('Error al activar local:', err);
+            this.dialog.open(ConfirmDialogComponent, {
+              data: {
+                title: 'Error',
+                message: 'Error al activar local. Por favor, intenta de nuevo. Detalle: ' + err.message,
+                confirmButtonText: 'Aceptar',
+                hideCancelButton: true
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // NUEVO: Método para descargar el reporte de Excel
+  downloadExcelReport(): void {
+    this.localesService.downloadLocalesExcel().subscribe({
+      next: (response: Blob) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'locales-reporte.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error al descargar el reporte de Excel:', err);
+        this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            title: 'Error en la Descarga',
+            message: 'Ocurrió un error al intentar descargar el archivo. Por favor, inténtalo de nuevo.',
+            confirmButtonText: 'Aceptar',
+            hideCancelButton: true
           }
         });
       }

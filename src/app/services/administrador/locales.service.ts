@@ -1,35 +1,28 @@
-// src/app/services/locales.service.ts (o el nombre de tu archivo)
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Local, LocalResponse, SingleLocalResponse } from '../../interfaces/locales.interface'; // Asegúrate de que la ruta sea correcta
+import { Local, LocalResponse, SingleLocalResponse } from '../../interfaces/locales.interface';
 import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment'; // <-- ¡AÑADE ESTA LÍNEA!
-                                                            // Asegúrate de que la ruta sea correcta para tu proyecto.
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalesService {
-  // MODIFICADO: Ahora la URL base se construye usando environment.apiUrl
-  // Asumiendo que environment.apiUrl ya incluye 'http://localhost:3000/v1/api' (o la URL de ngrok)
-  // y solo necesitamos añadir '/locales' para este servicio.
-  private apiUrl = `${environment.apiUrl}/locales`; // Asume que tu backend corre en el puerto 3000
+
+  private apiUrl = `${environment.apiUrl}/locales`;
 
   constructor(private http: HttpClient) { }
 
+  // Cambiado: Ahora usa la ruta del backend para obtener solo los activos
   getAllLocales(): Observable<Local[]> {
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`).pipe(
       map(response => response.data)
     );
   }
 
-  // Este método 'getLocales()' parece ser redundante con 'getAllLocales()',
-  // ya que ambos llaman a la misma URL base sin un sub-path específico.
-  // Si tienen propósitos diferentes, asegúrate de que la URL sea distinta.
-  // Si no, considera eliminar uno.
- getLocales(): Observable<LocalResponse> {
+  // Se mantiene este método, aunque `getAllLocales` es más descriptivo
+  getLocales(): Observable<LocalResponse> {
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`);
   }
 
@@ -47,7 +40,18 @@ export class LocalesService {
     return this.http.put<Local>(`${this.apiUrl}/update/${id}`, local);
   }
 
+  // MODIFICADO: Este método ahora llama a la nueva ruta `deactivate`
   deleteLocal(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    return this.http.put<void>(`${this.apiUrl}/deactivate/${id}`, {}); // Usamos PUT para la desactivación
+  }
+
+  // NUEVO: Método para activar un local
+  activateLocal(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/activate/${id}`, {});
+  }
+
+  // NUEVO: Método para descargar el reporte de Excel
+  downloadLocalesExcel(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/reporte/excel`, { responseType: 'blob' });
   }
 }
