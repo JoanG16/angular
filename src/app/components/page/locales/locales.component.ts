@@ -1,6 +1,6 @@
 // src/app/components/locales/locales.component.ts
 import { Component, OnInit } from '@angular/core';
-import { LocalesService } from '../../../services/page/locales.service';
+import { LocalesService } from '../../../services/administrador/locales.service';
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
 import { Local, LocalResponse } from '../../../interfaces/locales.interface';
 import { Contenedor, ContenedorResponse } from '../../../interfaces/contenedor.interface';
@@ -67,7 +67,7 @@ export class LocalComponent implements OnInit { // Asegúrate de que el nombre d
 
   loadCombinedData(): void {
     forkJoin({
-      localesResponse: this.localesService.getLocales(),
+      localesResponse: this.localesService.getAllLocales(),
       contenedoresResponse: this.contenedoresService.getAllContenedores()
     }).subscribe({
       next: ({ localesResponse, contenedoresResponse }: { localesResponse: LocalResponse, contenedoresResponse: ContenedorResponse }) => {

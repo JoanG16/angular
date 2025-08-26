@@ -2,7 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { LocalesService } from '../../../services/administrador/locales.service';
+import { LocalesService } from '../../../services/page/locales.service';
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
 import { Local } from '../../../interfaces/locales.interface';
 import { Contenedor, ContenedorResponse } from '../../../interfaces/contenedor.interface';

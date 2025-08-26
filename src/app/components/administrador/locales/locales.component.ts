@@ -1,4 +1,4 @@
-// src/app/components/page/locales/locales.component.ts
+// src/app/components/administrador/locales/locales.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,15 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 import { Observable, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
+// Definimos una interfaz para el formato de respuesta de la API,
+// basándonos en el console.log que el usuario mostró.
+interface ApiResponse<T> {
+  statusCode: number;
+  status: string;
+  message: string;
+  data: T;
+}
+
 @Component({
   selector: 'app-locales',
   standalone: true,
@@ -27,6 +36,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './locales.component.css'
 })
 export class LocalesComponent implements OnInit {
+  // Ahora el tipo de allLocales es una lista de objetos Local
   allLocales: Local[] = [];
   locales: Local[] = [];
   todosLosContenedores: contenedor[] = [];
@@ -36,7 +46,6 @@ export class LocalesComponent implements OnInit {
   mostrarFormulario: boolean = false;
   localSeleccionado: Local | null = null;
 
-  // MODIFICADO: Añadir el campo 'activo' con valor por defecto
   nuevoLocal: Local & { selectedBloque?: string | null } = {
     id_local: 0,
     nombre_del_negocio: '',
@@ -53,7 +62,7 @@ export class LocalesComponent implements OnInit {
     selectedBloque: null,
     imagen_urls: [],
     descripcion: '',
-    activo: true // <-- NUEVO: Valor por defecto para nuevos locales
+    activo: true
   };
 
   public selectedFiles: File[] = [];
@@ -70,12 +79,15 @@ export class LocalesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Usamos forkJoin para cargar ambos sets de datos en paralelo
     forkJoin({
+      // CORRECCIÓN: Se cambia 'getLocales' a 'getAllLocales'
       locales: this.localesService.getAllLocales(),
       contenedores: this.contenedoresService.getAllContenedores()
     }).subscribe({
       next: ({ locales, contenedores }) => {
-        this.allLocales = locales;
+        // Se accede a la propiedad 'data' de la respuesta
+        this.allLocales = locales.data;
         this.todosLosContenedores = contenedores.data;
         this.extractUniqueBloques();
         this.applyFilters();
@@ -87,9 +99,11 @@ export class LocalesComponent implements OnInit {
   }
 
   getLocalesData(): void {
+    // CORRECCIÓN: Se cambia 'getLocales' a 'getAllLocales'
     this.localesService.getAllLocales().subscribe({
-      next: (data: Local[]) => {
-        this.allLocales = data;
+      // Ahora 'response' ya es del tipo ApiResponse<Local[]> gracias al servicio corregido.
+      next: (response) => {
+        this.allLocales = response.data;
         this.applyFilters();
       },
       error: (err: HttpErrorResponse) => {
@@ -100,7 +114,7 @@ export class LocalesComponent implements OnInit {
 
   getContenedoresData(): void {
     this.contenedoresService.getAllContenedores().subscribe({
-      next: (response: { data: contenedor[] }) => {
+      next: (response) => {
         this.todosLosContenedores = response.data;
         this.extractUniqueBloques();
         this.filterContenedoresByBloque();
@@ -161,7 +175,7 @@ export class LocalesComponent implements OnInit {
       selectedBloque: null,
       imagen_urls: [],
       descripcion: '',
-      activo: true // <-- NUEVO: Inicializar con true
+      activo: true
     };
     this.selectedFiles = [];
     this.filterContenedoresByBloque();
@@ -176,7 +190,7 @@ export class LocalesComponent implements OnInit {
       correo: local.correo || '',
       imagen_urls: local.imagen_urls ? [...local.imagen_urls] : [],
       descripcion: local.descripcion || '',
-      activo: local.activo // <-- NUEVO: Asignar el valor actual
+      activo: local.activo
     };
 
     this.selectedFiles = [];
@@ -213,7 +227,7 @@ export class LocalesComponent implements OnInit {
       selectedBloque: null,
       imagen_urls: [],
       descripcion: '',
-      activo: true // <-- NUEVO: Limpiar a valor por defecto
+      activo: true
     };
     this.filterContenedoresByBloque();
   }
@@ -267,7 +281,7 @@ export class LocalesComponent implements OnInit {
     let dialogMessage: string;
     let successMessage: string;
     let errorMessage: string;
-    let operation: Observable<Local>;
+    let operation: Observable<ApiResponse<Local | {}>>;
 
     const { selectedBloque, ...baseLocalData } = this.nuevoLocal;
     const localPayload: Partial<Local> = { ...baseLocalData };
@@ -347,7 +361,6 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  // --- NUEVO MÉTODO para descargar el reporte de Excel ---
   downloadExcelReport(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -388,7 +401,6 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  // --- CORREGIDO: Activar/Desactivar local llamando a las rutas correctas del backend ---
   toggleActivoStatus(local: Local): void {
     const nuevoEstado = !local.activo;
     const mensaje = nuevoEstado ? `activar` : `desactivar`;
@@ -427,7 +439,7 @@ export class LocalesComponent implements OnInit {
             console.error(`Error al ${mensaje} el local:`, err);
             let userMessage = `Error al ${mensaje} el local. Por favor, intenta de nuevo.`;
             if (err.error && err.error.message) {
-                userMessage = `${userMessage} Detalle: ${err.error.message}`;
+              userMessage = `${userMessage} Detalle: ${err.error.message}`;
             }
             this.dialog.open(ConfirmDialogComponent, {
               data: {
@@ -445,6 +457,7 @@ export class LocalesComponent implements OnInit {
 
   applyFilters(): void {
     console.log('applyFilters: Valor de this.allLocales antes de la operación:', this.allLocales);
+    // Ahora que allLocales es un array, la iteración funcionará correctamente.
     let filtered = [...this.allLocales];
 
     if (this.filterBloque && this.filterBloque !== 'Todos') {
