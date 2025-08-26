@@ -1,21 +1,17 @@
-// src/app/services/locales.service.ts (o el nombre de tu archivo)
+// src/app/services/locales.service.ts
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Local, LocalResponse, SingleLocalResponse } from '../../interfaces/locales.interface'; // Asegúrate de que la ruta sea correcta
+import { Local, LocalResponse, SingleLocalResponse } from '../../interfaces/locales.interface';
 import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment'; // <-- ¡AÑADE ESTA LÍNEA!
-                                                            // Asegúrate de que la ruta sea correcta para tu proyecto.
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalesService {
-  // MODIFICADO: Ahora la URL base se construye usando environment.apiUrl
-  // Asumiendo que environment.apiUrl ya incluye 'http://localhost:3000/v1/api' (o la URL de ngrok)
-  // y solo necesitamos añadir '/locales' para este servicio.
-  private apiUrl = `${environment.apiUrl}/locales`; // Asume que tu backend corre en el puerto 3000
+  private apiUrl = `${environment.apiUrl}/locales`;
 
   constructor(private http: HttpClient) { }
 
@@ -25,11 +21,7 @@ export class LocalesService {
     );
   }
 
-  // Este método 'getLocales()' parece ser redundante con 'getAllLocales()',ac
-  // ya que ambos llaman a la misma URL base sin un sub-path específico.
-  // Si tienen propósitos diferentes, asegúrate de que la URL sea distinta.
-  // Si no, considera eliminar uno.
- getLocales(): Observable<LocalResponse> {
+  getLocales(): Observable<LocalResponse> {
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`);
   }
 
@@ -49,5 +41,11 @@ export class LocalesService {
 
   deleteLocal(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  }
+
+  // --- NUEVO MÉTODO: Actualizar el estado de 'activo' ---
+  updateLocalStatus(id: number, activo: boolean): Observable<Local> {
+    const payload = { activo };
+    return this.http.patch<Local>(`${this.apiUrl}/update-status/${id}`, payload);
   }
 }

@@ -52,16 +52,15 @@
                             <th>Nombre del Negocio</th>
                             <th>Nombre del Dueño</th>
                             <th>Código Local</th>
-                            <!-- Nuevos encabezados para RUC y Correo -->
                             <th>RUC</th>
                             <th>Correo</th>
                             <th>Facebook</th>
                             <th>Instagram</th>
                             <th>TikTok</th>
                             <th>Teléfono</th>
-                            <th>N° Contenedor</th>
                             <th>Descripción</th>
                             <th>Imágenes</th>
+                            <th>Estado</th> <!-- NUEVO: Encabezado para el estado -->
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -70,25 +69,35 @@
                             <td>{{ local.nombre_del_negocio }}</td>
                             <td>{{ local.nombre_del_dueno }}</td>
                             <td>{{ local.codigo_local }}</td>
-                            <!-- Nuevos datos para RUC y Correo en la tabla -->
                             <td>{{ local.ruc || 'N/A' }}</td>
                             <td>{{ local.correo || 'N/A' }}</td>
                             <td>{{ local.facebook || 'N/A' }}</td>
                             <td>{{ local.instagram || 'N/A' }}</td>
                             <td>{{ local.tiktok || 'N/A' }}</td>
                             <td>{{ local.telefono || 'N/A' }}</td>
-                            <td>{{ local.id_contenedor }}</td>
                             <td>{{ local.descripcion || 'N/A' }}</td>
                             <td>
                                 <div class="local-images-gallery">
                                     <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
-                                        class="local-image-thumbnail">
+                                         class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
                                 </div>
+                            </td>
+                            <!-- NUEVO: Celda para el estado del local -->
+                            <td>
+                                <span [ngClass]="{'badge-activo': local.activo, 'badge-inactivo': !local.activo}">
+                                    {{ local.activo ? 'Activo' : 'Inactivo' }}
+                                </span>
                             </td>
                             <td class="acciones">
                                 <button class="btn-accion btn-editar"
                                     (click)="abrirFormularioEditar(local)">Editar</button>
+                                <!-- NUEVO BOTÓN para Activar/Desactivar -->
+                                <button class="btn-accion"
+                                    [ngClass]="local.activo ? 'btn-desactivar' : 'btn-activar'"
+                                    (click)="toggleActivoStatus(local)">
+                                    {{ local.activo ? 'Desactivar' : 'Activar' }}
+                                </button>
                                 <button class="btn-accion btn-eliminar"
                                     (click)="eliminarLocal(local.id_local, local.nombre_del_negocio)">Eliminar</button>
                             </td>
@@ -120,14 +129,13 @@
                         <input id="codigoLocal" type="text" [(ngModel)]="nuevoLocal.codigo_local" name="codigo_local"
                             required>
                     </div>
-                    <!-- Nuevos campos del formulario para RUC y Correo -->
                     <div class="form-group">
                         <label for="ruc">RUC:</label>
-                        <input id="ruc" type="text" [(ngModel)]="nuevoLocal.ruc" name="ruc">
+                        <input id="ruc" type="text" [(ngModel)]="nuevoLocal.ruc" name="ruc" required>
                     </div>
                     <div class="form-group">
                         <label for="correo">Correo:</label>
-                        <input id="correo" type="email" [(ngModel)]="nuevoLocal.correo" name="correo">
+                        <input id="correo" type="email" [(ngModel)]="nuevoLocal.correo" name="correo" required>
                     </div>
                     <div class="form-group">
                         <label for="facebook">Facebook:</label>
@@ -174,6 +182,16 @@
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <textarea id="descripcion" [(ngModel)]="nuevoLocal.descripcion" name="descripcion"></textarea>
+                    </div>
+
+                    <!-- NUEVO: Switch para activar/desactivar el local -->
+                    <div class="form-group">
+                        <label for="activo">Estado:</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="activo" [(ngModel)]="nuevoLocal.activo" name="activo">
+                            <label for="activo" class="toggle-label"></label>
+                            <span class="status-label">{{ nuevoLocal.activo ? 'Activo' : 'Inactivo' }}</span>
+                        </div>
                     </div>
 
                     <div class="form-group file-upload-group">

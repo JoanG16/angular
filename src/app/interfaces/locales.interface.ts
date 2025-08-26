@@ -22,6 +22,7 @@ export interface Local {
     productos?: Producto[];
     socio?: Socio;
     contenedor?: Contenedor;
+    activo: boolean;
 }
 
 // Interfaces de respuesta de la API, siguiendo el patrón { statusCode, status, message, data }
@@ -37,4 +38,13 @@ export interface SingleLocalResponse {
     status: string;
     message: string;
     data: Local;
+}
+
+export interface contenedor {
+    id_contenedor: number;
+    numero_contenedor: string;
+    bloque: string;
+    geom?: any;
+    creado_en?: string;
+    socioId?: number;
 }
