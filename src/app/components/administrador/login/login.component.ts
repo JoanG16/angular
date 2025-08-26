@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Módulo necesario para directivas como *ngIf
-import { FormsModule } from '@angular/forms'; // Módulo necesario para [(ngModel)]
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/administrador/auth.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -9,18 +9,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
-  standalone: true, // Indica que este es un componente standalone
+  standalone: true,
   imports: [
-    CommonModule, // Agregado para usar *ngIf
-    FormsModule, // Agregado para usar [(ngModel)]
-    RouterLink // Agregado por si tienes enlaces en tu plantilla
+    CommonModule,
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   credentials = { username: '', password: '' };
-  errorMessage: string | null = null; // Propiedad que el HTML espera
+  errorMessage: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -30,10 +30,13 @@ export class LoginComponent implements OnInit {
    * Maneja el formulario de inicio de sesión.
    * Redirige al usuario según su rol.
    */
-  onLoginSubmit() { // Método que el HTML espera
+  onLoginSubmit() {
     this.authService.login(this.credentials.username, this.credentials.password).pipe(
       catchError((err: HttpErrorResponse) => {
-        this.errorMessage = err.error.message || 'Error de autenticación';
+        // Validación para evitar el TypeError:
+        // Si err.error existe y es un objeto, intenta acceder a 'message'.
+        // Si no, usa un mensaje de error genérico.
+        this.errorMessage = err.error?.message || 'Error de autenticación: la respuesta del servidor no tiene el formato esperado.';
         return throwError(() => new Error(this.errorMessage!));
       })
     ).subscribe(response => {
@@ -54,7 +57,8 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-    irAPagina(titulo: string): void {
+
+  irAPagina(titulo: string): void {
     this.router.navigate([titulo])
   }
 }
