@@ -10,7 +10,9 @@ import { Local } from '../../interfaces/locales.interface';
   providedIn: 'root'
 })
 export class LocalesService {
-  private apiUrl = environment.apiUrl + '/v1/api/locales';
+  // CORRECCIÓN: La URL base ahora solo tiene '/locales' porque
+  // environment.apiUrl ya contiene '/v1/api'
+  private apiUrl = environment.apiUrl + '/locales';
 
   constructor(private http: HttpClient) { }
 
