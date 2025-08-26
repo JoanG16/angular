@@ -19,7 +19,7 @@ table {
     /* Rounded corners for the table */
     overflow: hidden;
     /* Ensures rounded corners apply to content */
-    table-layout: fixed; /* CAMBIO CLAVE: Permite que las columnas tengan anchos fijos o flexibles */
+    table-layout: fixed;
 }
 
 th,
@@ -531,61 +531,71 @@ table tbody td {
 
 /* CAMBIO: Definir anchos para las columnas para un mejor control */
 
-table thead th:nth-child(1), /* Nombre del Negocio */
+/* Ajuste de anchos para incluir las nuevas columnas */
+table thead th:nth-child(1),
 table tbody td:nth-child(1) {
-    width: 15%;
+    width: 11%; /* Nombre del Negocio */
 }
 
-table thead th:nth-child(2), /* Nombre del Dueño */
+table thead th:nth-child(2),
 table tbody td:nth-child(2) {
-    width: 12%;
+    width: 9%; /* Nombre del Dueño */
 }
 
-table thead th:nth-child(3), /* Código Local */
+table thead th:nth-child(3),
 table tbody td:nth-child(3) {
-    width: 8%;
+    width: 7%; /* Código Local */
 }
 
-table thead th:nth-child(4), /* Facebook */
+table thead th:nth-child(4),
 table tbody td:nth-child(4) {
-    width: 10%;
+    width: 9%; /* RUC */
 }
 
-table thead th:nth-child(5), /* Instagram */
+table thead th:nth-child(5),
 table tbody td:nth-child(5) {
-    width: 10%;
+    width: 9%; /* Correo */
 }
 
-table thead th:nth-child(6), /* TikTok */
+table thead th:nth-child(6),
 table tbody td:nth-child(6) {
-    width: 10%;
+    width: 8%; /* Facebook */
 }
 
-table thead th:nth-child(7), /* Teléfono */
+table thead th:nth-child(7),
 table tbody td:nth-child(7) {
-    width: 10%;
+    width: 8%; /* Instagram */
 }
 
-table thead th:nth-child(8), /* N° Contenedor */
+table thead th:nth-child(8),
 table tbody td:nth-child(8) {
-    width: 7%;
+    width: 8%; /* TikTok */
 }
 
-table thead th:nth-child(9), /* Creado En */
+table thead th:nth-child(9),
 table tbody td:nth-child(9) {
-    width: 12%;
+    width: 8%; /* Teléfono */
 }
 
-table thead th:nth-child(10), /* Imágenes */
+table thead th:nth-child(10),
 table tbody td:nth-child(10) {
-    width: 15%; /* Ajustado para un mejor espacio para la galería de imágenes */
+    width: 7%; /* N° Contenedor */
 }
 
-table thead th:nth-child(11), /* Acciones */
+table thead th:nth-child(11),
 table tbody td:nth-child(11) {
-    width: 12%; /* Asegura espacio para los botones */
+    width: 10%; /* Descripción */
 }
 
+table thead th:nth-child(12),
+table tbody td:nth-child(12) {
+    width: 10%; /* Imágenes */
+}
+
+table thead th:nth-child(13),
+table tbody td:nth-child(13) {
+    width: 10%; /* Acciones */
+}
 
 table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
@@ -891,16 +901,16 @@ table tbody td:empty:before {
     .locales-table-container {
         padding: 0.5rem;
     }
-    table { /* CAMBIO: Asegurarse que la tabla se haga scroll si el contenido es demasiado ancho */
-        display: block; /* Permite que la tabla se desborde */
-        overflow-x: auto; /* Muestra la barra de desplazamiento horizontal */
-        white-space: nowrap; /* Asegura que las celdas no se rompan por defecto en este modo */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 
     table thead, table tbody tr {
-        display: table; /* Hace que el thead y las filas del tbody actúen como tablas individuales para el scroll */
+        display: table;
         width: 100%;
-        table-layout: fixed; /* Mantiene la consistencia de ancho */
+        table-layout: fixed;
     }
 
     /* CAMBIO: Eliminar anchos fijos de columnas para la vista móvil, dejar que el contenido defina el ancho en scroll */
@@ -927,9 +937,11 @@ table tbody td:empty:before {
     table thead th:nth-child(11),
     table tbody td:nth-child(11),
     table thead th:nth-child(12),
-    table tbody td:nth-child(12) {
-        width: auto; /* CAMBIO: Eliminar anchos fijos */
-        min-width: 80px; /* Ancho mínimo para que las columnas no se encojan demasiado */
+    table tbody td:nth-child(12),
+    table thead th:nth-child(13),
+    table tbody td:nth-child(13) {
+        width: auto;
+        min-width: 80px;
     }
 }
 
@@ -952,49 +964,5 @@ table tbody td:empty:before {
     .form-container {
         flex-direction: column;
         align-items: center;
-    }
-
-    #map {
-        height: 400px;
-    }
-}
-
-@media (max-width: 480px) {
-    main {
-        margin: 0.5rem;
-        padding: 0.8rem;
-    }
-
-    .datos {
-        padding: 1rem;
-    }
-
-    .datos h2 {
-        font-size: 1.3rem;
-    }
-
-    label {
-        font-size: 0.85rem;
-    }
-
-    input,
-    select,
-    pre {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-    }
-
-    #map {
-        height: 300px;
-    }
-
-    th,
-    td {
-        padding: 0.5rem 0.6rem;
-    }
-
-    td button {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.75rem;
     }
 }
