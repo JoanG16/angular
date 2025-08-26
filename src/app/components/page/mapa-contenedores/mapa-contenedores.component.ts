@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
 
-import { LocalesService } from '../../../services/page/locales.service';
+import { LocalesService } from '../../../services/administrador/locales.service';
 
 import { CategoriaService } from '../../../services/administrador/categoria.service';
 

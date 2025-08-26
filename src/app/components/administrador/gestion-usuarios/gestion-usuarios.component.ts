@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { User, UserResponse, SingleUserResponse } from '../../../interfaces/user.interface';
 import { Local } from '../../../interfaces/locales.interface';
 import { UserService } from '../../../services/administrador/user.service';
-import { LocalesService } from '../../../services/page/locales.service';
+import { LocalesService } from '../../../services/administrador/locales.service';
 import { Router } from '@angular/router';
 
 @Component({
