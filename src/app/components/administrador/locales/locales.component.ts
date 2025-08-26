@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 
 import { LocalesService } from '../../../services/administrador/locales.service';
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
-import { Local } from '../../../interfaces/locales.interface';
+import { Local, LocalResponse } from '../../../interfaces/locales.interface';
 import { Contenedor } from '../../../interfaces/contenedor.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
@@ -83,17 +83,20 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  getLocalesData(): void {
-    this.localesService.getAllLocales().subscribe({
-      next: (data: Local[]) => {
-        this.allLocales = data;
-        this.applyFilters();
-      },
-      error: (err: HttpErrorResponse) => {
-        console.error('Error al obtener locales:', err);
-      }
-    });
-  }
+getLocalesData(): void {
+  // Llama a la función getLocales() para obtener el Observable
+  this.localesService.getLocales().subscribe({
+    // El 'data' que recibes es de tipo LocalResponse.
+    next: (response: LocalResponse) => {
+      // Accedes a la propiedad 'data' para obtener el array de locales.
+      this.allLocales = response.data;
+      this.applyFilters();
+    },
+    error: (err: HttpErrorResponse) => {
+      console.error('Error al obtener locales:', err);
+    }
+  });
+}
 
   getContenedoresData(): void {
     this.contenedoresService.getAllContenedores().subscribe({

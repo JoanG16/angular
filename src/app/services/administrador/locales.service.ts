@@ -14,6 +14,7 @@ export class LocalesService {
 
   constructor(private http: HttpClient) { }
 
+ 
   // Cambiado: Ahora usa la ruta del backend para obtener solo los activos
   getAllLocales(): Observable<Local[]> {
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`).pipe(
