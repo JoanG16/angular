@@ -25,7 +25,7 @@ export class LocalesService {
     );
   }
 
-  // Este método 'getLocales()' parece ser redundante con 'getAllLocales()',
+  // Este método 'getLocales()' parece ser redundante con 'getAllLocales()',ac
   // ya que ambos llaman a la misma URL base sin un sub-path específico.
   // Si tienen propósitos diferentes, asegúrate de que la URL sea distinta.
   // Si no, considera eliminar uno.
