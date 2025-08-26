@@ -44,9 +44,9 @@ export class LocalesComponent implements OnInit {
     instagram: '',
     tiktok: '',
     telefono: '',
-    ruc: '', // <-- Propiedad agregada
-    correo: '', // <-- Propiedad agregada
-    activo: false, // <-- Propiedad agregada
+    ruc: '',
+    correo: '',
+    activo: false,
     id_contenedor: 0,
     creado_en: new Date().toISOString(),
     selectedBloque: null,
@@ -55,9 +55,7 @@ export class LocalesComponent implements OnInit {
   };
 
   public selectedFiles: File[] = [];
-
   public backendBaseUrl: string = environment.apiUrl;
-
   filterBloque: string | null = null;
   filterNombreLocal: string = '';
 
@@ -153,9 +151,9 @@ export class LocalesComponent implements OnInit {
       instagram: '',
       tiktok: '',
       telefono: '',
-      ruc: '', // <-- Propiedad agregada
-      correo: '', // <-- Propiedad agregada
-      activo: true, // <-- Propiedad agregada (un nuevo local debería estar activo por defecto)
+      ruc: '',
+      correo: '',
+      activo: true,
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
@@ -202,9 +200,9 @@ export class LocalesComponent implements OnInit {
       instagram: '',
       tiktok: '',
       telefono: '',
-      ruc: '', // <-- Propiedad agregada
-      correo: '', // <-- Propiedad agregada
-      activo: false, // <-- Propiedad agregada
+      ruc: '',
+      correo: '',
+      activo: false,
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
@@ -363,6 +361,7 @@ export class LocalesComponent implements OnInit {
       );
     }
 
+    // Aquí se corrige el problema de duplicación de locales y el filtro de activo
     this.locales = filtered;
   }
 
@@ -382,6 +381,13 @@ export class LocalesComponent implements OnInit {
       if (result) {
         this.localesService.deleteLocal(id).subscribe({
           next: () => {
+            // Se actualiza el estado en el array local primero para una respuesta visual instantánea
+            const localToUpdate = this.allLocales.find(l => l.id_local === id);
+            if (localToUpdate) {
+              localToUpdate.activo = false;
+              this.applyFilters();
+            }
+
             this.dialog.open(ConfirmDialogComponent, {
               data: {
                 title: 'Éxito',
@@ -390,6 +396,7 @@ export class LocalesComponent implements OnInit {
                 hideCancelButton: true
               }
             });
+            // Y luego se refresca el array completo para asegurar la consistencia
             this.getLocalesData();
           },
           error: (err: HttpErrorResponse) => {
@@ -408,7 +415,7 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  // NUEVO: Método para activar un local
+  // MODIFICADO: Método para activar un local
   activarLocal(id: number, nombre: string): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -423,6 +430,13 @@ export class LocalesComponent implements OnInit {
       if (result) {
         this.localesService.activateLocal(id).subscribe({
           next: () => {
+            // Se actualiza el estado en el array local primero para una respuesta visual instantánea
+            const localToUpdate = this.allLocales.find(l => l.id_local === id);
+            if (localToUpdate) {
+              localToUpdate.activo = true;
+              this.applyFilters();
+            }
+
             this.dialog.open(ConfirmDialogComponent, {
               data: {
                 title: 'Éxito',
@@ -431,6 +445,7 @@ export class LocalesComponent implements OnInit {
                 hideCancelButton: true
               }
             });
+            // Y luego se refresca el array completo para asegurar la consistencia
             this.getLocalesData();
           },
           error: (err: HttpErrorResponse) => {
@@ -449,7 +464,6 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-  // NUEVO: Método para descargar el reporte de Excel
   downloadExcelReport(): void {
     this.localesService.downloadLocalesExcel().subscribe({
       next: (response: Blob) => {
@@ -478,7 +492,6 @@ export class LocalesComponent implements OnInit {
   }
 
   getImageUrl(url: string): string {
-    console.log('[getImageUrl DEBUG] URL recibida:', url);
     return url;
   }
 
