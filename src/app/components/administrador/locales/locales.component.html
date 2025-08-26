@@ -55,9 +55,12 @@
                             <th>Nombre del Negocio</th>
                             <th>Nombre del Dueño</th>
                             <th>Código Local</th>
-                            <th>RUC</th> <th>Correo</th> <th>Teléfono</th>
+                            <th>RUC</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
                             <th>N° Contenedor</th>
-                            <th>Activo</th> <th>Descripción</th>
+                            <th>Activo</th>
+                            <th>Descripción</th>
                             <th>Imágenes</th>
                             <th>Acciones</th>
                         </tr>
@@ -67,7 +70,9 @@
                             <td>{{ local.nombre_del_negocio }}</td>
                             <td>{{ local.nombre_del_dueno }}</td>
                             <td>{{ local.codigo_local }}</td>
-                            <td>{{ local.ruc || 'N/A' }}</td> <td>{{ local.correo || 'N/A' }}</td> <td>{{ local.telefono || 'N/A' }}</td>
+                            <td>{{ local.ruc || 'N/A' }}</td>
+                            <td>{{ local.correo || 'N/A' }}</td>
+                            <td>{{ local.telefono || 'N/A' }}</td>
                             <td>{{ local.id_contenedor }}</td>
                             <td>
                                 <span [ngClass]="{'badge bg-success': local.activo, 'badge bg-danger': !local.activo}">
