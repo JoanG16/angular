@@ -83,17 +83,17 @@ export class LocalesComponent implements OnInit {
     });
   }
 
-getLocalesData(): void {
-  this.localesService.getAllLocales().subscribe({
-    next: (data: Local[]) => { // Nota el cambio a `data: Local[]`
-      this.allLocales = data;
-      this.applyFilters();
-    },
-    error: (err: HttpErrorResponse) => {
-      console.error('Error al obtener locales:', err);
-    }
-  });
-}
+  getLocalesData(): void {
+    this.localesService.getAllLocalesWithStatus().subscribe({ // <-- Llama al nuevo método
+      next: (response: LocalResponse) => {
+        this.allLocales = response.data;
+        this.applyFilters();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error al obtener locales:', err);
+      }
+    });
+  }
 
   getContenedoresData(): void {
     this.contenedoresService.getAllContenedores().subscribe({

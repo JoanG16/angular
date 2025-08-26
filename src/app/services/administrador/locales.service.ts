@@ -14,13 +14,18 @@ export class LocalesService {
 
   constructor(private http: HttpClient) { }
 
- 
+
   // Cambiado: Ahora usa la ruta del backend para obtener solo los activos
   getAllLocales(): Observable<Local[]> {
     return this.http.get<LocalResponse>(`${this.apiUrl}/get-all`).pipe(
       map(response => response.data)
     );
   }
+
+   // Este es el nuevo método para el componente de administración
+  getAllLocalesWithStatus(): Observable<LocalResponse> {
+    return this.http.get<LocalResponse>(`${this.apiUrl}/get-all-with-status`);
+  }
 
   // Se mantiene este método, aunque `getAllLocales` es más descriptivo
   getLocales(): Observable<LocalResponse> {
