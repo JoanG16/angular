@@ -1,5 +1,3 @@
-// src/app/components/page/locales/locales.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
@@ -9,7 +7,8 @@ import { Router } from '@angular/router';
 
 import { LocalesService } from '../../../services/administrador/locales.service';
 import { ContenedoresService } from '../../../services/administrador/contenedores.service';
-import { Local, contenedor } from '../../../interfaces/locales.interface';
+import { Local } from '../../../interfaces/locales.interface';
+import { Contenedor } from '../../../interfaces/contenedor.interface';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -29,34 +28,34 @@ import { environment } from '../../../../environments/environment';
 export class LocalesComponent implements OnInit {
   allLocales: Local[] = [];
   locales: Local[] = [];
-  todosLosContenedores: contenedor[] = [];
-  contenedoresFiltrados: contenedor[] = [];
+  todosLosContenedores: Contenedor[] = [];
+  contenedoresFiltrados: Contenedor[] = [];
   bloquesUnicos: string[] = [];
 
   mostrarFormulario: boolean = false;
   localSeleccionado: Local | null = null;
 
-  // MODIFICADO: Añadir el campo 'activo' con valor por defecto
   nuevoLocal: Local & { selectedBloque?: string | null } = {
     id_local: 0,
     nombre_del_negocio: '',
     nombre_del_dueno: '',
     codigo_local: '',
-    ruc: '',
-    correo: '',
     facebook: '',
     instagram: '',
     tiktok: '',
     telefono: '',
+    ruc: '', // Propiedad agregada
+    correo: '', // Propiedad agregada
+    activo: false, // Propiedad agregada
     id_contenedor: 0,
     creado_en: new Date().toISOString(),
     selectedBloque: null,
     imagen_urls: [],
-    descripcion: '',
-    activo: true // <-- NUEVO: Valor por defecto para nuevos locales
+    descripcion: ''
   };
 
   public selectedFiles: File[] = [];
+
   public backendBaseUrl: string = environment.apiUrl;
 
   filterBloque: string | null = null;
@@ -100,7 +99,7 @@ export class LocalesComponent implements OnInit {
 
   getContenedoresData(): void {
     this.contenedoresService.getAllContenedores().subscribe({
-      next: (response: { data: contenedor[] }) => {
+      next: (response: { data: Contenedor[] }) => {
         this.todosLosContenedores = response.data;
         this.extractUniqueBloques();
         this.filterContenedoresByBloque();
@@ -150,18 +149,18 @@ export class LocalesComponent implements OnInit {
       nombre_del_negocio: '',
       nombre_del_dueno: '',
       codigo_local: '',
-      ruc: '',
-      correo: '',
       facebook: '',
       instagram: '',
       tiktok: '',
       telefono: '',
+      ruc: '', // Propiedad agregada
+      correo: '', // Propiedad agregada
+      activo: true, // Propiedad agregada (o false, según tu lógica)
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
       imagen_urls: [],
-      descripcion: '',
-      activo: true // <-- NUEVO: Inicializar con true
+      descripcion: ''
     };
     this.selectedFiles = [];
     this.filterContenedoresByBloque();
@@ -172,11 +171,8 @@ export class LocalesComponent implements OnInit {
     this.localSeleccionado = { ...local };
     this.nuevoLocal = {
       ...local,
-      ruc: local.ruc || '',
-      correo: local.correo || '',
       imagen_urls: local.imagen_urls ? [...local.imagen_urls] : [],
-      descripcion: local.descripcion || '',
-      activo: local.activo // <-- NUEVO: Asignar el valor actual
+      descripcion: local.descripcion || ''
     };
 
     this.selectedFiles = [];
@@ -202,18 +198,18 @@ export class LocalesComponent implements OnInit {
       nombre_del_negocio: '',
       nombre_del_dueno: '',
       codigo_local: '',
-      ruc: '',
-      correo: '',
       facebook: '',
       instagram: '',
       tiktok: '',
       telefono: '',
+      ruc: '', // Propiedad agregada
+      correo: '', // Propiedad agregada
+      activo: false, // Propiedad agregada (o true, según tu lógica)
       id_contenedor: 0,
       creado_en: new Date().toISOString(),
       selectedBloque: null,
       imagen_urls: [],
-      descripcion: '',
-      activo: true // <-- NUEVO: Limpiar a valor por defecto
+      descripcion: ''
     };
     this.filterContenedoresByBloque();
   }
@@ -236,6 +232,7 @@ export class LocalesComponent implements OnInit {
     if (fileList && fileList.length > 0) {
       Array.from(fileList).forEach(file => {
         this.selectedFiles.push(file);
+
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.nuevoLocal.imagen_urls!.push(e.target.result);
@@ -252,11 +249,11 @@ export class LocalesComponent implements OnInit {
   }
 
   guardarLocal(): void {
-    if (!this.nuevoLocal.nombre_del_negocio || !this.nuevoLocal.nombre_del_dueno || !this.nuevoLocal.codigo_local || !this.nuevoLocal.id_contenedor || !this.nuevoLocal.ruc || !this.nuevoLocal.correo) {
+    if (!this.nuevoLocal.nombre_del_negocio || !this.nuevoLocal.nombre_del_dueno || !this.nuevoLocal.codigo_local || !this.nuevoLocal.id_contenedor) {
       this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: 'Campos Requeridos',
-          message: 'Por favor, completa todos los campos obligatorios: Nombre del Negocio, Nombre del Dueño, Código Local, RUC, Correo y N° Contenedor.',
+          message: 'Por favor, completa todos los campos obligatorios: Nombre del Negocio, Nombre del Dueño, Código Local y N° Contenedor.',
           confirmButtonText: 'Aceptar',
           hideCancelButton: true
         }
@@ -270,12 +267,13 @@ export class LocalesComponent implements OnInit {
     let operation: Observable<Local>;
 
     const { selectedBloque, ...baseLocalData } = this.nuevoLocal;
+
     const localPayload: Partial<Local> = { ...baseLocalData };
 
     localPayload.descripcion = this.nuevoLocal.descripcion || undefined;
-    localPayload.ruc = this.nuevoLocal.ruc || undefined;
-    localPayload.correo = this.nuevoLocal.correo || undefined;
+
     localPayload.imagen_urls = this.nuevoLocal.imagen_urls;
+
 
     if (this.localSeleccionado && this.localSeleccionado.id_local) {
       dialogMessage = `¿Estás seguro de que quieres guardar los cambios para el local "${this.nuevoLocal.nombre_del_negocio}"?`;
@@ -333,102 +331,6 @@ export class LocalesComponent implements OnInit {
               userMessage = `${errorMessage} Detalle: ${err.message}`;
             }
 
-            this.dialog.open(ConfirmDialogComponent, {
-              data: {
-                title: 'Error',
-                message: userMessage,
-                confirmButtonText: 'Aceptar',
-                hideCancelButton: true
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  // --- NUEVO MÉTODO para descargar el reporte de Excel ---
-  downloadExcelReport(): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirmar Descarga',
-        message: '¿Estás seguro de que quieres descargar el reporte de locales en formato Excel?',
-        confirmButtonText: 'Sí, descargar',
-        cancelButtonText: 'Cancelar'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.localesService.downloadLocalesExcel().subscribe({
-          next: (response: Blob) => {
-            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'reporte-locales.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
-          },
-          error: (err: HttpErrorResponse) => {
-            console.error('Error al descargar el reporte de Excel:', err);
-            this.dialog.open(ConfirmDialogComponent, {
-              data: {
-                title: 'Error de Descarga',
-                message: 'No se pudo generar o descargar el reporte de Excel. Por favor, inténtalo de nuevo más tarde.',
-                confirmButtonText: 'Aceptar',
-                hideCancelButton: true
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  // --- CORREGIDO: Activar/Desactivar local llamando a las rutas correctas del backend ---
-  toggleActivoStatus(local: Local): void {
-    const nuevoEstado = !local.activo;
-    const mensaje = nuevoEstado ? `activar` : `desactivar`;
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: `Confirmar ${nuevoEstado ? 'Activación' : 'Desactivación'}`,
-        message: `¿Estás seguro de que quieres ${mensaje} el local "${local.nombre_del_negocio}"?`,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No',
-        isDanger: !nuevoEstado
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let operation$: Observable<any>;
-        if (nuevoEstado) {
-          operation$ = this.localesService.activateLocal(local.id_local);
-        } else {
-          operation$ = this.localesService.deleteLocal(local.id_local);
-        }
-
-        operation$.subscribe({
-          next: () => {
-            this.dialog.open(ConfirmDialogComponent, {
-              data: {
-                title: 'Éxito',
-                message: `Local ${nuevoEstado ? 'activado' : 'desactivado'} correctamente.`,
-                confirmButtonText: 'Aceptar',
-                hideCancelButton: true
-              }
-            });
-            this.getLocalesData();
-          },
-          error: (err: HttpErrorResponse) => {
-            console.error(`Error al ${mensaje} el local:`, err);
-            let userMessage = `Error al ${mensaje} el local. Por favor, intenta de nuevo.`;
-            if (err.error && err.error.message) {
-                userMessage = `${userMessage} Detalle: ${err.error.message}`;
-            }
             this.dialog.open(ConfirmDialogComponent, {
               data: {
                 title: 'Error',

@@ -11,11 +11,13 @@
                 <li><a (click)="irAPagina('oferta')">🏷 Ofertas</a></li>
                 <li><a (click)="irAPagina('plano_contenedores')">🚛 Contenedores</a></li>
                 <li><a (click)="irAPagina('producto')">📦 Productos</a></li>
+
             </ul>
         </nav>
         <nav>
             <ul>
                 <li><a (click)="irAPagina('gestion-usuarios')">👤 Usuarios</a></li>
+
             </ul>
         </nav>
     </aside>
@@ -43,63 +45,49 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-between mb-3">
-                <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Local</button>
-                <button class="btn btn-excel" (click)="downloadExcelReport()">Descargar Reporte Excel</button>
-            </div>
-
+            <button class="btn-crear" (click)="abrirFormularioCrear()">+ Crear Nuevo Local</button>
 
             <div *ngIf="locales.length > 0; else noLocales">
                 <table>
                     <thead>
                         <tr>
+
                             <th>Nombre del Negocio</th>
                             <th>Nombre del Dueño</th>
                             <th>Código Local</th>
-                            <th>RUC</th>
-                            <th>Correo</th>
                             <th>Facebook</th>
                             <th>Instagram</th>
                             <th>TikTok</th>
                             <th>Teléfono</th>
+                            <th>N° Contenedor</th>
                             <th>Descripción</th>
                             <th>Imágenes</th>
-                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let local of locales">
+
                             <td>{{ local.nombre_del_negocio }}</td>
                             <td>{{ local.nombre_del_dueno }}</td>
                             <td>{{ local.codigo_local }}</td>
-                            <td>{{ local.ruc || 'N/A' }}</td>
-                            <td>{{ local.correo || 'N/A' }}</td>
                             <td>{{ local.facebook || 'N/A' }}</td>
                             <td>{{ local.instagram || 'N/A' }}</td>
                             <td>{{ local.tiktok || 'N/A' }}</td>
                             <td>{{ local.telefono || 'N/A' }}</td>
+                            <td>{{ local.id_contenedor }}</td>
                             <td>{{ local.descripcion || 'N/A' }}</td>
                             <td>
                                 <div class="local-images-gallery">
+                                    <!-- Usar getImageUrl para las imágenes existentes -->
                                     <img *ngFor="let imageUrl of local.imagen_urls" [src]="getImageUrl(imageUrl)" alt="Imagen del local"
-                                             class="local-image-thumbnail">
+                                        class="local-image-thumbnail">
                                     <span *ngIf="!local.imagen_urls || local.imagen_urls.length === 0">N/A</span>
                                 </div>
-                            </td>
-                            <td>
-                                <span [ngClass]="{'badge-activo': local.activo, 'badge-inactivo': !local.activo}">
-                                    {{ local.activo ? 'Activo' : 'Inactivo' }}
-                                </span>
                             </td>
                             <td class="acciones">
                                 <button class="btn-accion btn-editar"
                                     (click)="abrirFormularioEditar(local)">Editar</button>
-                                <button class="btn-accion"
-                                    [ngClass]="local.activo ? 'btn-desactivar' : 'btn-activar'"
-                                    (click)="toggleActivoStatus(local)">
-                                    {{ local.activo ? 'Desactivar' : 'Activar' }}
-                                </button>
                                 <button class="btn-accion btn-eliminar"
                                     (click)="eliminarLocal(local.id_local, local.nombre_del_negocio)">Eliminar</button>
                             </td>
@@ -130,14 +118,6 @@
                         <label for="codigoLocal">Código Local:</label>
                         <input id="codigoLocal" type="text" [(ngModel)]="nuevoLocal.codigo_local" name="codigo_local"
                             required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ruc">RUC:</label>
-                        <input id="ruc" type="text" [(ngModel)]="nuevoLocal.ruc" name="ruc" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="correo">Correo:</label>
-                        <input id="correo" type="email" [(ngModel)]="nuevoLocal.correo" name="correo" required>
                     </div>
                     <div class="form-group">
                         <label for="facebook">Facebook:</label>
@@ -181,18 +161,10 @@
                         </select>
                     </div>
 
+                    <!-- NUEVO CAMPO: Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <textarea id="descripcion" [(ngModel)]="nuevoLocal.descripcion" name="descripcion"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="activo">Estado:</label>
-                        <div class="toggle-switch">
-                            <input type="checkbox" id="activo" [(ngModel)]="nuevoLocal.activo" name="activo">
-                            <label for="activo" class="toggle-label"></label>
-                            <span class="status-label">{{ nuevoLocal.activo ? 'Activo' : 'Inactivo' }}</span>
-                        </div>
                     </div>
 
                     <div class="form-group file-upload-group">
@@ -201,6 +173,7 @@
                             name="imagenLocal">
                         <div *ngIf="nuevoLocal.imagen_urls && nuevoLocal.imagen_urls.length > 0" class="images-preview-gallery">
                             <div class="image-preview-item" *ngFor="let imageUrl of nuevoLocal.imagen_urls; let i = index">
+                                <!-- Para previsualización en el formulario, usa getImageUrl también -->
                                 <img [src]="getImageUrl(imageUrl)" alt="Previsualización de imagen" class="image-preview">
                                 <button type="button" class="clear-image-btn" (click)="removeImage(i)">
                                     &times;
