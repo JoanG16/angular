@@ -37,7 +37,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   tiktokVideosPerPage: number = 3; // Valor inicial, ajustado por CSS/JS
 
   currentIndex: number = 0; // Este es para el carrusel de YouTube
-  videosPerPage: number = 2; // Valor inicial, ajustado por CSS/JS
+  videosPerPage: number = 3; // Valor inicial, ajustado por CSS/JS
 
   comentarioActual = 0;
   private intervalo: any;
@@ -245,13 +245,13 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   adjustCarouselSettings(): void {
     if (window.innerWidth <= 768) { // Mobile and small tablets
       this.tiktokVideosPerPage = 1;
-      this.videosPerPage = 1;
+      this.videosPerPage = 10;
     } else if (window.innerWidth <= 1200) { // Medium screens (large tablets, small laptops)
       this.tiktokVideosPerPage = 2;
       this.videosPerPage = 2;
     } else { // Desktop
       this.tiktokVideosPerPage = 3;
-      this.videosPerPage = 2;
+      this.videosPerPage = 3;
     }
     // Asegurar que los índices actuales no excedan los límites después del ajuste
     if (this.currentSlideIndex + this.tiktokVideosPerPage > this.tiktokVideos.length) {
@@ -288,5 +288,5 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     this.router.navigate([path], navigationExtras);
   }
 
-  
+
 }

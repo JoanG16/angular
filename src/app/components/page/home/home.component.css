@@ -197,7 +197,7 @@ color: var(--crema);
  justify-content: flex-end; /* Lo baja */
  position: relative; /* Necesario para que z-index tenga efecto */
  z-index: 5; /* ¡CLAVE! Asegura que este contenido esté por encima del video. */
- 
+
 }
 
 /* Estilo el título grande sobre el mapa. ¡Ojo con el ancho fijo para móvil! */
@@ -282,43 +282,46 @@ color: var(--crema);
 /* --- PRODUCTOS SECTION --- */
 /* Configuración general de la sección de productos. */
 .productos {
-    padding: 2rem 1rem;
+    width: 90%; /* Ajustado para que el contenedor no sea tan estrecho */
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 2.5rem;
+    box-sizing: border-box;
     text-align: center;
-    overflow: hidden; /* Evito scrollbars por animaciones que entran */
+    overflow: hidden;
 }
-
 /* Estilo el título de la sección de productos. */
 .productos h1 {
     font-size: 35px;
     color: #3e4077;
-    margin-bottom: 2rem;
+    margin: 2rem;
+    padding: 10px;
 }
 
 /* Contenedor de las tarjetas de productos, las distribuyo y permito que se envuelvan. */
 .tarjetas {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    display: grid;
+    /* La clave: 4 columnas de igual ancho, con un mínimo de 120px para pantallas pequeñas */
+    grid-template-columns: repeat(4, 1fr);
+    /* Puedes ajustar el minmax(120px, 1fr) para cambiar el tamaño mínimo de la tarjeta */
+    gap: 50px; /* El mismo espacio que en los servicios */
+    justify-items: center;
 }
 
 /* Estilos para cada tarjeta de producto. */
 .tarjeta {
-    width: 10%; /* Mantener para escritorio */
-    min-width: 120px; /* Mantener para escritorio */
-    height: 155px; /* Mantener para escritorio */
+    width: 100%; /* La tarjeta ocupa todo el espacio de su celda en la cuadrícula */
+    height: 155px;
     background: #fbf4de;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
-    padding: 12px; /* Mantener para escritorio */
+    padding: 12px;
     display: flex;
-    flex-direction: column; /* Mantener para escritorio */
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-
 /* Estilos para la imagen dentro de cada tarjeta. */
 .tarjeta img {
     width: 80%;
@@ -355,6 +358,7 @@ color: var(--crema);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 /* Contenedor de servicios dentro de TikTok (posiblemente un remanente o para futuros usos). */
@@ -375,7 +379,7 @@ color: var(--crema);
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 900px; /* Mantener el max-width para el carrusel */
+  max-width: 960px; /* Mantener el max-width para el carrusel */
   overflow: hidden; /* ¡Importante para ocultar el scroll horizontal de los embeds! */
   position: relative;
   padding: 20px 0;
@@ -384,9 +388,9 @@ color: var(--crema);
 /* Estilo los botones de navegación del carrusel de TikTok. */
 .tiktok .nav-button {
   background-color: var(--crema);
-  color: white;
+  color: #000;
   border: none;
-  padding: 10px 25px;
+  padding: 10px 20px;
   border-radius: 50%;
   cursor: pointer;
   font-size: 1.5em;
@@ -394,18 +398,19 @@ color: var(--crema);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 50%;
+
   transform: translateY(-50%);
   z-index: 10;
 }
 
 /* Posiciono el botón de "anterior". */
 .tiktok .nav-button.prev {
-  left: 10px;
+  left: 200px;
 }
 
 /* Posiciono el botón de "siguiente". */
 .tiktok .nav-button.next {
-  right: 10px;
+  right: 200px;
 }
 
 /* Estilos para botones deshabilitados */
@@ -425,7 +430,7 @@ color: var(--crema);
 .tiktok .carousel-slide {
   display: flex;
   flex-grow: 1;
-  gap: 20px;
+  gap: 18px;
   transition: transform 0.5s ease-in-out;
   /* Asegurar que el carousel-slide tenga el ancho suficiente para contener todos los videos
      y que el transform funcione correctamente */
@@ -435,18 +440,16 @@ color: var(--crema);
 
 /* Estilo cada ítem de video en el carrusel de TikTok. */
 .tiktok .video-item {
-  flex-shrink: 0;
-  /* Calcular el ancho dinámicamente para que quepan 'tiktokVideosPerPage' videos */
-  width: calc((100% / var(--videos-per-page-tiktok)) - (20px * (var(--videos-per-page-tiktok) - 1) / var(--videos-per-page-tiktok)));
-  /* (100% / N) - (gap * (N-1) / N) */
-  max-width: 300px; /* Mantener un max-width para evitar que sean demasiado grandes */
+ flex-shrink: 0;
+  width: calc((100% / 3) - 12px); /* 3 videos con 18px de gap (18px * 2 / 3) */
+  max-width: 300px;
   height: auto;
+  max-height: 560px;
   background-color: #000;
   border-radius: 12px;
-  padding: 0;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  position: relative; /* Para el spinner */
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -460,8 +463,7 @@ color: var(--crema);
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 400px;
-  max-height: 580px;
+
   box-sizing: border-box;
 }
 
@@ -522,7 +524,7 @@ color: var(--crema);
 @media (max-width: 1200px) {
   .tiktok .video-item, .tiktok .video-item-placeholder {
     /* 2 videos por página */
-    width: calc((100% / 2) - 10px); /* (100% / 2) - (20px * (2-1) / 2) = 50% - 10px */
+    width: calc((100% / 2) - 9px); /* (100% / 2) - (20px * (2-1) / 2) = 50% - 10px */
   }
 }
 
@@ -533,17 +535,23 @@ color: var(--crema);
     max-width: 350px; /* Limitar el ancho en móviles para que no sea demasiado grande */
   }
   .tiktok .carousel {
-    padding: 20px 0; /* Ajustar padding si es necesario */
+   max-width: 100%;
+    padding: 0; /* Eliminar el padding que causa espacio extra */
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   .tiktok .nav-button {
     padding: 8px 18px;
     font-size: 1.2em;
   }
   .tiktok .nav-button.prev {
-    left: 5px;
+    left: 20px;
   }
   .tiktok .nav-button.next {
-    right: 5px;
+    right: 50px;
   }
 }
 
@@ -566,7 +574,7 @@ color: var(--crema);
 }
 /* Contenedor de los servicios (no tiene estilos directos en el HTML proporcionado, así que no hay reglas aquí). */
 .services-container {
-  
+
     /* No hay estilos específicos aquí en el HTML proporcionado para este contenedor,
        así que lo dejo sin reglas de CSS aquí. */
 }
@@ -929,72 +937,54 @@ footer li {
 
     /* Las tarjetas se apilan en columna en móvil. */
    .tarjetas {
-        flex-direction: column; /* Esto está bien si quieres una tarjeta por fila */
-        /* Si prefieres 2 tarjetas por fila en móvil, cambia esto a: */
-        /* flex-direction: row; */
-        flex-wrap: wrap; /* Permite que las tarjetas se envuelvan a la siguiente línea */
-        justify-content: center; /* Centra las tarjetas horizontalmente */
-        gap: 1rem; /* Reduce el espacio entre tarjetas si son 2 por fila */
-        align-items: center;
-        
-    }
-
-#tarjeta1,
-#tarjeta2,
-#tarjeta3,
-#tarjeta4,
-#tarjeta5,
-#tarjeta6,
-#tarjeta7,
-#tarjeta8{
-
-width: 70%;
-height: 90px;
+        /* Cambiamos de flexbox a grid para una organización más controlada */
+    display: grid;
+    /* La clave: 2 columnas de igual ancho, con un espacio entre ellas */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem; /* Ajusta el espacio entre las tarjetas */
+    justify-content: center; /* Centra la cuadrícula si tiene un ancho máximo */
+  }
 
 
-}
+
+
     /* Ajusto el estilo de las tarjetas en móvil para que sean en fila. */
    .tarjeta {
-        width: 80%; /* Un ancho fijo para móvil está bien si es una columna */
-        max-width: 300px; /* Limita el ancho máximo de la tarjeta */
-        flex-direction: row; /* Esto hace que el icono y el texto estén en la misma fila */
-        height: auto;
-        justify-content: flex-start; /* Alinea el contenido a la izquierda dentro de la tarjeta */
-        padding: 10px; /* Reduce un poco el padding de la tarjeta */
+        width: 100%;
+    height: auto;
 
-        /* Si quieres 2 tarjetas por fila en móvil, puedes probar con: */
-        /* width: 45%; */ /* Deja espacio para otra tarjeta y el gap */
-        /* min-width: 140px; */ /* Asegura que la tarjeta no sea demasiado pequeña */
-        /* height: 100px; */ /* Altura fija si es necesario para mantener uniformidad */
-    }
-    /* Ajusto el tamaño de la imagen dentro de la tarjeta en móvil. */
-    .tarjeta img {
-        width: 60px; /* Reduce el tamaño de la imagen */
-        height: 60px; /* Reduce el tamaño de la imagen */
-        margin-right: 0.8rem; /* Un poco menos de margen a la derecha */
-        flex-shrink: 0; /* Evita que la imagen se encoja si no hay espacio */
-    }
+    /* **Corrección:** Usar flex-direction: column para apilar imagen y texto */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
 
-    /* Contenedor del texto dentro de la tarjeta */
-    .tarjeta .texto {
-        flex-grow: 1; /* Permite que el contenedor de texto ocupe el espacio restante */
-        display: flex;
-        align-items: center; /* Centra verticalmente el texto si hay espacio */
-        justify-content: center; /* Centra horizontalmente el texto */
-        /* min-width: 0; */ /* NECESARIO para que el texto se envuelva correctamente */
-    }
+#tarjeta1, #tarjeta2, #tarjeta3, #tarjeta4, #tarjeta5, #tarjeta6, #tarjeta7, #tarjeta8{
+    height: auto;
+    width: 80%;
+}
 
-      /* *** ESTOS SON LOS CAMBIOS CLAVE PARA EL TEXTO DE LA CATEGORÍA *** */
-    .tarjeta .texto h3 {
-        font-size: 0.85em; /* ¡REDUCE EL TAMAÑO DE LA FUENTE! (aprox. 13-14px) */
-        /* Puedes probar con 0.8em o 0.75em si sigue desbordándose */
-        line-height: 1.2; /* Ajusta la altura de línea para que ocupe menos espacio vertical */
-        text-align: center; /* Asegura que el texto esté centrado si hay varias líneas */
-        word-break: break-word; /* Rompe palabras largas para que quepan */
-        white-space: normal; /* Asegura que el texto se envuelva normalmente */
-        padding-left: 5px; /* Pequeño padding si necesitas separar del borde izquierdo del div.texto */
-        padding-right: 5px; /* Pequeño padding si necesitas separar del borde derecho del div.texto */
-    }
+   /* Ajustamos la imagen dentro de la tarjeta */
+  .tarjeta img {
+    width: 80%;
+    height: auto;
+    max-height: 80px;
+    margin-bottom: 0.5rem; /* Un poco de espacio entre la imagen y el texto */
+  }
+
+  /* Ajustamos el contenedor del texto */
+  .tarjeta .texto {
+    width: 100%;
+    display: block; /* Vuelve a ser un bloque para que el texto se envuelva */
+    text-align: center;
+}
+.tarjeta .texto h3 {
+    font-size: 0.85em; /* Un tamaño de fuente más legible */
+    line-height: 1.2;
+    word-break: break-word; /* Asegura que palabras largas se rompan */
+}
 
     /* ... (el resto de tus media queries existentes para servicios, tiktok, footer) ... */
 
@@ -1035,40 +1025,19 @@ height: 90px;
 
 .contenedor-servicios{
 width: 100%;
-  height: 1000px;
+  height: 100%;
 }
     /* El carrusel de TikTok es más ancho en móviles. */
     /* Ajustes generales para el carrusel de TikTok en móviles */
-  .tiktok .carousel {
-        /* Ya no necesitamos un width fijo como 180vw,
-           el flexbox con scroll-snap lo manejará mejor. */
-        width: 180vw; /* Ocupa el 100% del contenedor padre */
-        max-width: unset; /* Elimina cualquier limitación de ancho máximo en móvil */
-        padding: 20px 0; /* Mantiene el padding vertical */
-        overflow-x: scroll; /* ¡CLAVE! Permite el scroll horizontal */
-        overflow-y: hidden; /* Oculta el scroll vertical */
-        position: relative;
-        /* Habilitar el desplazamiento suave con la mano (swipe) */
-        scroll-snap-type: x mandatory; /* ¡CLAVE! Habilita el snap en el eje X, forzando la alineación */
-        -webkit-overflow-scrolling: touch; /* Mejora el rendimiento del scroll en iOS */
-        scrollbar-width: none; /* Oculta la barra de desplazamiento en Firefox */
-        -ms-overflow-style: none;  /* Oculta la barra de desplazamiento en IE/Edge */
-        /* Para Chrome/Safari (Webkit), se oculta con ::-webkit-scrollbar en un bloque CSS aparte si no lo tienes */
-        box-sizing: border-box;
-    }
+
 
  .tiktok .carousel::-webkit-scrollbar {
         display: none;
     }
  .tiktok .carousel-slide {
-        display: flex; /* Sigue siendo un flex container */
-        gap: 0; /* No queremos espacio entre los videos si solo se ve uno a la vez */
-        /* Quita el transition de aquí, ya que el scroll-snap lo maneja */
-        /* transition: transform 0.5s ease-in-out; */
-        width: 100%; /* Esto es el ancho del *viewport* del slide en un momento dado, pero el contenido se desbordará */
-        flex-grow: 1; /* Permite que ocupe el espacio disponible */
-        /* IMPORTANTE: No le pongas overflow: hidden; aquí, ya que queremos que el contenido desborde para el scroll */
-    }
+       gap: 0; /* Eliminar el gap para que los videos se toquen */
+    width: 100%;   }
+
  .tiktok .video-item {
         flex-shrink: 0; /* ¡CLAVE! Evita que el video se encoja */
         width: 100%; /* ¡CLAVE! Cada video ocupa el 100% del ancho del carrusel visible */
@@ -1095,14 +1064,7 @@ width: 100%;
     }
 
     .tiktok .video-item blockquote {
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
-        width: 100% !important; /* ¡FUERZA el 100% de ancho! */
-        height: 100% !important; /* ¡FUERZA el 100% de altura del video-item! */
-        min-height: 100% !important; /* Asegura que la altura mínima sea la del padre */
-        max-width: 100% !important; /* Evita que crezca más allá del 100% */
-        box-sizing: border-box !important;
+        height: 100%;
     }
  .tiktok .video-item blockquote iframe {
         width: 100% !important; /* El iframe debe ocupar todo el blockquote */
@@ -1131,6 +1093,43 @@ width: 100%;
     .footer-content h3 {
         text-align: center;
     }
+
+     .carousel-slide {
+    grid-template-columns: 1fr; /* 1 sola columna en móviles */
+    gap: 15px; /* Un poco más de espacio vertical entre los videos */
+  }
+
+ .youtube .carousel-container {
+    padding: 0; /* Elimina el padding para maximizar el espacio de los videos */
+    /* **CLAVE:** Hacemos que los botones de navegación sean opcionales */
+    /* display: none; */
+  }
+
+  .youtube .carousel-slide {
+    /* **CLAVE:** Habilitar el desplazamiento horizontal y las propiedades de 'snap' */
+    display: flex;
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
+    scroll-snap-type: x mandatory; /* Asegura que los elementos se "enganchen" al desplazarse */
+    -webkit-overflow-scrolling: touch; /* Mejora la fluidez en iOS */
+    gap: 15px; /* Mantiene el espacio entre videos */
+  }
+
+  .youtube .carousel-slide iframe {
+    /* **CLAVE:** Asegura que cada video ocupe el 100% del espacio visible y no se encoja */
+    flex-shrink: 0;
+    width: 90%; /* Ajusta este porcentaje para un mejor ajuste visual */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    scroll-snap-align: center; /* Cada video se alinea al centro al desplazarse */
+  }
+
+  /* Oculta las flechas de navegación en móviles */
+  .youtube .nav-button {
+    display: none;
+  }
+
+
+
 }
 
 /* --- Media Queries para pantallas medianas (máximo 1200px) --- */
@@ -1142,6 +1141,28 @@ width: 100%;
 
     /* Muestro 2 videos por fila en pantallas medianas en TikTok. */
     .tiktok .video-item {
-        width: 48%;
+          width: 100%;
+    max-width: 350px;
+    margin: 0 5px; /* Pequeño margen para separar visualmente los videos al hacer scroll */
+    min-height: 400px; /* Tamaño más pequeño para móviles */
+    scroll-snap-align: center;
     }
+    #tarjeta1, #tarjeta2, #tarjeta3, #tarjeta4, #tarjeta5, #tarjeta6, #tarjeta7, #tarjeta8{
+    height: auto;
+    width: 80%;
 }
+
+
+/* Posiciono el botón de "anterior". */
+.tiktok .nav-button.prev {
+  left: 20px;
+}
+
+/* Posiciono el botón de "siguiente". */
+.tiktok .nav-button.next {
+  right: 20px;
+}
+
+}
+
+

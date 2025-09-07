@@ -258,6 +258,7 @@ export class SociosComponent implements OnInit {
       }
     });
   }
+  
    irAPagina(titulo: string): void {
     this.router.navigate([titulo])
 
